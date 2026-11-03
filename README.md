@@ -1,4 +1,4 @@
-# Liga de Dominação
+# Sport Bend Manager
 
 Jogo de gestão de equipe de **dominação profissional** (pro-bending, de *A Lenda de Korra*) que roda no navegador. Você é o técnico: monta o elenco, planeja os treinos, cuida do dinheiro e escolhe a tática entre os rounds. Referência principal: *Teamfight Manager 2*.
 
@@ -20,6 +20,7 @@ Abra `index.html` no navegador. Não precisa de servidor nem de instalação. O 
 | `tools/balance.js` | Simula carreiras longas para conferir o equilíbrio |
 
 ## Desenvolvimento
+
 
 Edite os arquivos em `src/` e gere o jogo de novo:
 

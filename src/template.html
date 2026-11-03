@@ -1,4 +1,4 @@
-<title>Liga de Dominação</title>
+<title>Sport Bend Manager</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -242,7 +242,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; font-varian
 .badge.l { background: #5c2626; color: #f6c4bb; }
 .gains { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
 .gains b { color: #a4e38f; font-weight: 600; }
-.head-right { display: flex; align-items: center; gap: 16px; }
+.head-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
+#headAction:empty { display: none; }
 .head-cash { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; }
 .head-cash span { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 4px; }
 .head-cash b { font-family: var(--display); font-weight: 800; font-size: 28px; font-variant-numeric: tabular-nums; }
@@ -332,8 +333,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 
 <div class="wrap">
   <header class="top">
-    <h1 class="brand">Liga de Dominação</h1>
-    <span class="tag">Protótipo 0.8 · gestão de equipe de dominação profissional</span>
+    <h1 class="brand">Sport Bend Manager</h1>
+    <span class="tag">Protótipo 0.9 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -376,6 +377,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       </div>
       <div class="head-right">
         <div class="head-cash"><span>Caixa</span><b id="headCash">—</b></div>
+        <span id="headAction"></span>
         <button class="btn" id="restartBtn" type="button">Recomeçar</button>
       </div>
     </div>
@@ -1677,6 +1679,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   }
 
   function renderHub() {
+    $('headAction').innerHTML = ''; // só a pré-temporada usa o botão do cabeçalho
     const me = L.teams[L.user], D = DIVS[me.div], table = standings(L, me.div), pos = table.indexOf(me) + 1, pre = L.phase === 'preseason';
     $('hubTitle').textContent = me.name; $('hubTitle').style.setProperty('--tc', me.color);
     $('hubSub').textContent = `${L.gameMode === 'career' ? 'Modo carreira · ' : ''}${D.name} · Temporada ${L.season} · ${phaseLabel()}${pre ? '' : ` · ${me.rec.w}V ${me.rec.l}D · ${pos}º lugar`} · nota do time ${teamOVR(me)} · popularidade do time ${r0(me.fame)} · reputação do técnico ${r0(L.coach.rep)}${L.coach.conf !== undefined && L.phase !== 'preseason' && L.phase !== 'done' ? ` · confiança da diretoria ${r0(L.coach.conf)}` : ''}`;
@@ -1706,14 +1709,12 @@ details summary { cursor: pointer; margin-bottom: 6px; }
           ${expN ? `<li class="${blockers.length ? '' : 'ok'}">Contratos encerrados: ${expN}${blockers.length ? ` · <span class="neg">sem renovar, você ficaria sem bender de ${blockers.map((e) => ELN[e]).join(' e ')}</span>` : ' (sem renovar, eles saem ao começar a temporada)'} <button class="btn sm" type="button" data-page="roster">Ver contratos</button></li>` : ''}
           <li class="${W.offers.length ? '' : 'ok'}">Ofertas pelos seus benders: ${W.offers.length} <button class="btn sm" type="button" data-page="market">Abrir mercado</button></li>
         </ul>
-        <div class="btnrow">
-          ${last ? `<button class="btn primary" id="seasonBtn" type="button"${ok ? '' : ' disabled'}>Começar temporada</button>`
-                 : `<button class="btn primary" id="stepBtn" type="button">Encerrar etapa ${W.step} da janela</button>`}
-          ${L.sponsors.length ? '' : '<span class="hint">Sem patrocínio, o time só recebe prêmios.</span>'}
-        </div>
+        ${L.sponsors.length ? '' : '<p class="hint">Sem patrocínio, o time só recebe prêmios.</p>'}
         ${ag && (ag.mine.changes.length || ag.mine.retired.length || ag.retired.length) ? `<h3 class="sub">Um ano mais velhos</h3>
           <p class="hint">${ag.mine.retired.length ? `<b class="neg">Aposentados do seu time: ${ag.mine.retired.map(esc).join(', ')}.</b> ` : ''}${ag.mine.changes.length ? `No seu elenco: ${ag.mine.changes.map((c) => `${esc(c.name)} (${c.age} anos) <b class="${c.d > 0 ? 'pos' : 'neg'}">${c.d > 0 ? '+' : ''}${c.d}</b>`).join(', ')}. ` : ''}${ag.retired.length ? `Na liga, ${ag.retired.length} bender${ag.retired.length > 1 ? 's se aposentaram' : ' se aposentou'}.` : ''}</p>` : ''}
         ${W.news.length ? `<h3 class="sub">Notícias do mercado</h3><ul class="news">${W.news.slice(0, 10).map((n) => `<li><span class="hint">Etapa ${n.step}</span> ${esc(n.text)}</li>`).join('')}</ul>` : ''}`;
+      $('headAction').innerHTML = last ? `<button class="btn primary" id="seasonBtn" type="button"${ok ? '' : ' disabled title="Resolva os itens da lista antes de começar"'}>Começar temporada</button>`
+        : `<button class="btn primary" id="stepBtn" type="button">Encerrar etapa ${W.step} da janela</button>`;
       if ($('seasonBtn')) $('seasonBtn').onclick = () => { if (startSeason(L)) { save(); renderHub(); } };
       if ($('stepBtn')) $('stepBtn').onclick = () => { if (advanceWindow(L)) { save(); renderHub(); } };
     } else if (L.phase === 'done') {

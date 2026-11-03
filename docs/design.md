@@ -1,6 +1,6 @@
-# Bender Manager: documento de design
+# Sport Bend Manager: documento de design
 
-Jogo de gestão de equipe de **dominação profissional** (pro-bending, de *A Lenda de Korra*), no navegador. Referência principal de gestão e visual: **Teamfight Manager 2**. O jogador é o técnico: não controla os benders em quadra; monta o elenco, planeja os treinos, cuida do dinheiro e escolhe a tática entre os rounds.
+**Sport Bend Manager** (nome provisório do projeto: Bender Manager; antes, Liga de Dominação) é um jogo de gestão de equipe de **dominação profissional** (pro-bending, de *A Lenda de Korra*), no navegador. Referência principal de gestão e visual: **Teamfight Manager 2**. O jogador é o técnico: não controla os benders em quadra; monta o elenco, planeja os treinos, cuida do dinheiro e escolhe a tática entre os rounds.
 
 Este documento é a referência das regras. Quando uma regra mudar, ela muda aqui primeiro.
 
@@ -17,7 +17,7 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
    - **Carreira:** começa num time da **Terceira Divisão**, com pouca reputação (8). O objetivo é subir, se firmar e chegar ao título da Primeira. As regras são as mesmas do modo Livre; muda só o ponto de partida.
 2. **Pré-temporada**
    - **Patrocínios:** escolhe até 2 entre as propostas. ✅
-   - **Janela de transferências:** contrata, compra e vende benders, em 2 etapas. ✅
+   - **Janela de transferências:** contrata, compra e vende benders, em 2 etapas. O botão para encerrar a etapa (e depois "Começar temporada") fica no cabeçalho, ao lado de Recomeçar, visível em todas as páginas da central. ✅
 3. **Semana da temporada** (repete a cada rodada)
    - Escolhe o **tipo de treino** (Equipe ou Individual) e o foco de cada um, ou descanso. ✅
    - Joga a **partida**, ajustando a tática no intervalo entre rounds. ✅
@@ -476,6 +476,7 @@ Ataques de times opostos que se chocam no ar se anulam.
   - **Canto inferior esquerdo:** narração como um chat (a mensagem mais nova embaixo; se o técnico rolar para cima para ler, a rolagem não pula).
   - **Canto inferior direito:** controles (começar/pausar, velocidade, pular para o resultado, som, Regras). As regras, a legenda e o laboratório (partida avulsa) abrem num painel por cima.
   - Na partida avulsa, os dois times são do técnico, então os dois painéis têm os controles.
+- **Tipografia:** títulos e destaques em Big Shoulders Display; textos em Work Sans. (Uma fonte pixel art própria foi testada na v0.9 e deixada de lado por enquanto.)
 - **Futuro:** pixel art, com o Teamfight Manager 2 como referência visual. Os sprites só precisam olhar para um lado (o outro é espelhado). 💡
 
 ---
@@ -526,6 +527,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.9 / Doc, 03/11/2026**: nome do jogo passa a ser Sport Bend Manager; botão da janela de transferências no cabeçalho, ao lado de Recomeçar (tipografia pixel art testada e revertida).
 - **v0.8 / Doc, 03/11/2026**: partida em tela cheia com HUD; táticas do adversário escondidas; narração em formato de chat.
 - **v0.7 / Doc, 03/11/2026**: Terceira Divisão (24 times) e modos Livre e Carreira.
 - **v0.6 / Doc, 03/11/2026**: revisão de equilíbrio (dinheiro, potencial, confiança, reputação na Segunda, contratação de emergência) e dicas de primeira vez.
