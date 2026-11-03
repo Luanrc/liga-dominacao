@@ -1679,7 +1679,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   }
 
   function renderHub() {
-    $('headAction').innerHTML = ''; // só a pré-temporada usa o botão do cabeçalho
+    $('headAction').innerHTML = '';
     const me = L.teams[L.user], D = DIVS[me.div], table = standings(L, me.div), pos = table.indexOf(me) + 1, pre = L.phase === 'preseason';
     $('hubTitle').textContent = me.name; $('hubTitle').style.setProperty('--tc', me.color);
     $('hubSub').textContent = `${L.gameMode === 'career' ? 'Modo carreira · ' : ''}${D.name} · Temporada ${L.season} · ${phaseLabel()}${pre ? '' : ` · ${me.rec.w}V ${me.rec.l}D · ${pos}º lugar`} · nota do time ${teamOVR(me)} · popularidade do time ${r0(me.fame)} · reputação do técnico ${r0(L.coach.rep)}${L.coach.conf !== undefined && L.phase !== 'preseason' && L.phase !== 'done' ? ` · confiança da diretoria ${r0(L.coach.conf)}` : ''}`;
@@ -1753,8 +1753,14 @@ details summary { cursor: pointer; margin-bottom: 6px; }
           <button class="btn" id="quickBtn" type="button">Simular rápido</button>
         </div>
         ${scoutHtml(rival, me)}`;
+      $('headAction').innerHTML = '<button class="btn primary" id="headPlayMatchBtn" type="button">Ir para a partida</button>';
+      $('headPlayMatchBtn').onclick = playLeagueMatch;
       $('playMatchBtn').onclick = playLeagueMatch;
-      $('quickBtn').onclick = () => busy($('quickBtn'), () => { const m = quickUserMatch(); finishWeek(L, m); save(); hubPage = 'home'; renderHub(); });
+      $('quickBtn').onclick = () => {
+        $('headPlayMatchBtn').disabled = true;
+        $('playMatchBtn').disabled = true;
+        busy($('quickBtn'), () => { const m = quickUserMatch(); finishWeek(L, m); save(); hubPage = 'home'; renderHub(); });
+      };
     } else {
       np.innerHTML = `<h2>${phaseLabel()}</h2><p class="hint">Seu time não está nesta fase. Acompanhe os resultados.</p>
         <div class="btnrow"><button class="btn primary" id="simPhaseBtn" type="button">Simular ${phaseLabel().toLowerCase()}</button></div>`;
