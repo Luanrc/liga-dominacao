@@ -17,7 +17,7 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
    - **Carreira:** começa num time da **Terceira Divisão**, com pouca reputação (8). O objetivo é subir, se firmar e chegar ao título da Primeira. As regras são as mesmas do modo Livre; muda só o ponto de partida.
 2. **Pré-temporada**
    - **Patrocínios:** escolhe até 2 entre as propostas. ✅
-   - **Janela de transferências:** contrata, compra e vende benders, em 2 etapas. O botão para encerrar a etapa (e depois "Começar temporada") fica no cabeçalho, ao lado de Recomeçar, visível em todas as páginas da central. ✅
+   - **Janela de transferências:** contrata, compra e vende benders, em 2 etapas. O botão para encerrar a etapa (e depois "Começar temporada") fica no cabeçalho, ao lado de Recomeçar, visível em todas as páginas da central. Durante a temporada, o mesmo lugar mostra "Ir para a partida" e "Simular rápido". ✅
 3. **Semana da temporada** (repete a cada rodada)
    - Escolhe o **tipo de treino** (Equipe ou Individual) e o foco de cada um, ou descanso. ✅
    - Joga a **partida**, ajustando a tática no intervalo entre rounds. ✅

@@ -244,6 +244,8 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; font-varian
 .gains b { color: #a4e38f; font-weight: 600; }
 .head-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
 #headAction:empty { display: none; }
+#viewHub .hub-head > div:first-child { flex: 1 1 360px; min-width: 0; }
+#headAction { display: inline-flex; gap: 8px; flex-wrap: wrap; }
 .head-cash { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; }
 .head-cash span { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 4px; }
 .head-cash b { font-family: var(--display); font-weight: 800; font-size: 28px; font-variant-numeric: tabular-nums; }
@@ -1679,7 +1681,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   }
 
   function renderHub() {
-    $('headAction').innerHTML = '';
+    $('headAction').innerHTML = ''; // só a pré-temporada usa o botão do cabeçalho
     const me = L.teams[L.user], D = DIVS[me.div], table = standings(L, me.div), pos = table.indexOf(me) + 1, pre = L.phase === 'preseason';
     $('hubTitle').textContent = me.name; $('hubTitle').style.setProperty('--tc', me.color);
     $('hubSub').textContent = `${L.gameMode === 'career' ? 'Modo carreira · ' : ''}${D.name} · Temporada ${L.season} · ${phaseLabel()}${pre ? '' : ` · ${me.rec.w}V ${me.rec.l}D · ${pos}º lugar`} · nota do time ${teamOVR(me)} · popularidade do time ${r0(me.fame)} · reputação do técnico ${r0(L.coach.rep)}${L.coach.conf !== undefined && L.phase !== 'preseason' && L.phase !== 'done' ? ` · confiança da diretoria ${r0(L.coach.conf)}` : ''}`;
@@ -1748,19 +1750,11 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <p class="hint">Arena ${H.arena === 'round' ? 'redonda' : 'quadrada'} (casa de ${esc(H.name)}). O treino da semana vale depois desta partida.${L.coach.expect ? ` Expectativa da diretoria: <b>${L.coach.expect}º lugar</b> (${BOARD_GOAL(me.div, L.coach.expect).toLowerCase()}).` : ''}</p>
         ${L.coach.conf !== undefined && L.phase === 'season' ? `<div class="conf"><span class="hint">Confiança da diretoria</span> ${confBar(L.coach.conf)} <b>${confLabel(L.coach.conf)}</b>
           ${L.coach.conf < 25 ? `<span class="neg">A diretoria está perdendo a paciência${L.week >= 3 ? ': se chegar a zero, você é demitido' : ''}.</span>` : ''}</div>` : ''}
-        <div class="btnrow">
-          <button class="btn primary" id="playMatchBtn" type="button">Ir para a partida</button>
-          <button class="btn" id="quickBtn" type="button">Simular rápido</button>
-        </div>
         ${scoutHtml(rival, me)}`;
-      $('headAction').innerHTML = '<button class="btn primary" id="headPlayMatchBtn" type="button">Ir para a partida</button>';
-      $('headPlayMatchBtn').onclick = playLeagueMatch;
+      // os botões da partida ficam no cabeçalho, visíveis em todas as páginas da central
+      $('headAction').innerHTML = `<button class="btn" id="quickBtn" type="button">Simular rápido</button> <button class="btn primary" id="playMatchBtn" type="button">Ir para a partida</button>`;
       $('playMatchBtn').onclick = playLeagueMatch;
-      $('quickBtn').onclick = () => {
-        $('headPlayMatchBtn').disabled = true;
-        $('playMatchBtn').disabled = true;
-        busy($('quickBtn'), () => { const m = quickUserMatch(); finishWeek(L, m); save(); hubPage = 'home'; renderHub(); });
-      };
+      $('quickBtn').onclick = () => busy($('quickBtn'), () => { const m = quickUserMatch(); finishWeek(L, m); save(); hubPage = 'home'; renderHub(); });
     } else {
       np.innerHTML = `<h2>${phaseLabel()}</h2><p class="hint">Seu time não está nesta fase. Acompanhe os resultados.</p>
         <div class="btnrow"><button class="btn primary" id="simPhaseBtn" type="button">Simular ${phaseLabel().toLowerCase()}</button></div>`;
@@ -1985,6 +1979,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     guide: ['Guia', '<p>Aqui estão os atributos e as regras de cada partida. Volte quando tiver dúvida.</p>'],
     match: ['Sua primeira partida', `<ul>
       <li>Até 3 rounds de 3 minutos. Empurre os rivais para trás ou derrube-os na água.</li>
+      <li><b>Você é o técnico:</b> não controla os benders durante o combate. Suas ordens valem antes da partida e nos intervalos entre os rounds.</li>
       <li><b>Antes de cada round</b>, ajuste postura, alvo, formação e instruções individuais. Durante o round, não dá para mexer.</li>
       <li>Temperamento e estresse podem fazer um bender <b>desobedecer</b>; o risco aparece ao lado da instrução.</li>
       <li>Pode acelerar ou pular para o resultado.</li></ul>`],
