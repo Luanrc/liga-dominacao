@@ -453,6 +453,7 @@ Ataques de times opostos que se chocam no ar se anulam.
 - **Round a round:** quem venceu e como, e a tática dos dois times naquele round (postura, formação, escolha de alvo e instruções individuais).
 - **Estatísticas** de cada bender dos dois times: acertos, precisão, empurrões, quedas causadas, esquivas, bloqueios, faltas, desobediências e estado de estresse.
 - **Alertas:** muitas faltas do seu time (3 ou mais), desobediências e benders que jogaram estressados (50 ou mais).
+- **Guia (aba da central):** atributos, estados do bender e uma seção **Táticas da partida** que explica cada postura, escolha de alvo, formação e instrução individual, além da desobediência. ✅
 - **Histórico de temporadas:** ver 6b. 💡 (gráficos de evolução de atributos e caixa)
 
 ## 9c. Dicas de primeira vez ✅
@@ -527,6 +528,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **Doc, 03/11/2026**: Guia ganha a seção Táticas da partida.
 - **v0.9 / Doc, 03/11/2026**: nome do jogo passa a ser Sport Bend Manager; botão da janela de transferências no cabeçalho, ao lado de Recomeçar (tipografia pixel art testada e revertida).
 - **v0.8 / Doc, 03/11/2026**: partida em tela cheia com HUD; táticas do adversário escondidas; narração em formato de chat.
 - **v0.7 / Doc, 03/11/2026**: Terceira Divisão (24 times) e modos Livre e Carreira.

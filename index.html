@@ -498,6 +498,43 @@ details summary { cursor: pointer; margin-bottom: 6px; }
             <dt>Eventos</dt><dd>No lugar do treino, um bender pode fazer um evento: rende dinheiro e popularidade, mas cansa e não evolui atributos. Alguns exigem popularidade mínima e têm poucas vagas.</dd>
           </dl>
       </section>
+      <section class="panel">
+        <h2>Táticas da partida</h2>
+        <p class="hint">Você escolhe tudo isto antes de cada round, no intervalo. Durante o round as ordens ficam travadas.</p>
+        <h3 class="sub">Postura do time</h3>
+        <dl class="gloss">
+          <dt>Agressiva</dt><dd>Joga mais perto da linha e ataca com mais frequência, mas esquiva e bloqueia menos e comete bem mais faltas.</dd>
+          <dt>Equilibrada</dt><dd>O meio-termo: distância, ritmo de ataque e faltas normais.</dd>
+          <dt>Defensiva</dt><dd>Joga mais recuada e ataca mais devagar, mas esquiva e bloqueia mais e comete metade das faltas.</dd>
+          <dt>Temperamento</dt><dd>A postura de cada bender mistura a sua ordem (65%) com o jeito dele (35%): um explosivo puxa para o ataque mesmo numa postura defensiva, e um calmo puxa para a defesa. Explosivos também cometem mais faltas.</dd>
+        </dl>
+        <h3 class="sub">Escolha de alvo</h3>
+        <dl class="gloss">
+          <dt>IA decide</dt><dd>Cada bender escolhe sozinho, pesando quem está mais perto de ser empurrado e a distância que combina com o elemento dele (o fogo prefere alvos longe, a terra, perto).</dd>
+          <dt>Foco no mais vulnerável</dt><dd>Todos atacam quem está mais perto de cair para a próxima zona ou na água. Quem tem pouca Leitura às vezes não percebe e ataca outro.</dd>
+          <dt>Duelo de elementos</dt><dd>Cada um ataca o rival do mesmo elemento (água contra água, e assim por diante), a não ser que outro rival esteja bem mais vulnerável.</dd>
+          <dt>Foco no mais perigoso</dt><dd>Prefere o rival com mais Poder, para tirar de quadra quem empurra mais. Ainda considera quem está quase sendo empurrado.</dd>
+          <dt>Foco no mais próximo</dt><dd>Prefere o rival mais perto. Ainda considera quem está quase sendo empurrado.</dd>
+          <dt>Caçar a estrela</dt><dd>Prefere o rival com a maior soma de atributos. Ainda considera quem está quase sendo empurrado.</dd>
+        </dl>
+        <h3 class="sub">Formação</h3>
+        <dl class="gloss">
+          <dt>Aberta</dt><dd>O time se espalha por toda a largura da arena. Sem bônus nem penalidade.</dd>
+          <dt>Compacta</dt><dd>O time se junta no centro e tende a concentrar os ataques no mesmo alvo. O preço: um golpe num bender também empurra (com menos força) um companheiro colado nele.</dd>
+          <dt>Escalonada</dt><dd>Um bender segura a linha: a terra, se estiver em quadra, ou quem tiver mais Firmeza. Ele joga mais à frente e aguenta mais os empurrões, mas comete mais faltas de linha. Os outros dois jogam um pouco atrás e esquivam um pouco mais.</dd>
+        </dl>
+        <h3 class="sub">Instruções individuais</h3>
+        <dl class="gloss">
+          <dt>Sem instrução</dt><dd>O bender segue a tática do time.</dd>
+          <dt>Pressionar</dt><dd>Joga colado na linha, prefere alvos perto e ataca um pouco mais rápido. Comete bem mais faltas de linha.</dd>
+          <dt>Manter distância</dt><dd>Joga mais atrás, prefere alvos longe, se movimenta mais e esquiva mais. Combina com o fogo.</dd>
+          <dt>Mais agressivo</dt><dd>Puxa a postura daquele bender para a agressiva, sem mudar a do time.</dd>
+          <dt>Mais cauteloso</dt><dd>Puxa a postura daquele bender para a defensiva, sem mudar a do time.</dd>
+          <dt>Proteger</dt><dd>Esquiva mais; quem não é de terra recua um pouco. Na terra, tenta erguer um disco para interceptar ataques que vão num companheiro próximo.</dd>
+          <dt>Marcar um rival</dt><dd>Ataca sempre o rival escolhido, ignorando a escolha de alvo do time.</dd>
+          <dt>Desobediência</dt><dd>Uma ordem contra o temperamento pode ser ignorada naquele round: explosivos resistem a Mais cauteloso, Manter distância e Proteger; calmos resistem a Mais agressivo e Pressionar. Com estresse acima de 60, qualquer ordem pode ser ignorada. O risco aparece ao lado da instrução. Quem desobedece joga do próprio jeito (o explosivo ataca, o calmo se retrai).</dd>
+        </dl>
+      </section>
     </div>
   </section>
 
