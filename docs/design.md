@@ -468,6 +468,14 @@ Ataques de times opostos que se chocam no ar se anulam.
 - **Câmera:** arena reta, da esquerda para a direita, com a câmera a **15°** em relação ao chão (bem de lado).
 - **Protótipo:** formas geométricas simples. Água é cilindro, terra é cubo e fogo é pirâmide; a cor do time aparece no topo e num anel no chão.
 - **Cenário:** plataforma suspensa sobre a água, com pilares, cordas laterais, bandeira na linha de frente, arquibancada com torcida que reage aos lances e camarote dos juízes.
+- **Tela da partida em tela cheia** (v0.8): a arena ocupa a tela toda e as informações ficam num HUD por cima dela.
+  - **Topo, ao centro:** placar (times, rounds vencidos, relógio, território).
+  - **Cantos de cima:** um painel por time, do lado em que o time joga na arena.
+    - **Seu time:** postura, escolha de alvo, formação e instruções individuais (só aparecem no intervalo; durante o round o painel encolhe), além dos atributos e das estatísticas da partida.
+    - **Adversário:** só os benders, a zona, os atributos (no intervalo) e as estatísticas da partida. **Não mostra postura, escolha de alvo, formação nem instruções.**
+  - **Canto inferior esquerdo:** narração como um chat (a mensagem mais nova embaixo; se o técnico rolar para cima para ler, a rolagem não pula).
+  - **Canto inferior direito:** controles (começar/pausar, velocidade, pular para o resultado, som, Regras). As regras, a legenda e o laboratório (partida avulsa) abrem num painel por cima.
+  - Na partida avulsa, os dois times são do técnico, então os dois painéis têm os controles.
 - **Futuro:** pixel art, com o Teamfight Manager 2 como referência visual. Os sprites só precisam olhar para um lado (o outro é espelhado). 💡
 
 ---
@@ -518,6 +526,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.8 / Doc, 03/11/2026**: partida em tela cheia com HUD; táticas do adversário escondidas; narração em formato de chat.
 - **v0.7 / Doc, 03/11/2026**: Terceira Divisão (24 times) e modos Livre e Carreira.
 - **v0.6 / Doc, 03/11/2026**: revisão de equilíbrio (dinheiro, potencial, confiança, reputação na Segunda, contratação de emergência) e dicas de primeira vez.
 - **Doc, 03/11/2026**: os times da IA negociam entre si; patrocínio sem multa, com consequência na renovação; diretriz de peso dos salários.
