@@ -11,20 +11,36 @@ const LEAGUE_COLORS = ['#ff5a7a', '#f2ead6', '#3fd0b6', '#e45fd6', '#b48cff', '#
   '#d9434f', '#9be7c4', '#ffa3c8', '#d4b3ff', '#e0a030', '#b9bec9', '#4dd0e1', '#c9e265',
   '#6fa8ff', '#e8c39e', '#7fd36b', '#ff7fb0', '#a3866a', '#9ad0ff', '#ffd27a', '#c08bd9'];
 const STYLES = { agg: 'Agressivo', bal: 'Equilibrado', def: 'Defensivo' };
-const MAX_ROSTER = 5, WEEKS = 14;
+// elenco de 6 a 9 benders: 3 titulares (um de cada elemento) e o resto no banco, que pode entrar no intervalo dos rounds
+const MAX_ROSTER = 9, MIN_ROSTER = 6, WEEKS = 14;
+// lesão fora da partida: treinar cansado pode machucar; duração sorteada em semanas (rodadas)
+const INJURY = { trainBase: 0.005, trainPerEnergy: 0.0015, trainEnergy: 60, weeks: [[1, 0.45], [2, 0.30], [3, 0.15], [4, 0.07], [5, 0.03]] };
+function injuryWeeks(r) { let x = r(); for (const [w, pr] of INJURY.weeks) { if ((x -= pr) <= 0) return w; } return 1; }
+const isInjured = (p) => (p.inj || 0) > 0;
 // turno e returno: 14 rodadas. Ganhos que são "por temporada" (treino, popularidade, fama) valem metade por partida,
 // para a temporada inteira render o mesmo que antes com 7 rodadas.
 const PER_MATCH = 7 / WEEKS;
-const ENERGY = { match: 15, train: 10, rest: 35, bench: 8, natural: 10 };
+const ENERGY = { match: 15, train: 10, rest: 35, bench: 8, natural: 10 }; // modelo semanal antigo (até a v0.15.1), mantido como referência
+// ---- calendário da semana (v0.16) ----
+// segunda: o técnico decide; quarta: treino (ou descanso); eventos na terça, quinta, sexta ou sábado; domingo: jogo.
+// Dia livre recupera 12% do que falta para 100, mais 2 (quanto mais cansado, mais recupera). Treino na quarta custa 22;
+// descansar na quarta é um dia livre com 10 a mais. Evento ocupa o dia (não recupera) e custa a energia dele. Jogo custa 15.
+const DAYS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'];
+const DAY_NAME = { seg: 'Segunda', ter: 'Terça', qua: 'Quarta', qui: 'Quinta', sex: 'Sexta', sab: 'Sábado', dom: 'Domingo' };
+const EVENT_DAYS = ['ter', 'qui', 'sex', 'sab'];
+const DAY = { k: 0.12, b: 2, train: 22, restBonus: 10, match: 15 };
+// estresse por dia: dia livre −0,8; descanso na quarta −14 a mais; treino +2; evento +1; reserva que não joga no domingo −3 a mais
+const DAY_STRESS = { free: -0.8, rest: -14, train: 2, event: 1, bench: -3 };
+function dayRecover(p) { p.energy = Math.min(100, p.energy + DAY.k * (100 - p.energy) + DAY.b); }
 
 const DIVS = [
   // faBase: nível dos agentes livres; fame: [início, base de referência, por ponto] e média para onde a popularidade volta;
   // rep: reputação inicial do técnico, teto e peso dos ganhos naquela divisão, bônus pelo título; need: [mínimo, nota de referência, por ponto]
-  { name: 'Primeira Divisão', short: '1ª', mult: 1, cash: 20000, aiIncome: 4600, bases: [72, 70, 69, 67, 66, 65, 63, 62],
+  { name: 'Primeira Divisão', short: '1ª', mult: 1, cash: 20000, aiIncome: 5300, bases: [72, 70, 69, 67, 66, 65, 63, 62],
     faBase: 57, fame: [40, 62, 3], fameMean: 55, repStart: 30, repCap: 100, repMul: 1, champRep: 12, need: [38, 62, 3] },
-  { name: 'Segunda Divisão', short: '2ª', mult: 0.6, cash: 12000, aiIncome: 2700, bases: [62, 60, 59, 57, 56, 54, 52, 50],
+  { name: 'Segunda Divisão', short: '2ª', mult: 0.6, cash: 12000, aiIncome: 3100, bases: [62, 60, 59, 57, 56, 54, 52, 50],
     faBase: 49, fame: [12, 50, 2.2], fameMean: 28, repStart: 20, repCap: 70, repMul: 0.6, champRep: 8, need: [8, 50, 2] },
-  { name: 'Terceira Divisão', short: '3ª', mult: 0.45, cash: 7000, aiIncome: 1600, bases: [52, 50, 49, 47, 46, 44, 42, 40],
+  { name: 'Terceira Divisão', short: '3ª', mult: 0.45, cash: 7000, aiIncome: 1850, bases: [52, 50, 49, 47, 46, 44, 42, 40],
     faBase: 41, fame: [4, 40, 1.6], fameMean: 14, repStart: 8, repCap: 45, repMul: 0.45, champRep: 6, need: [0, 40, 1] },
 ];
 const TEAM_LIST = [
@@ -61,13 +77,14 @@ const TIER_LABEL = { easy: 'Fácil', medium: 'Média', hard: 'Difícil' };
 // Eventos da semana: a Exibição na praça está sempre disponível; outros 2 aparecem a cada rodada.
 // renda = (base + porPop × popularidade) × multiplicador da divisão; custa energia; dá popularidade.
 const EVENTS = {
-  praca:      { name: 'Exibição na praça',              req: 0,  slots: 99, base: 200, perPop: 6, energy: 8,  pop: 2, always: true },
+  // v0.15: 2 vagas (com elenco de até 9, vagas livres viravam renda fácil com os reservas)
+  praca:      { name: 'Exibição na praça',              req: 0,  slots: 2,  base: 200, perPop: 6, energy: 8,  pop: 2, always: true, phys: true },
   radio:      { name: 'Comercial de rádio',             req: 40, slots: 1,  base: 600, perPop: 20, energy: 6,  pop: 3 },
   autografos: { name: 'Sessão de autógrafos',           req: 25, slots: 2,  base: 300, perPop: 14, energy: 8,  pop: 2 },
   beneficente:{ name: 'Evento beneficente',             req: 0,  slots: 2,  base: 0,   perPop: 0,  energy: 10, pop: 6 },
-  festival:   { name: 'Festival da Cidade República',   req: 50, slots: 3,  base: 500, perPop: 18, energy: 14, pop: 4 },
+  festival:   { name: 'Festival da Cidade República',   req: 50, slots: 3,  base: 500, perPop: 18, energy: 14, pop: 4, phys: true },
   jornal:     { name: 'Entrevista ao jornal',           req: 30, slots: 1,  base: 200, perPop: 8,  energy: 3,  pop: 3 },
-  escola:     { name: 'Aula numa escola de dominação',  req: 0,  slots: 1,  base: 400, perPop: 4,  energy: 10, pop: 3 },
+  escola:     { name: 'Aula numa escola de dominação',  req: 0,  slots: 1,  base: 400, perPop: 4,  energy: 10, pop: 3, phys: true },
 };
 const POP_GAIN = { played: 0.6, win: 1, push: 0.4, fall: 1, bench: -1 };
 
@@ -98,16 +115,18 @@ function popGain(p, v) { return v > 0 ? v * (1 + Math.max(0, p.st.tmp - 50) / 10
 function addPop(p, v) { p.st.pop = Math.max(0, Math.min(100, Math.round((p.st.pop + popGain(p, v)) * 10) / 10)); }
 function makeEvents(L, r) {
   const extra = Object.keys(EVENTS).filter((k) => !EVENTS[k].always).sort(() => r() - 0.5).slice(0, 2);
-  return ['praca', ...extra];
+  const list = ['praca', ...extra], days = EVENT_DAYS.slice().sort(() => r() - 0.5);
+  L.evDay = {}; list.forEach((k, i) => { L.evDay[k] = days[i]; });
+  return list;
 }
+const evDayOf = (L, key) => (L.evDay && L.evDay[key]) || 'sab';
 function eventTaken(L, key, exceptId) {
   const me = L.teams[L.user];
-  if (L.trainMode === 'team') return L.teamPlan === 'ev:' + key ? me.roster.length : 0;
-  return me.roster.filter((p) => p.id !== exceptId && p.plan === 'ev:' + key).length;
+  return me.roster.filter((p) => p.id !== exceptId && p.ev === key).length;
 }
 function canDoEvent(L, p, key) {
   const E = EVENTS[key];
-  return !!E && L.events.includes(key) && p.st.pop >= E.req && eventTaken(L, key, p.id) < E.slots;
+  return !!E && L.events.includes(key) && p.st.pop >= E.req && eventTaken(L, key, p.id) < E.slots && !(E.phys && isInjured(p));
 }
 
 // nota geral: média ponderada pelo impacto medido de cada atributo nas partidas
@@ -116,17 +135,20 @@ function ovr(st) {
 }
 function tmpLabel(t) { return t < 35 ? 'Calmo' : t > 65 ? 'Explosivo' : 'Equilibrado'; }
 // salário por rodada: cresce mais rápido que a nota (nota 70 = ¥1.400, nota 56 ≈ ¥730, nota 80 ≈ ¥1.960)
-function salary(p) { return Math.round(1400 * Math.pow(Math.max(0.15, (ovr(p.st) - 30) / 40), 1.5) / 10) * 10; }
+// com elenco de 6 a 9, cada salário vale 75% da tabela antiga: a folha de um elenco médio (7 a 8) fica cerca de 15% acima da de antes (4)
+const WAGE_K = 0.75;
+function rawSalary(p) { return 1400 * Math.pow(Math.max(0.15, (ovr(p.st) - 30) / 40), 1.5); }
+function salary(p) { return Math.round(rawSalary(p) * WAGE_K / 10) * 10; }
 // benders populares valem mais e pedem luvas maiores
 // valor de mercado: jovens com potencial valem mais, veteranos menos
 function ageFactor(age) { return age <= 21 ? 1.35 : age <= 25 ? 1.15 : age <= 29 ? 1 : age <= 31 ? 0.75 : 0.5; }
 function marketValue(p, starter) {
   const potBonus = 1 + Math.max(0, (p.pot || 0) - ovr(p.st)) * 0.02;
-  return Math.round(salary(p) * 10 * (starter ? 1.25 : 1) * (1 + (p.st.pop || 0) / 150) * ageFactor(p.age || 26) * potBonus / 100) * 100;
+  return Math.round(rawSalary(p) * 10 * (starter ? 1.25 : 1) * (1 + (p.st.pop || 0) / 150) * ageFactor(p.age || 26) * potBonus / 100) * 100;
 }
 // salário pedido numa renovação: benders populares pedem mais
 function askWage(p) { return Math.round(salary(p) * (1 + (p.st.pop || 0) / 250) / 10) * 10; }
-function signingFee(p) { return Math.round(salary(p) * 2 * (1 + (p.st.pop || 0) / 200) / 10) * 10; }
+function signingFee(p) { return Math.round(rawSalary(p) * 2 * (1 + (p.st.pop || 0) / 200) / 10) * 10; }
 // folha: cada bender recebe o salário fixado no contrato (wage); sem contrato, o salário pedido hoje
 function wageOf(p) { return p.wage || salary(p); }
 function payroll(t) { return t.roster.reduce((a, p) => a + wageOf(p), 0); }
@@ -148,7 +170,7 @@ function makePlayer(L, r, elem, base, age) {
   if (elem === 'earth') { st.fir = Math.min(95, st.fir + 8); st.agi = Math.max(35, st.agi - 6); }
   if (elem === 'fire') { st.agi = Math.min(95, st.agi + 6); st.fir = Math.max(35, st.fir - 6); }
   st.pop = Math.max(0, initialPop(st, r) - (age <= 20 ? 10 : 0));
-  const p = { id: L.nextId++, name: n, elem, st, age, energy: 100, stress: Math.round(r() * 15), plan: 'rest', season: { games: 0, hits: 0, pushes: 0, falls: 0 } };
+  const p = { id: L.nextId++, name: n, elem, st, age, inj: 0, energy: 100, stress: Math.round(r() * 15), plan: 'rest', season: { games: 0, hits: 0, pushes: 0, falls: 0 } };
   p.pot = Math.min(95, Math.round(ovr(st) + potGap(age, r)));
   p.contract = 1 + Math.floor(r() * 3); p.wage = salary(p);
   return p;
@@ -180,8 +202,11 @@ function addDivisionTeams(L, r, di) {
   const age = () => di === 2 && r() < 0.25 ? 17 + Math.floor(r() * 4) : undefined;
   TEAM_LIST[di].forEach(([name, short], i) => {
     const base = bases[i], idx = L.teams.length;
+    // 3 titulares, 1 reserva de cada elemento e de 0 a 3 benders a mais (mais fracos, muitas vezes jovens): elenco de 6 a 9
     const roster = ELEMS.map((e) => makePlayer(L, r, e, base, age()));
-    roster.push(makePlayer(L, r, ELEMS[Math.floor(r() * 3)], base - 6, age()));
+    for (const e of ELEMS) roster.push(makePlayer(L, r, e, base - 5 - Math.floor(r() * 4), age()));
+    const extra = Math.floor(r() * 4);
+    for (let k = 0; k < extra; k++) roster.push(makePlayer(L, r, ELEMS[Math.floor(r() * 3)], base - 9 - Math.floor(r() * 5), r() < 0.5 ? 17 + Math.floor(r() * 4) : age()));
     L.teams.push({ idx, div: di, name, short, color: LEAGUE_COLORS[di * 8 + i], arena: r() < 0.5 ? 'round' : 'square', fame: initialFame(di, base, r),
       style: Object.keys(STYLES)[Math.floor(r() * 3)], targeting: ['free', 'focus', 'free'][Math.floor(r() * 3)], posture: 'bal',
       roster, starters: {}, cash: D.cash, rec: { w: 0, l: 0, rf: 0, ra: 0, ko: 0, homeL: 0 }, streak: 0, bestStreak: 0, wins: 0, kos: 0 });
@@ -350,10 +375,24 @@ function teamOVR(t) { const s = starters(t); return s.length ? Math.round(s.redu
 function starters(t) { return ELEMS.map((e) => t.roster.find((p) => p.id === t.starters[e])).filter(Boolean); }
 function autoStarters(t) {
   for (const e of ELEMS) {
-    const opts = t.roster.filter((p) => p.elem === e);
-    if (!opts.length) { delete t.starters[e]; continue; }
+    const all = t.roster.filter((p) => p.elem === e), fit = all.filter((p) => !isInjured(p));
+    if (!all.length) { delete t.starters[e]; continue; }
+    const opts = fit.length ? fit : [all.reduce((b, p) => (p.inj < b.inj ? p : b))];
     t.starters[e] = opts.reduce((b, p) => (ovr(p.st) * (0.7 + 0.3 * p.energy / 100) > ovr(b.st) * (0.7 + 0.3 * b.energy / 100) ? p : b)).id;
   }
+}
+// titular lesionado do técnico: entra o melhor reserva sadio do elemento (se houver)
+function fixInjuredStarters(t) {
+  const out = [];
+  for (const e of ELEMS) {
+    const s = t.roster.find((p) => p.id === t.starters[e]);
+    if (!s || !isInjured(s)) continue;
+    const fit = t.roster.filter((p) => p.elem === e && !isInjured(p));
+    if (!fit.length) continue;
+    const b = fit.reduce((a, p) => (ovr(p.st) > ovr(a.st) ? p : a));
+    t.starters[e] = b.id; out.push({ out: s.name, in: b.name });
+  }
+  return out;
 }
 function isStarter(L, p) { return L.teams.some((t) => t.starters[p.elem] === p.id); }
 
@@ -363,12 +402,14 @@ const MENTAL = new Set(['pre', 'dis', 'lei']);
 function matchStats(p) {
   const f = 0.78 + 0.22 * p.energy / 100, s = (p.stress || 0) / 100, st = {};
   for (const k of TRAINABLE) st[k] = Math.round(p.st[k] * f * (1 - (MENTAL.has(k) ? 0.25 : 0.08) * s));
-  st.tmp = p.st.tmp; st.stress = p.stress || 0;
+  st.tmp = p.st.tmp; st.stress = p.stress || 0; st.energy = Math.round(p.energy ?? 100); st.ovr = ovr(p.st); // energia e nota só para a tela
   return st;
 }
 function matchDef(L, t, auto) {
   return { name: t.name, short: t.short, color: t.color, pop: t.fame, posture: auto ? t.style : t.posture, targeting: t.targeting, formation: t.formation || 'open',
-    style: t.style, auto, players: starters(t).map((p) => ({ id: p.id, name: p.name, elem: p.elem, st: matchStats(p) })) };
+    style: t.style, auto, players: starters(t).map((p) => ({ id: p.id, name: p.name, elem: p.elem, st: matchStats(p), injured: isInjured(p) })),
+    // banco: reservas sadios, que podem entrar no intervalo entre os rounds
+    bench: t.roster.filter((p) => !starters(t).includes(p) && !isInjured(p)).map((p) => ({ id: p.id, name: p.name, elem: p.elem, st: matchStats(p) })) };
 }
 // técnico da IA: escolhe a postura no início de cada round conforme o placar e o estilo do time
 // também escolhe a formação e dá instruções individuais de acordo com o estilo
@@ -381,12 +422,16 @@ function aiCoach(m, ti) {
     else if (me.roundWins > op.roundWins) posture = st === 'agg' ? 'bal' : 'def';
   }
   let formation = { agg: 'stagger', bal: 'compact', def: 'open' }[st];
-  if (losing && formation === 'open') formation = 'compact';
+  // depois de perder um round, o técnico da IA lê a formação do rival na arena e costuma trocar para a que a vence
+  const last = m.roundLog && m.roundLog[m.roundLog.length - 1];
+  if (m.round > 1 && last && last.winner !== ti && m.rng() < 0.7) formation = Object.keys(FORM_BEATS).find((k) => FORM_BEATS[k] === op.formation) || formation;
+  // o técnico defensivo segura o placar com o Duelo de elementos quando está ganhando
+  const targeting = st === 'def' && me.roundWins > op.roundWins ? 'mirror' : me.baseTargeting;
   const instr = {};
   if (st === 'agg' || losing) instr.earth = 'press';
   else if (st === 'def') instr.earth = 'protect';
   if (st !== 'agg') instr.fire = 'distance';
-  return { posture, formation, instr };
+  return { posture, formation, instr, targeting };
 }
 
 const STAGE = { season: (L) => `Rodada ${L.week + 1}`, semis: () => 'Semifinal', final: () => 'Final' };
@@ -412,7 +457,7 @@ function simFixture(L, f) {
 }
 function resultOf(m, f, detail) {
   const r = { h: f.h, a: f.a, div: f.div, stage: f.stage, winner: m.winner === 0 ? f.h : f.a, score: [m.teams[0].roundWins, m.teams[1].roundWins], ko: m.winReason === 'ko',
-    stats: m.teams.map((t) => t.players.map((p) => ({ ref: p.ref, hits: p.stats.hits, pushes: p.stats.pushes, falls: p.stats.falls }))) };
+    stats: m.teams.map((t) => (t.played || t.players).map((p) => ({ ref: p.ref, hits: p.stats.hits, pushes: p.stats.pushes, falls: p.stats.falls, injured: p.injured === 'match' }))) };
   // relatório completo só para a partida do técnico
   if (detail) {
     // destaque: empurrões e quedas decidem partidas; acertos, bloqueios e esquivas contam pouco (são muito numerosos)
@@ -420,10 +465,10 @@ function resultOf(m, f, detail) {
     let mvp = null, best = -1e9;
     r.detail = {
       rounds: m.roundLog.map((x, i) => ({ round: x.round, winner: x.winner === 0 ? f.h : f.a, reason: x.reason, tactics: (m.tacticLog || [])[i] || null })),
-      players: m.teams.map((t) => t.players.map((p) => {
+      players: m.teams.map((t) => (t.played || t.players).map((p) => {
         const s = p.stats, sc = score(s);
         if (sc > best) { best = sc; mvp = p.ref; }
-        return { ref: p.ref, name: p.name, elem: p.elem, shots: s.shots, hits: s.hits, pushes: s.pushes, falls: s.falls, dodges: s.dodges, blocks: s.blocks, fouls: s.fouls, disobey: s.disobey || 0, stress: p.st.stress || 0 };
+        return { ref: p.ref, name: p.name, elem: p.elem, injured: p.injured === 'match', shots: s.shots, hits: s.hits, pushes: s.pushes, falls: s.falls, dodges: s.dodges, blocks: s.blocks, fouls: s.fouls, disobey: s.disobey || 0, stress: p.st.stress || 0 };
       })),
     };
     r.detail.mvp = mvp;
@@ -436,7 +481,7 @@ function formOf(L, idx, n = 5) {
 }
 // o que se sabe do técnico rival: tendências do estilo dele (as mesmas regras do técnico da IA)
 const STYLE_TENDENCY = {
-  agg: { posture: 'agg', formation: 'stagger', instr: 'a terra pressiona na linha' },
+  agg: { posture: 'agg', formation: 'stagger', instr: 'a terra pressiona na linha' }, // depois de perder um round, costuma trocar para a formação que vence a do rival
   bal: { posture: 'bal', formation: 'compact', instr: 'o fogo mantém distância' },
   def: { posture: 'def', formation: 'open', instr: 'a terra protege os companheiros e o fogo mantém distância' },
 };
@@ -452,7 +497,7 @@ function snapHistory(L, reset) {
 }
 function startSeason(L) {
   const me = L.teams[L.user];
-  if (L.phase !== 'preseason' || seasonBlockers(L).length) return false;
+  if (L.phase !== 'preseason' || seasonBlockers(L).length || rosterShort(L)) return false;
   // quem ficou sem renovação vai embora de graça
   for (const p of me.roster.filter((q) => q.expiring)) {
     me.roster = me.roster.filter((q) => q !== p); p.expiring = false; p.contract = 0; p.wage = 0; L.freeAgents.push(p);
@@ -467,20 +512,21 @@ function startSeason(L) {
   L.window.offers = [];
   L.coach.expect = expectedPos(L, L.user);
   L.coach.conf = Math.max(40, Math.min(70, Math.round(CONF.start + (L.coach.rep - 30) * 0.3)));
-  L.phase = 'season';
+  L.phase = 'season'; L.day = 'mon'; L.weekLog = null;
   return true;
 }
 
 // encerra a rodada: recebe a partida do técnico (ou null para simular) e simula o resto
 function finishWeek(L, userMatch) {
+  const week = runWeekDays(L) || { gains: [], events: [], injuries: [], subs: [], cashBefore: L.teams[L.user].cash };
   const fixtures = currentFixtures(L), res = [], money = { salaries: 0, sponsors: 0, prizes: 0, bonuses: [] };
-  const me = L.teams[L.user], cashBefore = me.cash, phase = L.phase;
+  const me = L.teams[L.user], cashBefore = week.cashBefore, phase = L.phase;
   for (const f of fixtures) {
     const isUser = f.h === L.user || f.a === L.user;
     res.push(resultOf(isUser && userMatch ? userMatch : simFixture(L, f), f, isUser));
   }
-  const played = new Set(), result = {};
-  money.events = [];
+  const played = new Set(), result = {}, newInj = [];
+  money.events = week.events;
   const fameBefore = me.fame;
   for (const rs of res) {
     const W = L.teams[rs.winner], Lo = L.teams[rs.winner === rs.h ? rs.a : rs.h], H = L.teams[rs.h], A = L.teams[rs.a];
@@ -500,6 +546,7 @@ function finishWeek(L, userMatch) {
       const p = playerById(L, s.ref); if (!p) return;
       p.season.games++; p.season.hits += s.hits; p.season.pushes += s.pushes; p.season.falls += s.falls;
       played.add(p.id);
+      if (s.injured) newInj.push(p);
       const won = (si === 0 ? rs.h : rs.a) === rs.winner;
       addPop(p, (POP_GAIN.played + (won ? POP_GAIN.win : 0) + s.pushes * POP_GAIN.push + s.falls * POP_GAIN.fall) * PER_MATCH);
     }));
@@ -512,9 +559,16 @@ function finishWeek(L, userMatch) {
       for (const s of L.sponsors) { t.cash += s.base; money.sponsors += s.base; }
     } else t.cash += aiIncome(t);
   }
-  const gains = applyTraining(L, played, money, result);
+  const injuries = applyInjuries(L, newInj, rngOf(L));
+  applySunday(L, played, result);
+  injuries.mine = week.injuries.concat(injuries.mine);
+  injuries.subs = (week.subs || []).concat(fixInjuredStarters(me));
+  const gains = week.gains;
   snapHistory(L, false);
   L.events = makeEvents(L, rngOf(L));
+  // nova segunda-feira: eventos da semana passada saem do plano
+  for (const p of me.roster) if (p.ev && !L.events.includes(p.ev)) p.ev = null;
+  L.day = 'mon'; L.weekLog = null;
   L.results.push(res);
   const confBefore = L.coach.conf;
   if (!L.coach.fired) updateConfidence(L, res, phase);
@@ -522,54 +576,88 @@ function finishWeek(L, userMatch) {
   // demissão no meio da temporada: confiança zerada a partir da 4ª rodada
   if (!L.coach.fired && L.phase === 'season' && L.week >= WEEKS / 2 && L.coach.conf <= CONF.fireMid) fireCoach(L, 'mid', 'A diretoria perdeu a confiança depois da sequência de resultados ruins.');
   checkMetas(L, money);
-  L.lastReport = { stage: fixtures[0] ? fixtures[0].stage : '', results: res, gains, money, cashBefore, cashAfter: me.cash, fameBefore, fameAfter: me.fame, confBefore, confAfter: L.coach.conf };
+  L.lastReport = { stage: fixtures[0] ? fixtures[0].stage : '', results: res, gains, money, injuries, cashBefore, cashAfter: me.cash, fameBefore, fameAfter: me.fame, confBefore, confAfter: L.coach.conf };
   return L.lastReport;
 }
 
-function applyTraining(L, played, money, result = {}) {
-  const r = rngOf(L), gains = [], taken = {};
-  const pendingMetas = L.phase !== 'done' ? L.sponsors.filter((s) => s.status === 'pending').length : 0;
+// lesões: quem já estava lesionado cumpre mais uma semana; quem se machucou na partida ganha a duração sorteada
+function applyInjuries(L, newInj, r) {
+  const mine = [], fresh = new Set(newInj.map((p) => p.id)), me = L.teams[L.user];
+  for (const t of L.teams) for (const p of t.roster) if (!fresh.has(p.id) && p.inj > 0) { p.inj--; if (!p.inj && t === me) mine.push({ name: p.name, healed: true }); }
+  for (const p of newInj) {
+    const w = injuryWeeks(r); p.inj = Math.max(p.inj || 0, w);
+    if (me.roster.includes(p)) mine.push({ name: p.name, weeks: p.inj, where: 'partida' });
+  }
+  return { mine, count: newInj.length };
+}
+// segunda a sábado: descanso, treino de quarta e eventos de cada dia, para todos os times.
+// Roda uma vez por semana, antes do jogo de domingo (o técnico vê o resultado no domingo e ainda pode mexer na escalação).
+function runWeekDays(L) {
+  if (L.day === 'sun' || !['season', 'semis', 'final'].includes(L.phase)) return L.weekLog || null;
+  const r = rngOf(L), me = L.teams[L.user], log = { gains: [], events: [], injuries: [], cashBefore: me.cash, days: {} };
+  const taken = {};
   for (const t of L.teams) {
     const isUser = t.idx === L.user;
     for (const p of t.roster) {
-      // recuperação natural da semana para todos; quem jogou gasta, reserva que não jogou recupera um pouco mais
-      p.energy += ENERGY.natural;
-      if (played.has(p.id)) {
-        p.energy -= ENERGY.match;
-        // estresse da partida: derrota pesa mais, e a cobrança da torcida cresce com a popularidade do time
-        const res = result[t.idx];
-        addStress(p, STRESS.match + (res === 'l' ? STRESS.loss + STRESS.crowd * t.fame / 100 : res === 'w' ? STRESS.win : 0));
-        if (isUser) addStress(p, STRESS.meta * pendingMetas); // metas de patrocínio ainda em aberto
-      } else { p.energy += ENERGY.bench; addPop(p, POP_GAIN.bench * PER_MATCH); addStress(p, STRESS.bench); }
-      addStress(p, STRESS.natural);
+      // plano de quarta: treino ou descanso; a IA descansa quem está cansado ou estressado
       let plan = isUser ? (L.trainMode === 'team' ? L.teamPlan : p.plan) : (p.energy < 55 || (p.stress || 0) > 60 ? 'rest' : TRAINABLE[Math.floor(r() * TRAINABLE.length)]);
-      if (plan && plan.startsWith('ev:')) {
-        // evento: só vale se o bender cumpre o requisito e ainda há vaga; senão, descansa
-        const key = plan.slice(3), E = EVENTS[key];
-        taken[key] = taken[key] || 0;
-        if (E && L.events.includes(key) && p.st.pop >= E.req && taken[key] < E.slots) {
-          taken[key]++;
-          const inc = eventIncome(L, p, key);
-          t.cash += inc; p.energy -= E.energy; addPop(p, E.pop * PER_MATCH); addStress(p, STRESS.event); addFame(t, FAME.event * PER_MATCH);
-          money.events.push({ name: p.name, event: E.name, amount: inc });
-        } else { p.energy += ENERGY.rest; addStress(p, STRESS.rest); }
-      } else if (plan === 'rest') { p.energy += ENERGY.rest; addStress(p, STRESS.rest); }
-      else {
-        p.energy -= ENERGY.train; addStress(p, STRESS.train);
-        const k = plan, before = p.st[k];
-        // quanto mais alto o atributo, mais difícil evoluir; cansado treina pior
-        // jovens evoluem mais rápido; perto do potencial o treino quase não rende
-        const ageM = p.age <= 20 ? 1.5 : p.age <= 23 ? 1.25 : p.age <= 27 ? 1 : p.age <= 30 ? 0.6 : 0.3;
-        const o = ovr(p.st), pt = p.pot || 99, potM = o >= pt + 2 ? 0 : o >= pt ? 0.15 : 1;
-        const g = (0.6 + r() * 1.6) * Math.max(0.15, 1 - (before - 35) / 75) * (0.6 + 0.4 * Math.max(0, p.energy) / 100) * ageM * potM * PER_MATCH;
-        p.st[k] = Math.min(99, Math.round((before + g) * 10) / 10);
-        if (isUser) gains.push({ id: p.id, name: p.name, k, d: Math.round((p.st[k] - before) * 10) / 10 });
+      if (!TRAINABLE.includes(plan)) plan = 'rest';
+      const ev = isUser ? p.ev : null;
+      for (const d of DAYS.slice(0, 6)) {
+        if (d === 'qua') {
+          if (TRAINABLE.includes(plan) && !isInjured(p)) {
+            const k = plan, before = p.st[k], e0 = p.energy;
+            // quanto mais alto o atributo, mais difícil evoluir; cansado treina pior; jovens evoluem mais rápido; perto do potencial quase não rende
+            const ageM = p.age <= 20 ? 1.5 : p.age <= 23 ? 1.25 : p.age <= 27 ? 1 : p.age <= 30 ? 0.6 : 0.3;
+            const o = ovr(p.st), pt = p.pot || 99, potM = o >= pt + 2 ? 0 : o >= pt ? 0.15 : 1;
+            const g = (0.6 + r() * 1.6) * Math.max(0.15, 1 - (before - 35) / 75) * (0.6 + 0.4 * Math.max(0, e0) / 100) * ageM * potM * PER_MATCH;
+            p.st[k] = Math.min(99, Math.round((before + g) * 10) / 10);
+            p.energy = Math.max(0, e0 - DAY.train); addStress(p, DAY_STRESS.train);
+            if (isUser) log.gains.push({ id: p.id, name: p.name, k, d: Math.round((p.st[k] - before) * 10) / 10 });
+            // treinar cansado pode machucar (e a lesão já vale para o domingo)
+            const ch = INJURY.trainBase + Math.max(0, INJURY.trainEnergy - e0) * INJURY.trainPerEnergy;
+            if (r() < ch) { p.inj = injuryWeeks(r) ; p.injWed = true; if (isUser) log.injuries.push({ name: p.name, weeks: p.inj, where: 'treino de quarta' }); }
+          } else { dayRecover(p); p.energy = Math.min(100, p.energy + DAY.restBonus); addStress(p, DAY_STRESS.free + DAY_STRESS.rest); }
+          continue;
+        }
+        if (ev && evDayOf(L, ev) === d) {
+          // evento do dia: só vale se ainda está na semana, cumpre o requisito, tem vaga e (se exige o físico) não está lesionado
+          const E = EVENTS[ev]; taken[ev] = taken[ev] || 0;
+          if (E && L.events.includes(ev) && p.st.pop >= E.req && taken[ev] < E.slots && !(E.phys && isInjured(p))) {
+            taken[ev]++;
+            const inc = eventIncome(L, p, ev);
+            t.cash += inc; p.energy = Math.max(0, p.energy - E.energy); addPop(p, E.pop * PER_MATCH); addStress(p, DAY_STRESS.event); addFame(t, FAME.event * PER_MATCH);
+            log.events.push({ name: p.name, event: E.name, amount: inc, day: d });
+            continue;
+          }
+        }
+        dayRecover(p); addStress(p, DAY_STRESS.free);
       }
       p.energy = Math.max(0, Math.min(100, p.energy));
     }
     if (!isUser) autoStarters(t);
   }
-  return gains;
+  log.subs = fixInjuredStarters(me);
+  L.weekLog = log; L.day = 'sun';
+  return log;
+}
+// domingo, depois do jogo: quem jogou gasta energia e acumula estresse conforme o resultado; quem ficou no banco tem o dia livre
+function applySunday(L, played, result) {
+  const pendingMetas = L.phase !== 'done' ? L.sponsors.filter((s) => s.status === 'pending').length : 0;
+  for (const t of L.teams) {
+    const isUser = t.idx === L.user;
+    for (const p of t.roster) {
+      if (played.has(p.id)) {
+        p.energy = Math.max(0, p.energy - DAY.match);
+        // estresse da partida: derrota pesa mais, e a cobrança da torcida cresce com a popularidade do time
+        const res = result[t.idx];
+        addStress(p, STRESS.match + (res === 'l' ? STRESS.loss + STRESS.crowd * t.fame / 100 : res === 'w' ? STRESS.win : 0));
+        if (isUser) addStress(p, STRESS.meta * pendingMetas); // metas de patrocínio ainda em aberto
+      } else { dayRecover(p); addPop(p, POP_GAIN.bench * PER_MATCH); addStress(p, DAY_STRESS.free + DAY_STRESS.bench); }
+      p.injWed = false;
+    }
+    if (!isUser) autoStarters(t);
+  }
 }
 
 function standings(L, div) {
@@ -665,7 +753,7 @@ function newWindow(L, r) {
 const userTeam = (L) => L.teams[L.user];
 const elemCount = (t, elem) => t.roster.filter((q) => q.elem === elem).length;
 function ownerOf(L, pid) { return L.teams.find((t) => t.roster.some((q) => q.id === pid)) || null; }
-function valueOf(L, p) { const t = ownerOf(L, p.id); return marketValue(p, !!t && t.starters[p.elem] === p.id); }
+function valueOf(L, p) { const t = ownerOf(L, p.id); return Math.round(marketValue(p, !!t && t.starters[p.elem] === p.id) * Math.max(0.6, 1 - 0.08 * (p.inj || 0)) / 100) * 100; }
 function news(L, text) { L.window.news.unshift({ step: L.window.step, text }); L.window.news = L.window.news.slice(0, 40); }
 function moveTo(L, p, from, to) {
   from.roster = from.roster.filter((q) => q !== p);
@@ -681,7 +769,7 @@ function canBuy(L, pid) {
   const me = userTeam(L), seller = ownerOf(L, pid);
   if (L.phase !== 'preseason' || !seller || seller === me || me.roster.length >= MAX_ROSTER) return { ok: false, why: me.roster.length >= MAX_ROSTER ? 'Elenco cheio' : '' };
   const p = seller.roster.find((q) => q.id === pid), price = valueOf(L, p);
-  if (elemCount(seller, p.elem) < 2 || seller.roster.length <= 3) return { ok: false, why: 'Não está à venda', price };
+  if (elemCount(seller, p.elem) < 2 || seller.roster.length <= MIN_ROSTER) return { ok: false, why: 'Não está à venda', price };
   if (me.cash < price) return { ok: false, why: 'Caixa insuficiente', price };
   return { ok: true, price };
 }
@@ -753,7 +841,7 @@ function aiWindowMoves(L, r) {
   for (const t of ai) {
     autoStarters(t);
     // no vermelho: vende o reserva mais caro (ou dispensa) para cortar a folha
-    if (t.cash < 0 && t.roster.length > 3) {
+    if (t.cash < 0 && t.roster.length > MIN_ROSTER) {
       const out = t.roster.filter((q) => !Object.values(t.starters).includes(q.id) && elemCount(t, q.elem) > 1).sort((a, b) => wageOf(b) - wageOf(a))[0];
       if (out) {
         const price = Math.round(valueOf(L, out) * 0.8 / 100) * 100, buyer = L.teams.filter((o) => o !== t && o.idx !== L.user && o.roster.length < MAX_ROSTER && o.cash > price + 5000)[0];
@@ -763,8 +851,8 @@ function aiWindowMoves(L, r) {
       }
     }
     // completa o elenco com agente livre
-    if (t.roster.length < 4) {
-      const fa = L.freeAgents.filter((p) => signingFee(p) <= t.cash - 2000).sort((a, b) => ovr(b.st) - ovr(a.st))[0];
+    if (t.roster.length < MIN_ROSTER) {
+      const fa = L.freeAgents.filter((p) => signingFee(p) <= Math.max(0, t.cash - 2000) || t.roster.length < MIN_ROSTER - 1).sort((a, b) => ovr(b.st) - ovr(a.st))[0];
       if (fa) { L.freeAgents = L.freeAgents.filter((p) => p !== fa); t.cash -= signingFee(fa); hire(fa); t.roster.push(fa); autoStarters(t); news(L, `${t.name} contrata o agente livre ${fa.name}.`); }
       continue;
     }
@@ -778,7 +866,7 @@ function aiWindowMoves(L, r) {
     if (!weak) continue;
     const need = ovr(weak.s.st) + (t.cash > 80000 ? 2 : 4), budget = t.cash - 3000;
     const fromFA = L.freeAgents.filter((p) => p.elem === weak.e && ovr(p.st) >= need && signingFee(p) <= budget).map((p) => ({ p, price: signingFee(p), from: null }));
-    const fromTeams = L.teams.filter((o) => o !== t && o.idx !== L.user && o.roster.length > 3).flatMap((o) =>
+    const fromTeams = L.teams.filter((o) => o !== t && o.idx !== L.user && o.roster.length > MIN_ROSTER).flatMap((o) =>
       o.roster.filter((p) => p.elem === weak.e && elemCount(o, p.elem) > 1 && ovr(p.st) >= need).map((p) => ({ p, price: valueOf(L, p), from: o })))
       .filter((c) => c.price <= budget);
     // só contrata quem cabe na folha que a divisão sustenta
@@ -962,7 +1050,7 @@ function ageAndContracts(L, r) {
       L.freeAgents = L.freeAgents.filter((p) => p !== fa); hire(fa); t.roster.push(fa);
       rep.news.push(`${t.name} contrata ${fa.name} para repor a saída.`);
     }
-    while (t.roster.length < 4) {
+    while (t.roster.length < MIN_ROSTER) {
       let fa = L.freeAgents.sort((a, b) => ovr(b.st) - ovr(a.st))[0];
       if (!fa) { fa = makePlayer(L, r, ELEMS[Math.floor(r() * 3)], DIVS[t.div].faBase); L.freeAgents.push(fa); }
       L.freeAgents = L.freeAgents.filter((p) => p !== fa); hire(fa); t.roster.push(fa);
@@ -978,6 +1066,8 @@ function renewContract(L, pid, years) {
   p.wage = askWage(p); p.contract = years; p.expiring = false;
   return true;
 }
+// elenco abaixo do mínimo (sem contar quem está com contrato encerrado)
+function rosterShort(L) { const me = userTeam(L); return Math.max(0, MIN_ROSTER - me.roster.filter((p) => !p.expiring).length); }
 // o que impede de começar a temporada (contratos encerrados saem e podem deixar um elemento vazio)
 function seasonBlockers(L) {
   const me = userTeam(L), out = [];
@@ -993,7 +1083,7 @@ function signPlayer(L, id) {
   const t = L.teams[L.user], i = L.freeAgents.findIndex((p) => p.id === id);
   if (L.phase !== 'preseason' || i < 0 || t.roster.length >= MAX_ROSTER) return false;
   const p = L.freeAgents[i], fee = signingFee(p);
-  if (t.cash < fee && !seasonBlockers(L).includes(p.elem)) return false;
+  if (t.cash < fee && !seasonBlockers(L).includes(p.elem) && !(rosterShort(L) && fee <= 1500)) return false;
   L.freeAgents.splice(i, 1);
   t.cash -= fee; hire(p); t.roster.push(p);
   if (!t.starters[p.elem]) t.starters[p.elem] = p.id;
@@ -1032,7 +1122,18 @@ function deserialize(s) {
     for (const p of t.roster) if (p.stress === undefined) p.stress = Math.round(r() * 15);
   }
   for (const p of o.freeAgents) if (p.stress === undefined) p.stress = 0;
+  // saves de antes do elenco de 6 a 9: todos começam sem lesão e cada time ganha jovens da base até ter 6
+  for (const p of o.teams.flatMap((t) => t.roster).concat(o.freeAgents)) if (p.inj === undefined) p.inj = 0;
+  // saves de antes do calendário: plano de evento vira evento da semana; treino em equipe não tem mais evento
+  for (const p of o.teams.flatMap((t) => t.roster)) if (p.plan && p.plan.startsWith('ev:')) { p.ev = p.plan.slice(3); p.plan = 'rest'; }
+  if (o.teamPlan && o.teamPlan.startsWith('ev:')) o.teamPlan = 'rest';
+  if (!o.evDay) { const days = EVENT_DAYS.slice(); o.evDay = {}; (o.events || []).forEach((k, i) => { o.evDay[k] = days[i % 4]; }); }
+  if (!o.day) o.day = 'mon';
+  for (const t of o.teams) while (t.roster.length < MIN_ROSTER) {
+    const need = ELEMS.slice().sort((a, b) => elemCount(t, a) - elemCount(t, b))[0];
+    const kid = makePlayer(o, r, need, Math.max(38, teamOVR(t) - 10), 17 + Math.floor(r() * 3)); hire(kid); t.roster.push(kid);
+  }
   return o;
 }
 
-if (typeof module !== 'undefined') module.exports = { renewContract, seasonBlockers, wageOf, takeJob, chooseCoachOffer, expectedPos, repNeeded, formOf, newSeason, advanceWindow, buyPlayer, sellPlayer, sellQuote, canBuy, acceptOffer, declineOffer, valueOf, offerTiers, EVENTS, teamPop, eventIncome, newLeague, setUser, startSeason, finishWeek, standings, userFixture, currentFixtures, ovr, salary, payroll, teamOVR, starters, matchDef, aiCoach, signSponsor, signPlayer, releasePlayer, serialize, deserialize, DIVS };
+if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, DAY, DAYS, DAY_NAME, EVENT_DAYS, evDayOf, rosterShort, fixInjuredStarters, isInjured, MIN_ROSTER, MAX_ROSTER, INJURY, renewContract, seasonBlockers, wageOf, takeJob, chooseCoachOffer, expectedPos, repNeeded, formOf, newSeason, advanceWindow, buyPlayer, sellPlayer, sellQuote, canBuy, acceptOffer, declineOffer, valueOf, offerTiers, EVENTS, teamPop, eventIncome, newLeague, setUser, startSeason, finishWeek, standings, userFixture, currentFixtures, ovr, salary, payroll, teamOVR, starters, matchDef, aiCoach, signSponsor, signPlayer, releasePlayer, serialize, deserialize, DIVS };

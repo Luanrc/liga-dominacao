@@ -61,12 +61,25 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
 
 ## 3. Elenco
 
-- Cada time tem **até 5 benders** e precisa ter **pelo menos 1 de cada elemento** (água, terra, fogo). ✅
-- Em cada partida jogam **3 titulares, um por elemento**. O jogador escolhe os titulares. ✅
+- Cada time tem **de 6 a 9 benders** (v0.15; antes, até 5) e precisa ter **pelo menos 1 de cada elemento** (água, terra, fogo). ✅
+  - Elenco inicial dos times: 3 titulares, 1 reserva de cada elemento (5 a 8 pontos de nota abaixo) e de 0 a 3 benders a mais, mais fracos e muitas vezes jovens. Média de 7,5 por time.
+  - A temporada só começa com pelo menos 6 benders (sem contar contratos encerrados). Se o caixa não pagar, o técnico ainda pode contratar agentes livres baratos (luva até ¥1.500) para chegar a 6.
+  - A IA completa o elenco até 6 e só vende ou dispensa acima de 6.
+  - Nomes: a lista tem 318 nomes (eram 128), o bastante para 24 elencos de até 9 mais os agentes livres.
+- Cada partida começa com **3 titulares, um por elemento**. O jogador escolhe os titulares. ✅
+- **Banco e substituições** (v0.15): os reservas sadios ficam no banco da partida. No intervalo entre os rounds (na HUD de preparação), o técnico troca à vontade, sempre por alguém do mesmo elemento, para que os três elementos continuem em quadra. Quem entra herda a instrução de quem saiu, e quem marcava o bender que saiu passa a marcar quem entrou. Quem entra em quadra conta como quem jogou (energia, estresse, popularidade). A IA, e o técnico que pula para o resultado, trocam automaticamente quem se lesionou pelo melhor reserva sadio do elemento. ✅
+- **Lesão** (v0.15): atributo visível, "sem lesão" ou "lesionado por X semanas" (rodadas). ✅
+  - **Na partida:** cada vez que um bender é empurrado de zona (2,2%), cai na água (8%) ou é atingido acima dos ombros, a jogada que dá falta (2%, v0.15.1), pode se machucar; com energia baixa a chance aumenta (×0,7 com energia 100, ×1,3 com 50, ×1,9 com 0). Quem se lesiona joga o resto da partida com Poder, Agilidade e Firmeza a 85%, até ser trocado no intervalo. A narração avisa e o bender aparece com o selo "Lesionado" na HUD de preparação.
+  - **No treino:** treinar com energia baixa pode machucar: 0,5% + 0,15% por ponto de energia abaixo de 50 (energia 30 ≈ 3,5%).
+  - **Duração:** 1 semana (45%), 2 (30%), 3 (15%), 4 (7%) ou 5 (3%). Cada rodada desconta uma semana.
+  - **Lesionado** não treina nem faz eventos que exigem o físico (Exibição na praça, Festival, Aula numa escola), mas pode descansar e fazer eventos tranquilos (Evento beneficente, Entrevista ao jornal, Comercial de rádio, Sessão de autógrafos). Não vai para o banco da partida e não pode ser escalado. Se o titular se lesiona, o melhor reserva sadio do elemento assume (aparece no resumo da rodada). Só entra em quadra se não houver outro bender sadio do elemento, e então joga com os atributos físicos a 85%.
+  - **Valor de mercado:** −8% por semana de lesão (no mínimo 60% do valor).
 - O elenco só muda durante a **janela de transferências**. ✅
 - **Aba Elenco** (v0.11) ✅
-  - **Escalação:** um quadro por elemento com o titular (nota, energia, estresse) e os reservas daquele elemento, cada um com o botão "Escalar no lugar de [titular]". Na tabela, o titular tem a etiqueta Titular e o reserva tem o botão Escalar.
-  - **Ficha do bender:** clique em qualquer linha da tabela. Mostra idade, temperamento e popularidade, o **gráfico de competências** (radar dos 6 atributos, de 30 a 100, comparando o início da temporada com agora), a lista de atributos com o ganho na temporada e a **evolução semana a semana** (uma coluna por rodada; ▲ nas semanas em que o atributo subiu; cor mais forte conforme o crescimento acumulado).
+  - **Escalação** (v0.16.7, no estilo da HUD de preparação): à esquerda, o campo vertical com as Zonas 1 a 3 e os 3 titulares posicionados pela formação e pela postura da última partida; à direita, a lista com titulares e reservas (elemento, nome, nota, idade, energia, estresse, lesão). Arrastar um reserva para o campo (ou sobre o titular) o escala no lugar de quem é do mesmo elemento; arrastar um titular sobre um reserva faz a troca ao contrário; o botão "Escalar ⇄ [titular]" continua como alternativa. Clicar num boneco do campo ou numa linha da lista abre a ficha do bender (gráfico de competências) logo abaixo.
+  - A tabela completa do elenco (atributos, popularidade, temperamento, energia, estresse, lesão) continua embaixo. **Vender e dispensar** saíram dela e ficam na **folha salarial da aba Finanças** (só na pré-temporada), ao lado do salário, do contrato e do valor (v0.16.8).
+  - **Ficha do bender sempre em janela** (v0.16.8): em qualquer lugar onde um bender pode ser clicado (campo e lista da escalação, tabela do elenco, treino, folha salarial, mercado, observação do rival na Central e na partida, e, desde a v0.16.9, bonecos e linhas da HUD de preparação, inclusive o banco), a ficha abre numa janela por cima da tela. Na HUD, clicar abre a ficha e arrastar faz a substituição; trocar a instrução não abre nada.
+  - **Ficha do bender:** clique em qualquer bender (abre numa janela). Mostra idade, temperamento e popularidade, o **gráfico de competências** (radar dos 6 atributos, de 30 a 100, comparando o início da temporada com agora), a lista de atributos com o ganho na temporada e a **evolução semana a semana** (uma coluna por rodada; ▲ nas semanas em que o atributo subiu; cor mais forte conforme o crescimento acumulado).
   - O histórico é guardado só para os benders do seu time, a partir do início da temporada. Na pré-temporada, a ficha mostra só os valores atuais.
 - **Aba Finanças · Folha salarial** (v0.11.1): salário, contrato e valor de mercado de cada bender (com Nota, Idade e Popularidade), o total da folha por rodada e na temporada, e a renovação dos contratos encerrados. Essas colunas saíram do Elenco. ✅
 - **Aba Treino** (v0.11): tipo de treino (equipe ou individual), plano de cada bender e eventos da semana, separado do elenco. ✅
@@ -92,16 +105,16 @@ Os valores de patrocínio e prêmios acima são os da **Primeira Divisão**. Na 
 **Saídas**
 | Gasto | Valor inicial |
 |---|---|
-| Salário de cada bender, pago a cada rodada (fixado no contrato, ver 6d) | ¥1.400 × ((nota − 30) ÷ 40)^1,5: nota 50 ≈ ¥500, nota 56 ≈ ¥730, nota 70 = ¥1.400, nota 80 ≈ ¥1.960 |
+| Salário de cada bender, pago a cada rodada (fixado no contrato, ver 6d) | 0,75 × ¥1.400 × ((nota − 30) ÷ 40)^1,5: nota 50 ≈ ¥370, nota 56 ≈ ¥550, nota 70 = ¥1.050, nota 80 ≈ ¥1.470 (v0.15: o fator 0,75 compensa o elenco maior) |
 | Contratar agente livre (luvas) | 2 rodadas de salário |
 | Comprar bender de outro time | valor de mercado |
 
 (Valor de mercado e luvas também sobem com a popularidade do bender: ver 7b.)
 
 - O salário **cresce mais rápido que a nota** (curva, não linear), para que um elenco médio da Segunda Divisão caiba no orçamento dela e uma estrela custe bem mais que um bender mediano. *Inicial.*
-- **Valor de mercado:** 10 rodadas de salário (nota 70 = ¥14.000), ×1,25 se o bender for titular no time atual. *Inicial.*
+- **Valor de mercado:** 10 rodadas do salário de tabela, sem o fator 0,75 (nota 70 = ¥14.000); as luvas também usam o salário de tabela, ×1,25 se o bender for titular no time atual. *Inicial.*
 - **Caixa inicial:** Primeira ¥20.000; Segunda ¥12.000; Terceira ¥7.000. *Inicial.*
-- **Times da IA** não têm patrocinadores: recebem uma **renda simplificada por rodada** proporcional à própria folha (Primeira ×1,05, Segunda e Terceira ×0,95; ×0,8 acima de ¥40 mil; ×0,55 acima de ¥80 mil), **limitada por divisão** (1,35 × a renda de referência: Primeira ¥6.210, Segunda ¥3.645, Terceira ¥2.160 por rodada), mais os prêmios de vitória e playoffs como o jogador. ✅
+- **Times da IA** não têm patrocinadores: recebem uma **renda simplificada por rodada** proporcional à própria folha (Primeira ×1,05, Segunda e Terceira ×0,95; ×0,8 acima de ¥40 mil; ×0,55 acima de ¥80 mil), **limitada por divisão** (1,35 × a renda de referência: Primeira ¥7.155, Segunda ¥4.185, Terceira ¥2.500 por rodada; v0.15: referência +15% para acompanhar a folha do elenco maior), mais os prêmios de vitória e playoffs como o jogador. ✅
 - **Saldo negativo:** bloqueia contratações e compras até voltar ao positivo. ✅
 - **Peso dos salários (diretriz de balanceamento):** o valor fixo dos patrocínios deve cobrir **cerca de 90% a 100% dos salários de um elenco médio**. Assim, um time que só cumpre o básico empata as contas, e o dinheiro para crescer (contratar e pagar benders melhores) vem das **metas de patrocínio, dos prêmios e das vendas**. Um elenco cheio de estrelas só se paga se o time vencer. 🔨
 
@@ -160,7 +173,7 @@ Os patrocinadores são marcas inventadas do universo (lojas, fábricas e serviç
   - **Aceitar ou recusar ofertas da IA.** As ofertas vão de 95% a 130% do valor (a maioria acima), e aparecem quando o bender seria titular no time interessado (chance alta) ou um bom reserva (chance baixa).
   - **Dispensar** um bender: ele vira agente livre, sem custo nem receita.
 - Nunca é possível ficar sem bender de algum elemento.
-- **A IA negocia entre si:** completa o elenco com agentes livres quando tem menos de 4; procura reforço (agente livre ou bender de outro time da IA) para o elemento do titular mais fraco, quando acha alguém pelo menos 4 pontos de nota melhor que caiba no caixa (deixando ¥3.000 de folga); dispensa o reserva mais fraco para abrir vaga; e, **se estiver no vermelho**, vende ou dispensa o reserva mais caro.
+- **A IA negocia entre si:** completa o elenco com agentes livres quando tem menos de 6; procura reforço (agente livre ou bender de outro time da IA) para o elemento do titular mais fraco, quando acha alguém pelo menos 4 pontos de nota melhor que caiba no caixa (deixando ¥3.000 de folga); dispensa o reserva mais fraco para abrir vaga; e, **se estiver no vermelho**, vende ou dispensa o reserva mais caro.
 - As **notícias do mercado** mostram todos os negócios da janela.
 - Fora da janela, o elenco fica travado.
 - Multa por quebra de contrato e renegociação no meio do contrato. 💡
@@ -246,6 +259,42 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 
 ## 7. Treino e energia
 
+**Calendário da semana** (v0.16) ✅
+| Dia | O que acontece |
+|---|---|
+| Segunda | O técnico decide: treino de quarta (ou descanso) de cada bender e até 1 evento por bender. Dia livre. |
+| Terça, quinta, sexta, sábado | Os eventos da semana, cada um no seu dia (sorteado toda semana). Quem não tem evento no dia tem o dia livre. |
+| Quarta | Treino (ou descanso). |
+| Domingo | Jogo. |
+- Fluxo: na segunda, o botão **Avançar para domingo** roda a semana (segunda a sábado) para todos os times. No domingo a Central mostra **Como foi a semana** (ganhos do treino, eventos, lesões, quem assumiu como titular) e o técnico ainda pode mexer na escalação antes de **Ir para a partida**. Depois do jogo começa a nova segunda. **Simular rápido** faz tudo de uma vez.
+- A grande mudança: **o treino e os eventos acontecem antes do jogo da mesma semana**. Até a v0.15.1, o plano da semana era aplicado depois da partida e só pesava no jogo seguinte.
+- Lesão no treino de quarta já tira o bender do domingo da mesma semana.
+
+**Energia por dia** (v0.16; substitui a tabela semanal abaixo)
+| Dia | Efeito |
+|---|---|
+| Dia livre | recupera 12% do que falta para 100, mais 2 (quanto mais cansado, mais recupera) |
+| Quarta: treinar | −22 |
+| Quarta: descansar | dia livre + 10 |
+| Dia de evento | não recupera; gasta a energia do evento |
+| Domingo: jogar | −15 |
+| Domingo: reserva que não joga | dia livre |
+- Calibrado para manter o equilíbrio de antes: num ciclo **treina 2, descansa 1**, o titular chega ao jogo com energia média de 86 (mínimo 76); antes, 85 (mínimo 70).
+- Como a recuperação depende do quanto falta, **o dia do evento importa**: um titular que treina e faz a Exibição na terça chega ao domingo com ~43; no sábado, com ~32. Quem descansa na quarta e faz exibição chega com 100 (terça) ou 92 (sábado). Para titulares, evento é caro; é trabalho para reservas.
+- Treinar toda semana não zera mais a energia: estabiliza perto de 68 no dia do jogo, o que já custa caro em quadra (um time com energia 70 venceu 18% contra a cópia de si mesmo descansada, em 60 partidas).
+- O ganho do treino usa a energia de antes do treino. O risco de lesão no treino usa a energia de antes do treino, a partir de 60 (antes: depois do treino, a partir de 50, o que dá o mesmo ponto).
+
+**Medição: semana antiga × calendário novo** (3 temporadas, técnico automático treinando 2 semanas e descansando 1, reservas treinando e fazendo exibição)
+| | Semana antiga | Calendário novo |
+|---|---|---|
+| Energia do titular do técnico no jogo | 87,6 | 87,3 |
+| Estresse do titular do técnico no jogo | 18,1 | 11,6 |
+| Energia do titular da IA no jogo | 80,8 | 80,7 |
+| Titulares da IA abaixo de 60 de energia no jogo | 13% | 0% |
+| Evolução de atributos por time na temporada | 50,9 | 53,5 |
+| Renda de eventos do técnico na temporada | ¥12.300 | ¥11.700 |
+- O estresse no jogo cai porque o descanso de quarta (−14) chega antes do jogo; antes, chegava depois.
+
 **Tipo de treino** (escolhido a cada semana) ✅
 - **Equipe:** um único foco para todo o elenco (um atributo, ou todos descansam). É um atalho para quem não quer configurar bender por bender; rende o mesmo que o treino individual.
 - **Individual:** cada bender tem o seu foco ou descansa.
@@ -255,7 +304,7 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 - Atributos treináveis: Poder, Precisão, Agilidade, Firmeza, Disciplina, Leitura de jogo.
 - Temperamento não se treina.
 
-**Energia** ✅ (0 a 100)
+**Energia: modelo semanal antigo** (até a v0.15.1, guardado como referência) (0 a 100)
 | Ação | Efeito |
 |---|---|
 | Recuperação natural (todos, toda semana) | +10 |
@@ -267,7 +316,7 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 - Com esses valores, **treinar 2 semanas e descansar 1** mantém a energia estável. Treinar toda semana derruba ~15 por rodada: é possível, mas o titular chega cansado ao fim da temporada.
 
 - Energia baixa reduz o rendimento em quadra: com energia 100 o bender rende 100%; com energia 0, rende 78%.
-- Os planos de treino da semana são aplicados depois da partida da rodada.
+- Até a v0.15.1, os planos de treino da semana eram aplicados depois da partida da rodada. Desde a v0.16, antes (ver o calendário acima).
 
 **Instalações** (centro de treino, centro médico), que aumentam o ganho de treino ou a recuperação. 💡
 
@@ -303,11 +352,11 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 - **Arquibancada:** a lotação do lado de cada time vai de 35% (popularidade 0) a lotada (100).
 - **Cobrança da torcida:** quanto mais popular o time, mais uma derrota estressa os benders (ver Estresse).
 
-**Eventos da semana**: no plano semanal, no lugar de treinar ou descansar, um bender pode fazer um evento. Rende dinheiro e popularidade, custa energia e **não evolui atributos**. A **Exibição na praça** está sempre disponível; outros **2 eventos** sorteados aparecem a cada rodada. Alguns exigem popularidade mínima e têm vagas limitadas. Renda = (base + valor por ponto × popularidade) × multiplicador da divisão (60% na Segunda).
+**Eventos da semana**: desde a v0.16, além do treino de quarta, cada bender pode fazer até 1 evento por semana, no dia do evento (terça, quinta, sexta ou sábado, sorteado a cada semana); antes, o evento ocupava o lugar do treino. Rende dinheiro e popularidade, custa energia e **não evolui atributos**. A **Exibição na praça** está sempre disponível (com 2 vagas desde a v0.15: com elenco de até 9, vagas livres viravam renda fácil com os reservas, de ¥5 mil para ¥20 a 36 mil por temporada na Primeira); outros **2 eventos** sorteados aparecem a cada rodada. Alguns exigem popularidade mínima e têm vagas limitadas. Renda = (base + valor por ponto × popularidade) × multiplicador da divisão (60% na Segunda).
 
 | Evento | Requisito | Vagas | Base | Por ponto de POP | Energia | POP |
 |---|---|---|---|---|---|---|
-| Exibição na praça | — | livres | ¥200 | ¥6 | −8 | +2 |
+| Exibição na praça | — | 2 | ¥200 | ¥6 | −8 | +2 |
 | Comercial de rádio | POP 40 | 1 | ¥600 | ¥20 | −6 | +3 |
 | Sessão de autógrafos | POP 25 | 2 | ¥300 | ¥14 | −8 | +2 |
 | Evento beneficente | — | 2 | ¥0 | ¥0 | −10 | +6 |
@@ -315,7 +364,9 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 | Entrevista ao jornal | POP 30 | 1 | ¥200 | ¥8 | −3 | +3 |
 | Aula numa escola de dominação | — | 1 | ¥400 | ¥4 | −10 | +3 |
 
-- No **treino em equipe**, há a opção "Todos: Exibição na praça".
+- No **treino em equipe**, o foco vale só para a quarta; os eventos são escolhidos bender a bender (v0.16).
+- **Calendário como quadro de eventos** (v0.16.6): a faixa da semana no topo da aba Treino é onde se arrasta: cada dia de evento mostra o nome do evento, etiquetas curtas (renda, energia gasta, vagas ocupadas, popularidade mínima, se exige o físico) e as fichas dos benders escalados. Logo abaixo fica o quadro "Sem evento". O bloco separado de cartões de evento, embaixo da tabela, saiu.
+- **Arrastar e soltar** (v0.16.1): na aba Treino, os benders aparecem como fichas no quadro "Sem evento · descansam nos dias livres". O técnico arrasta a ficha até o cartão do evento (com o dia, a renda, o custo de energia e as vagas). Quem não é arrastado para nenhum evento descansa nos dias livres. Para tirar, arraste de volta ou clique no ×. Se não puder (popularidade abaixo do mínimo, sem vaga, lesionado em evento que exige o físico), o cartão fica vermelho durante o arraste e uma mensagem explica o motivo. A coluna de evento saiu da tabela de treino. Funciona com mouse e com toque.
 - Se o bender não cumprir o requisito ou não houver vaga quando a semana for processada, ele descansa.
 - Times da IA não fazem eventos (renda simplificada); a popularidade dos benders deles muda só pelas partidas.
 - **Referência medida:** uma Exibição na praça paga mais ou menos o salário de um bender mediano; eventos especiais pagam bem mais para quem é popular. Numa temporada, um time que usa eventos com moderação arrecada cerca de ¥9.000 na Primeira Divisão e ¥4.500 na Segunda.
@@ -335,7 +386,7 @@ Cada bender tem **estresse** de 0 a 100.
 | Treinar | +2 |
 | Fazer um evento | +1 |
 
-**O que alivia**
+**O que alivia** (v0.16: por dia; descanso na quarta −14, cada dia livre −0,8, reserva que não joga −3 a mais no domingo. A tabela abaixo é o modelo semanal antigo.)
 | Fonte | Estresse |
 |---|---|
 | Descansar | −15 |
@@ -362,7 +413,7 @@ Os atributos vão de 35 a 99. ✅
 | **FIR · Firmeza** | Aguenta golpes sem ser empurrado. No dominador de terra, também dá chance de bloquear com um disco. |
 | **DIS · Disciplina** | Evita faltas (pisar além da linha da zona, golpe acima dos ombros). |
 | **LEI · Leitura de jogo** | Escolhe melhor o alvo, reage mais rápido e antecipa golpes para esquivar. |
-| **Temperamento** (0 calmo a 100 explosivo) | Puxa a postura do bender para o seu jeito natural: ele segue 65% da ordem do técnico e 35% do próprio jeito. Explosivos cometem um pouco mais de faltas. Não se treina. |
+| **Temperamento** (0 calmo a 100 explosivo) | Puxa a postura do bender para o seu jeito natural (65% a ordem do técnico, 35% o próprio jeito). Faltas × (0,8 + temperamento × 0,004). **Em quadra (v0.13):** com o time atrás (rounds, território) ou o próprio bender empurrado para trás, o **explosivo esquenta** (acima de 55: até +5% de empurrão e ataques 5% mais rápidos); sem estar atrás, o **calmo fica frio** (abaixo de 45: até +4% de esquiva). Medido contra neutros (50): explosivo 85 vence 55% (antes 35%); calmo 15 vence 56% (antes 60%). |
 | **Nota** | Média ponderada dos atributos, pesando mais os que mais decidem partidas: Poder 1,25 · Firmeza 1,2 · Agilidade 1,1 · Precisão 1,0 · Leitura 0,85 · Disciplina 0,6. |
 
 **Tendência por elemento:** a terra nasce com mais Firmeza e menos Agilidade; o fogo, com mais Agilidade e menos Firmeza.
@@ -383,6 +434,7 @@ Os atributos vão de 35 a 99. ✅
 - Quem cai pela borda do fundo cai na água e está fora do round. Derrubar os três é **nocaute** e encerra a partida na hora.
 - Rounds de 3 minutos, melhor de 3.
 - Vence o round quem avançou mais. Se a linha estiver no centro, vence quem tem os jogadores mais à frente. Empate total vira **duelo 1 contra 1** numa plataforma circular no centro.
+  - **Escolha do duelista** (v0.13.1): antes do duelo abre uma janela e o técnico escolhe um dos benders que estavam em quadra. Quem caiu na água no round aparece apagado, riscado e com a faixa "Caiu na água", e não pode ser escolhido. O técnico da IA (e as partidas simuladas ou puladas) escolhe o mais forte em Poder + Agilidade + Precisão entre os que não caíram.
 - **Faltas** (pisar além da linha, golpe acima dos ombros) mandam o infrator uma zona para trás. ✅
   - **Infrator já na Zona 3** (v0.11.2): quem recua é o **aliado mais à frente** (o vivo, em quadra, com a zona mais avançada).
   - **Time inteiro na Zona 3** (todos os que estão em quadra): o infrator é **suspenso por 20 segundos**. Ele fica fora da ação (não ataca, não se move e não pode ser atingido; aparece apagado na arena e com "Suspenso" no painel) e volta sozinho quando cumpre o tempo. A suspensão termina junto com o round. Um suspenso não conta como caído para o nocaute.
@@ -415,28 +467,35 @@ Ataques de times opostos que se chocam no ar se anulam.
 - **Escolha de alvo:**
   | Opção | Comportamento |
   |---|---|
-  | IA decide | cada bender escolhe pela vulnerabilidade, distância e o próprio alcance |
+  | Leitura do bender (antes "IA decide", v0.13) | cada bender escolhe sozinho e a Leitura decide: vulnerabilidade × LEI × 2, preferência de distância do elemento × LEI, distração com quem está perto quando LEI < 70, acaso × (1,05 − LEI)^1,4 × 2,2. Medido contra Foco no vulnerável com o mesmo elenco: LEI 75 vence 59%, LEI 60 vence 55%, LEI 45 vence 35% |
   | Foco no mais vulnerável | todos no rival mais perto de ser empurrado ou de cair |
-  | Duelo de elementos | cada um no rival do mesmo elemento, salvo se outro estiver bem mais vulnerável |
+  | Duelo de elementos (v0.13) | jogo defensivo: ataca o mais vulnerável, mas 25% mais devagar; quando um ataque rival chega a menos de 90 do alvo, o bender livre mais próximo (até 230) tenta rebatê-lo no ar: chance 0,14 + PRE × 0,002 + LEI × 0,001, com 0,7 s de espera por bender. Medido: ~400 ataques rebatidos por partida, empurrões dos dois lados caem pela metade, nocautes caem para ~8%; vence 54% contra Leitura do bender e 54% contra Foco no vulnerável. O técnico da IA defensivo usa quando está ganhando |
   | Foco no mais perigoso | prioriza o rival com mais Poder |
   | Foco no mais próximo | prioriza quem está mais perto |
   | Caçar a estrela | prioriza o rival com os melhores atributos |
 
   As três últimas misturam o critério com a leitura de quem está vulnerável, para não virarem escolhas às cegas.
-- **Formação:**
-  - **Aberta:** o time se espalha pela largura.
-  - **Compacta:** o time se junta no centro e se ajuda um pouco a focar o mesmo alvo. Custo: o golpe **respinga** em quem está colado no alvo (40% do empurrão).
-  - **Escalonada:** um bender segura a linha (a terra, se estiver em quadra; senão quem tem mais Firmeza), finca o pé (+14 de Firmeza contra empurrões) e comete mais faltas de linha. Os outros dois ficam um pouco atrás e esquivam mais (+5%).
-- **Instruções individuais** (uma por bender, por round):
+- **Formação: pedra, papel e tesoura** (v0.12). **Segredo de design (v0.12.2): o jogo não explica as vantagens em lugar nenhum.** O Guia descreve só o que cada formação faz e avisa que cada uma se sai melhor contra umas do que contra outras; descobrir qual vence qual é parte da graça. **Compacta vence Escalonada, Escalonada vence Aberta, Aberta vence Compacta.** A formação do rival **não aparece em lugar nenhum** (nem na narração, nem no resumo do round, nem na observação do rival, nem no relatório da partida): o técnico a reconhece só pelo desenho do time na arena e pelo mapa de calor do resumo do round. (v0.12.1)
+  | Formação | Identidade | Vence | Contra-ataque |
+  |---|---|---|---|
+  | Aberta (cerco) | ocupa toda a largura | Compacta | golpes de lado: +8% de empurrão e respingo de 90% (em vez de 60%) em quem está colado |
+  | Compacta (bloco) | 55% da largura; tende a atacar o mesmo alvo (+0,02); sofre respingo de 60% do empurrão em quem está a menos de 34 | Escalonada | ataque concentrado anula os +14 de Firmeza da âncora, e +3% de empurrão |
+  | Escalonada (muralha) | âncora (terra, ou quem tem mais FIR) 14 à frente, +14 de FIR, ataca 20% mais devagar (não comete mais faltas extras); os outros 10 atrás, +5% de esquiva | Aberta | +6% de empurrão em quem está isolado na largura |
+  - **Medido** (120 partidas por confronto, mesmos times trocando de lado): Compacta × Escalonada **62%**, Escalonada × Aberta **60%**, Aberta × Compacta **65%**. Sem os contra-ataques as três ficam perto de 50% entre si.
+  - **Pior caso:** a formação em desvantagem com a melhor mistura de instruções (terra Pressionar, fogo Manter distância, água Proteger) vence só 25% a 33%. Instrução não vira o confronto de formação.
+  - **Desenho na arena** (medido): Compacta ocupa ~82 de largura; Aberta ~129; Escalonada ~116, com o da frente ~34 à frente dos outros (Aberta ~16). São essas diferenças de desenho que o técnico precisa perceber.
+- **Instruções individuais** (os três benders podem receber instrução em todo intervalo):
   | Instrução | Efeito |
   |---|---|
-  | Pressionar | joga colado na linha, prefere alvos próximos, ataca 10% mais rápido, 2,5× mais faltas de linha |
-  | Manter distância | fica um pouco mais atrás, prefere alvos distantes, balança mais de lado, +8% de esquiva |
+  | Pressionar | 8 mais à frente, prefere alvos próximos, ataca 5% mais rápido; custo: −5% de esquiva e 2,5× faltas de linha |
+  | Manter distância | prefere alvos distantes, balança mais de lado, +10% de esquiva; custo: ataca 5% mais devagar (não recua mais: o recuo era a punição escondida) |
   | Mais agressivo / Mais cauteloso | puxa a postura daquele bender para Agressiva ou Defensiva |
-  | Proteger | +10% de esquiva; na terra, tenta interceptar com um disco os ataques que vão num companheiro próximo |
+  | Proteger | +10% de esquiva; na terra, tenta interceptar com um disco os ataques que vão num companheiro próximo; custo: ataca 5% mais devagar (não recua mais) |
   | Marcar [rival] | ataca só aquele rival enquanto ele estiver em quadra |
+  - **Mesma instrução nos três** (qualquer uma, menos "sem instrução"): o time fica **previsível** naquele round: −18% de esquiva e ataques 8% mais lentos. Só o próprio time é avisado (narração, painel do intervalo e resumo do round); nada é dito sobre o rival.
+  - **Medido** (contra time sem instrução): uma instrução num bender fica entre 43% e 49%; a mistura terra Pressionar + fogo Manter distância + água Proteger dá 50%; os três iguais perdem: Pressionar 37%, Proteger 36%, Manter distância 34%.
 - **Obediência:** uma instrução que contraria o temperamento pode ser **ignorada no round inteiro**. Explosivos resistem a Mais cauteloso, Manter distância e Proteger; calmos resistem a Mais agressivo e Pressionar. A chance é 0 até 15 pontos do centro (50) e chega a 45% nos extremos (explosivo 90 mandado ser cauteloso: ~32%). Quem desobedece joga do próprio jeito (explosivo fica agressivo, calmo fica cauteloso). A tela mostra o risco antes de confirmar e avisa quando acontece.
-- **Técnico da IA:** escolhe postura, formação e instruções conforme o estilo e o placar (estilo agressivo: escalonada e terra pressionando; equilibrado: compacta; defensivo: aberta e terra protegendo; perdendo: mais agressivo e compacto).
+- **Técnico da IA:** depois de perder um round, em 70% das vezes troca para a formação que vence a do rival (v0.12). Também escolhe postura, formação e instruções conforme o estilo e o placar (estilo agressivo: escalonada e terra pressionando; equilibrado: compacta; defensivo: aberta e terra protegendo; perdendo: mais agressivo e compacto).
 - **Equilíbrio medido** (time com a opção contra time igual na opção padrão, ~50%): a maioria das opções fica entre 44% e 56%. Compacta e Foco no mais próximo estão um pouco fortes (~60%); Duelo de elementos está mais fraco (~35%).
 
 **Arenas**
@@ -457,7 +516,7 @@ Ataques de times opostos que se chocam no ar se anulam.
 
 **Observação do rival** (na Central, junto da próxima partida, e na partida pelo botão **Rival**)
 - Últimos 5 resultados do rival na temporada.
-- Tendência do técnico rival, conforme o estilo: postura e formação iniciais, instruções típicas e o que faz quando está perdendo (as mesmas regras que o técnico da IA segue).
+- Tendência do técnico rival, conforme o estilo: postura inicial, instruções típicas e o que faz quando está perdendo (sem a formação, desde a v0.12.1).
 - Energia e estresse médios dos titulares do rival e do seu time.
 - Titulares do rival com nota, Poder, Firmeza, Agilidade, temperamento, energia e estresse; marcados o **mais perigoso** (maior Poder) e a **estrela** (maior nota).
 
@@ -471,19 +530,36 @@ Ataques de times opostos que se chocam no ar se anulam.
 
 **Relatório da sua partida** (nos resultados da rodada, tanto jogando quanto em "Simular rápido")
 - **Destaque** da partida: pontuação = empurrões × 5 + quedas causadas × 10 + acertos × 0,03 + bloqueios × 0,02 + esquivas × 0,01 − faltas × 2 (acertos, bloqueios e esquivas são muito numerosos e pesam pouco).
-- **Round a round:** quem venceu e como, e a tática dos dois times naquele round (postura, formação, escolha de alvo e instruções individuais).
+- **Round a round:** quem venceu e como, e a tática **do seu time** naquele round (a do rival não aparece, v0.12.1) (postura, formação, escolha de alvo e instruções individuais).
 - **Estatísticas** de cada bender dos dois times: acertos, precisão, empurrões, quedas causadas, esquivas, bloqueios, faltas, desobediências e estado de estresse.
 - **Alertas:** muitas faltas do seu time (3 ou mais), desobediências e benders que jogaram estressados (50 ou mais).
 - **Guia em janela** (v0.11): na primeira vez que o técnico entra no jogo, o conteúdo da aba Guia abre numa janela, com o aviso de que ele fica sempre na aba Guia. O botão Guia da partida abre a mesma janela. ✅
 - **Guia (aba da central):** atributos, estados do bender e uma seção **Táticas da partida** que explica cada postura, escolha de alvo, formação e instrução individual, além da desobediência. ✅
+  - **Abas** (v0.16.3): o Guia tem as abas **Atributos** e **Táticas da partida**; dentro das táticas, **Postura do time** e **Instruções** (escolha de alvo, formação e instruções individuais). Saíram o texto de temperamento da postura (o temperamento continua explicado em Atributos) e o de desobediência. A janela do Guia (primeira entrada e botão Guia na partida) tem as mesmas abas.
+  - **Sem números** (v0.16.2): o Guia explica o que cada coisa faz, nunca quanto. Nenhum número aparece (nem percentuais, faixas ou limites), e as explicações não dizem como os valores mexem nas estatísticas. Os números ficam neste documento.
 - **Histórico de temporadas:** ver 6b. 💡 (gráficos de evolução de atributos e caixa)
 
 ## 9c. Dicas de primeira vez ✅
+
+- **Abertura** (v0.17): na primeira vez que o jogo abre, antes de tudo (escolha de time, Guia e dicas), aparece a janela **"Sabe como funciona a Dobra Esportiva?"** com um resumo do esporte (times de três benders, um de cada elemento; arena sobre a água com zonas; empurrar para ganhar território; queda na água; vitória por território ou nocaute; melhor de três rounds) e do papel do técnico (elenco, semana, energia e estresse, tática antes de cada round; em quadra, quem joga são os benders). Ao lado do texto, uma partida de verdade roda ao vivo num campo visto de cima (benders com a forma do elemento e a cor do time, ataques, linha de território), recomeçando sozinha. O botão **Vamos lá** fecha a janela, e ela não volta (fica salvo neste navegador).
 
 - Na primeira visita, cada página da central (Central, Elenco e treino, Mercado, Patrocínios, Finanças, Classificação, Guia) mostra no topo um quadro curto com o essencial daquela página. O quadro some ao clicar em **Entendi**.
 - A dica da **Central** é a de boas-vindas: o caminho de uma temporada (pré-temporada → elenco → semana → partida → fim da temporada) e a barra de confiança.
 - A **primeira partida** mostra uma dica sobre rounds, tática entre os rounds e desobediência.
 - O que já foi visto fica salvo no jogo. No **Guia**, o botão **Rever dicas** mostra todas de novo.
+
+## 9d. HUD de preparação (v0.14) ✅
+
+Tela que abre antes de cada round (e entre os rounds) por cima da arena. É onde o técnico monta o time; os painéis laterais e a narração ficam escondidos enquanto ela está aberta.
+- **Topo:** título (Preparação · Round N), placar em rounds, e os botões Resumo do round (a partir do round 2), Guia, Rival (na liga), Ver a arena e **Começar round**. O botão **Preparação** nos controles reabre a tela.
+- **Esquerda:** Postura, Escolha de alvo e Formação (botões com o desenho da formação).
+- **Centro:** campo na vertical só com as **Zonas 1, 2 e 3** do seu lado; a linha central fica em cima. Os benders aparecem na Zona 1 com a forma do elemento (círculo, quadrado, triângulo) e a cor do time, na posição em que começam o round, calculada com as mesmas regras da simulação (largura da formação, postura, elemento, âncora da Escalonada, Pressionar). A distância da linha é ampliada para as diferenças ficarem visíveis.
+- **Animação:** ao trocar formação, postura ou instrução, cada bender é arrastado até a nova posição (inclina e cresce de leve, deixando um rastro que some).
+- **Selo de instrução** sobre o bender: ↑ Pressionar, ↓ Manter distância, + Mais agressivo, − Mais cauteloso, ◆ Proteger, ◎ Marcar. O nome completo fica na lista.
+- **Direita (lista):** elemento, nome, nota, energia (barra), estresse (barra), instrução individual e o risco de desobediência. Aviso quando os três estão com a mesma instrução.
+- Não mostra nada da formação do rival.
+- **Substituição arrastando** (v0.16.1): arraste um reserva do banco para o campo (em qualquer ponto, ou sobre o boneco ou a linha de quem sai) e ele entra no lugar de quem é do mesmo elemento; também dá para arrastar quem está em quadra até a linha de um reserva. O campo fica com contorno dourado quando a troca vale. O botão "Entra ⇄" continua como alternativa.
+- **Banco** (v0.15): abaixo dos três em quadra, os reservas sadios com elemento, nome, nota, energia e estresse, cada um com o botão "Entra ⇄ [quem sai]" (sempre do mesmo elemento). Ao trocar, o boneco de quem sai desce e some e o de quem entra cai no lugar dele. Quem se lesionou na partida aparece com o selo "Lesionado" na lista e um contorno vermelho no campo.
 
 ## 10. Visual
 
@@ -553,6 +629,25 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.17 / Doc, 04/11/2026**: abertura "Sabe como funciona a Dobra Esportiva?" na primeira vez que o jogo abre, com uma partida ao vivo ao lado do texto.
+- **v0.16.9 / Doc, 04/11/2026**: na HUD de preparação, clicar num bender (boneco do campo, linha em quadra ou do banco) abre a ficha em janela.
+- **v0.16.8 / Doc, 04/11/2026**: a ficha do bender abre sempre numa janela, em qualquer lugar; vender e dispensar passam do Elenco para a folha salarial em Finanças.
+- **v0.16.7 / Doc, 04/11/2026**: aba Elenco no estilo da HUD de preparação: campo com os titulares, lista de titulares e reservas, arrastar para escalar; clicar no campo ou na lista abre a ficha.
+- **v0.16.6 / Doc, 04/11/2026**: aba Treino simplificada: o arrastar dos eventos passa para o calendário da semana no topo (com os detalhes de cada evento em etiquetas curtas); sai o bloco de cartões de evento.
+- **v0.16.5 / Doc, 04/11/2026**: no mercado, o botão indisponível por caixa insuficiente mostra só "Comprar" (a coluna Orçamento já indica que não cabe).
+- **v0.16.4 / Doc, 04/11/2026**: mercado sem as colunas de atributos (sem rolagem lateral); clicar num bender abre a ficha dele numa janela, como no Elenco.
+- **v0.16.3 / Doc, 04/11/2026**: abas no Guia (Atributos; Táticas da partida com Postura do time e Instruções); saem os textos de temperamento da postura e de desobediência.
+- **v0.16.2 / Doc, 04/11/2026**: o Guia deixa de mostrar números; as explicações dizem o que cada coisa faz, sem quantificar.
+- **v0.16.1 / Doc, 04/11/2026**: arrastar e soltar os benders nos eventos da semana (sai a coluna de evento) e para substituir na HUD de preparação (do banco para o campo).
+- **v0.16 / Doc, 04/11/2026**: calendário da semana: decisão na segunda, treino na quarta, eventos na terça, quinta, sexta ou sábado (até 1 por bender, além do treino), jogo no domingo; energia e estresse por dia; o cansaço da semana já pesa no jogo do domingo.
+- **v0.15.1 / Doc, 04/11/2026**: golpe acima dos ombros também pode lesionar quem foi atingido (2% por golpe; são cerca de 8 por partida, o que soma perto de 1 lesão a mais por time por temporada).
+- **v0.15 / Doc, 04/11/2026**: elenco de 6 a 9 benders, banco com substituições à vontade entre os rounds (sempre do mesmo elemento), lesão (partida e treino) com semanas fora, 318 nomes, salários a 75% da tabela para compensar o elenco maior.
+- **v0.14 / Doc, 04/11/2026**: HUD de preparação: campo vertical das Zonas 1–3 com os benders posicionados pela formação (animação de arrasto ao trocar) e lista reduzida (elemento, nome, nota, energia, estresse, instrução).
+- **v0.13.1 / Doc, 04/11/2026**: no desempate, o técnico escolhe quem duela (quem caiu na água não pode).
+- **v0.13 / Doc, 04/11/2026**: temperamento em quadra (explosivo esquenta quando atrás, calmo fica frio quando não está atrás); "IA decide" vira "Leitura do bender" (a LEI decide); Duelo de elementos vira jogo defensivo que rebate ataques no ar.
+- **v0.12.2 / Doc, 04/11/2026**: o Guia deixa de explicar quem vence quem entre as formações (o técnico descobre jogando); a observação do rival continua com postura e instruções típicas.
+- **v0.12.1 / Doc, 04/11/2026**: nenhuma informação sobre a formação do rival ou sobre vantagem de formação aparece para o técnico; o relatório da partida mostra só a tática do seu time.
+- **v0.12 / Doc, 04/11/2026**: formações em pedra, papel e tesoura; Escalonada sem faltas extras (âncora ataca mais devagar); Pressionar, Manter distância e Proteger com custos visíveis; mesma instrução nos três deixa o time previsível; técnico da IA reage à formação; leitura da formação do rival no resumo do round. Regras anteriores guardadas em `design/regras-partida-v0.11.2.md`.
 - **v0.11.2 / Doc, 04/11/2026**: faltas na Zona 3 recuam o aliado mais à frente; com o time inteiro na Zona 3, o infrator fica 20 segundos fora.
 - **v0.11.1 / Doc, 04/11/2026**: Regras da partida sem repetir o Guia; salário, contrato e valor vão para Finanças (folha salarial); seletores do treino com a mesma largura.
 - **v0.11 / Doc, 04/11/2026**: abas Elenco e Treino separadas; ficha do bender com gráfico de competências e evolução semana a semana; escalação mais clara; potencial oculto; guia em janela; rival e resumo do round (mapa de calor, gráficos, leituras) na partida; painéis minimizáveis; orçamento no mercado.

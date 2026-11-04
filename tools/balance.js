@@ -2,7 +2,7 @@
 const fs = require('fs'), vm = require('vm');
 const ctx = { console, Math, JSON, Set, Map, Object, Array, String };
 vm.createContext(ctx);
-vm.runInContext(fs.readFileSync(__dirname + '/../src/sim.js', 'utf8').replace(/if \(typeof module[^\n]*/, '') + '\n' + fs.readFileSync(__dirname + '/../src/league.js', 'utf8').replace(/if \(typeof module[^\n]*/, '') + '\nthis.X={newLeague,setUser,startSeason,finishWeek,newSeason,advanceWindow,signSponsor,teamOVR,ovr,renewContract,seasonBlockers,signPlayer,starters,payroll,expectedPos,serialize,deserialize,ELEMS,signingFee,chooseCoachOffer,takeJob};', ctx);
+vm.runInContext(fs.readFileSync(__dirname + '/../src/sim.js', 'utf8').replace(/if \(typeof module[^\n]*/, '') + '\n' + fs.readFileSync(__dirname + '/../src/league.js', 'utf8').replace(/if \(typeof module[^\n]*/, '') + '\nthis.X={newLeague,setUser,startSeason,finishWeek,newSeason,advanceWindow,signSponsor,teamOVR,ovr,renewContract,seasonBlockers,signPlayer,starters,payroll,expectedPos,serialize,deserialize,ELEMS,signingFee,chooseCoachOffer,takeJob,rosterShort};', ctx);
 const X = ctx.X;
 const seed = +process.argv[2] || 1, startDiv = +process.argv[3] || 0, SEASONS = +process.argv[4] || 8;
 let L = X.newLeague(seed);
@@ -17,6 +17,7 @@ for (let s = 0; s < SEASONS; s++) {
   for (const e of X.ELEMS) if (!me().roster.some(p => p.elem === e && !p.expiring)) {
     const fa = L.freeAgents.filter(p => p.elem === e).sort((a, b) => X.ovr(b.st) - X.ovr(a.st))[0]; if (fa) X.signPlayer(L, fa.id);
   }
+  while (X.rosterShort(L)) { const fa = L.freeAgents.slice().sort((a, b) => X.signingFee(a) - X.signingFee(b))[0]; if (!fa || !X.signPlayer(L, fa.id)) break; }
   const exp = X.expectedPos(L, L.user);
   const offers = L.sponsorOffers.slice().sort((a, b) => (a.tier === 'hard' && exp > 3 ? 1 : 0) - (b.tier === 'hard' && exp > 3 ? 1 : 0) || b.base - a.base);
   offers.slice(0, 2).forEach(o => X.signSponsor(L, o.id));
@@ -25,7 +26,8 @@ for (let s = 0; s < SEASONS; s++) {
   let w = 0, midFired = 0; const acc={sal:0,sp:0,pz:0,ev:0,bn:0}; const sw=[], ew=[]; const ovr0=avg(me().roster.map(p=>X.ovr(p.st)));
   while (L.phase !== 'done') {
     const st = X.starters(me());
-    for (const p of me().roster) p.plan = st.includes(p) ? ((w % 3 === 2 || p.stress > 55 || p.energy < 45) ? 'rest' : ['pow', 'fir', 'agi', 'pre'][w % 4]) : 'ev:praca';
+    // titulares treinam 2 semanas e descansam 1 na quarta; reservas descansam na quarta e fazem a exibição (calendário da v0.16)
+    for (const p of me().roster) { p.plan = st.includes(p) ? ((w % 3 === 2 || p.stress > 55 || p.energy < 45) ? 'rest' : ['pow', 'fir', 'agi', 'pre'][w % 4]) : 'rest'; p.ev = st.includes(p) ? null : 'praca'; }
     const rep=X.finishWeek(L, null); w++; { const st=X.starters(me()); sw.push(avg(st.map(p=>p.stress||0))); ew.push(avg(st.map(p=>p.energy))); } const mo=rep.money; acc.sal+=mo.salaries; acc.sp+=mo.sponsors; acc.pz+=mo.prizes; acc.ev+=(mo.events||[]).reduce((a,e)=>a+e.amount,0); acc.bn+=(mo.bonuses||[]).filter(b=>!b.prize).reduce((a,b)=>a+b.amount,0);
     if (L.coach.fired && L.coach.fired.when === 'mid') { midFired++; X.takeJob(L, L.coach.offers[0].team); }
   }

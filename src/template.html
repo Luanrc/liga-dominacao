@@ -90,7 +90,7 @@ body.in-match { overflow: hidden; }
 .hud-controls { right: 10px; bottom: 10px; max-width: calc(100% - min(400px, calc(50% - 20px)) - 40px); padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; align-items: center; }
 .hud-controls .btn { padding: 7px 11px; }
 .hud-info { left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(640px, calc(100% - 32px)); max-height: calc(100% - 40px); overflow: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; z-index: 3; background: rgba(13, 15, 28, .95); }
-.hud-wide { width: min(760px, calc(100% - 660px)); min-width: min(520px, calc(100% - 32px)); }
+.hud-wide { z-index: 4; width: min(760px, calc(100% - 660px)); min-width: min(520px, calc(100% - 32px)); }
 @media (max-width: 1180px) { .hud-wide { width: calc(100% - 32px); } }
 .brk-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 700px) { .brk-grid { grid-template-columns: minmax(0, 1fr); } }
@@ -108,6 +108,75 @@ body.in-match { overflow: hidden; }
 .hud-min:hover { border-color: var(--gold); color: var(--text); }
 .hud-team.min > :not(.hud-th) { display: none !important; }
 .hud-team.min { max-height: none; }
+.prep { left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(1180px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto; z-index: 2;
+  background: #0d0f1c; border: 1px solid rgba(226,176,74,.35); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 16px 50px rgba(0,0,0,.55); }
+.prep-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.prep-head h2 { font-size: 22px; }
+.prep-body { display: grid; grid-template-columns: 210px minmax(260px, 1fr) minmax(380px, 1.3fr); gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .prep-body { grid-template-columns: minmax(0, 1fr); } }
+.prep-tac { display: flex; flex-direction: column; gap: 12px; }
+.fm-pick { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.fm-pick button { display: flex; align-items: center; gap: 10px; text-align: left; background: var(--panel2); border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 8px 10px; font: 600 13px var(--body); cursor: pointer; text-transform: none; letter-spacing: 0; }
+.fm-pick button[aria-pressed="true"] { border-color: var(--gold); background: rgba(226,176,74,.14); }
+.fm-pick button:hover { border-color: var(--gold); }
+.fm-pick svg { width: 34px; height: 22px; flex: none; fill: currentColor; opacity: .85; }
+.prep-field { display: flex; justify-content: center; }
+.pitch { position: relative; width: 100%; max-width: 360px; aspect-ratio: 1 / 1; border-radius: 8px; overflow: hidden; background: #1a2f3c; border: 2px solid rgba(239,232,216,.25); }
+.pz { position: absolute; left: 0; right: 0; height: 33.333%; border-top: 1px dashed rgba(239,232,216,.25); }
+.pz span { position: absolute; right: 8px; bottom: 6px; font: 800 13px var(--display); letter-spacing: .1em; text-transform: uppercase; color: rgba(239,232,216,.35); }
+.pz.z1 { top: 0; background: linear-gradient(#24465a, #213f52); border-top: 0; } .pz.z2 { top: 33.333%; background: #1d3747; } .pz.z3 { top: 66.666%; background: #19303e; }
+.pline { position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--gold); }
+.pline-l { position: absolute; left: 8px; top: 7px; font: 600 10px var(--body); color: var(--gold); text-transform: uppercase; letter-spacing: .12em; }
+.tok { position: absolute; width: 64px; margin-left: -32px; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: left .55s cubic-bezier(.3,.7,.3,1), top .55s cubic-bezier(.3,.7,.3,1); z-index: 2; }
+.tok .shp { width: 26px; height: 26px; box-shadow: 0 0 0 3px var(--tc), 0 4px 8px rgba(0,0,0,.45); transition: transform .2s; }
+.tok .shp.water { border-radius: 50%; background: #4aa3ff; } .tok .shp.earth { background: #7ec35a; border-radius: 3px; }
+.tok .shp.fire { background: #ff7a3c; clip-path: polygon(50% 0, 100% 100%, 0 100%); box-shadow: none; filter: drop-shadow(0 0 2px var(--tc)) drop-shadow(0 3px 4px rgba(0,0,0,.5)); }
+.tok b { font: 600 11px var(--body); background: rgba(5,6,14,.75); padding: 1px 6px; border-radius: 99px; white-space: nowrap; }
+.tok i { position: absolute; top: -6px; left: calc(50% + 8px); font: 800 10px var(--body); font-style: normal; color: #14110a; background: var(--gold); border-radius: 99px; min-width: 16px; height: 16px; line-height: 16px; text-align: center; padding: 0 3px; box-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.tok i:empty { display: none; }
+.tok.drag .shp { transform: scale(1.15) rotate(-8deg); }
+.tok.ghost { z-index: 1; opacity: .35; transition: opacity .6s ease; pointer-events: none; }
+.tok.ghost.fade { opacity: 0; }
+.prep-list { min-width: 0; overflow-x: auto; } .prep-list .tbl td { padding: 7px 6px; vertical-align: middle; } .prep-list .tbl select { width: 150px; max-width: 100%; }
+.prep-list .risk { display: block; font-size: 11px; color: #ff9a6b; }
+.prep-list .bench-h td { padding-top: 14px; font: 700 11px var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+.prep-list tr.bench td { opacity: .92; } .prep-list tr.bench .btn { white-space: nowrap; }
+.gtabs > .seg { margin: 4px 0 12px; } .gtabs .seg { display: inline-flex; width: fit-content; max-width: 100%; } .gsub { margin: 4px 0 10px; }
+.lineup2 { display: grid; grid-template-columns: minmax(240px, 360px) minmax(0, 1fr); gap: 18px; align-items: start; margin-top: 8px; }
+@media (max-width: 900px) { .lineup2 { grid-template-columns: minmax(0, 1fr); } }
+.lineup2 .prep-field { flex-direction: column; align-items: center; display: flex; } .pitch-note { margin-top: 6px; text-align: center; }
+.lineup2 .tbl tbody tr { cursor: pointer; } .lineup2 .tbl tbody tr.sel td { background: rgba(226,176,74,.12); } .lineup2 .tbl tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
+.lineup2 .tbl tr.bench-h td { cursor: default; }
+.tok.sel .shp { outline: 2px solid var(--gold); outline-offset: 4px; }
+.week-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin: 10px 0 14px; }
+.week-strip .wd { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; min-height: 64px; font-size: 12px; display: flex; flex-direction: column; gap: 3px; }
+.week-strip .wd b { font: 700 11px var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.week-strip .wd.now { border-color: var(--gold); background: rgba(226,176,74,.12); } .week-strip .wd.now b { color: var(--gold); }
+.week-strip .wd.done { opacity: .55; } .week-strip .wd > span { line-height: 1.3; }
+.week-strip .ev-day { border-style: dashed; border-color: rgba(226,176,74,.45); }
+.week-strip .ev-day strong { font: 600 13px var(--body); color: var(--text); line-height: 1.25; }
+.ev-tags { display: flex; flex-wrap: wrap; gap: 3px 8px; font-size: 11px; color: var(--muted); }
+.week-strip .ev-chips { margin-top: 4px; min-height: 28px; } .week-strip .ev-chips:empty::after { content: 'Arraste para cá'; }
+.week-strip .chip-b { font-size: 11px; padding: 3px 8px 3px 6px; max-width: 100%; }
+@media (max-width: 760px) { .week-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.inj-tag { display: inline-block; font: 700 10px var(--body); letter-spacing: .06em; text-transform: uppercase; color: #fff; background: #c8414f; border-radius: 99px; padding: 1px 7px; margin-left: 4px; vertical-align: 1px; }
+.tok.out { transition: opacity .45s ease, transform .45s ease; opacity: 0; transform: translateY(12px) scale(.8); }
+.tok.in .shp { animation: tokIn .5s ease; } @keyframes tokIn { from { transform: translateY(-30px) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+.tok.hurt .shp { outline: 2px solid #c8414f; outline-offset: 3px; }
+.prep-warn { color: #ff9a6b; }
+.hud.break .hud-team .tactics, .hud.break .hud-team .instr { display: none !important; }
+.hud.prepping .hud-team, .hud.prepping .hud-chat { visibility: hidden; }
+.duel-pick { width: min(760px, calc(100% - 32px)); z-index: 5; }
+.duel-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .duel-grid { grid-template-columns: minmax(0, 1fr); } }
+.duel-card { position: relative; overflow: hidden; text-align: left; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 12px; color: var(--text); font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 8px; }
+.duel-card:hover:not(:disabled), .duel-card:focus-visible { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(226,176,74,.35); outline: none; }
+.duel-card .dn { font-family: var(--display); font-weight: 800; font-size: 20px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.duel-card .bars { gap: 4px 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.duel-card .pick-cta { font-size: 12px; color: var(--gold); font-weight: 600; }
+.duel-card:disabled { cursor: not-allowed; filter: grayscale(1); opacity: .55; }
+.duel-card:disabled .dn { text-decoration: line-through; }
+.duel-card .ban { position: absolute; left: -40px; right: -40px; top: 44%; transform: rotate(-12deg); background: #2a6fb0; color: #fff; text-align: center; font: 700 12px var(--body); letter-spacing: .12em; text-transform: uppercase; padding: 6px 0; box-shadow: 0 2px 8px rgba(0,0,0,.5); }
 .hud-info-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .hud-info .lab { display: flex; flex-direction: column; gap: 8px; }
 #viewMatch > .tip { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4; width: min(620px, calc(100% - 32px)); margin: 0; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
@@ -218,7 +287,14 @@ body[data-mode="league"] .sbx, body[data-mode="sandbox"] .lg { display: none !im
 .gm-note { margin: 0; padding: 8px 12px; border: 1px solid rgba(226,176,74,.4); border-radius: 6px; background: rgba(226,176,74,.08); font-size: 13px; }
 #guideBody { display: flex; flex-direction: column; gap: 14px; }
 #guideBody .panel { padding: 0; border: 0; background: none; }
-#guideModal { z-index: 80; }
+#guideModal { z-index: 80; } #benderModal { z-index: 85; } #introModal { z-index: 90; }
+.intro-modal { width: min(1040px, 100%); }
+.intro-modal h2 { font-size: 30px; } @media (max-width: 600px) { .intro-modal h2 { font-size: 22px; } }
+.intro-body { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 820px) { .intro-body { grid-template-columns: minmax(0, 1fr); } }
+.intro-arena { display: flex; flex-direction: column; gap: 6px; } .intro-arena canvas { width: 100%; height: auto; border-radius: 8px; background: #0b2a3a; border: 1px solid var(--line); }
+.intro-cap { font-size: 12px; color: var(--muted); text-align: center; }
+.intro-text p { margin: 0 0 10px; font-size: 15px; line-height: 1.55; color: var(--text); }
 .modal-actions { justify-content: flex-end; gap: 8px; display: flex; flex-wrap: wrap; }
 .btn.lgb { font-size: 15px; padding: 10px 18px; }
 .tcard:hover { border-color: var(--gold); border-left-color: var(--tc); }
@@ -273,6 +349,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; font-varian
 .badge-res { font: 500 11px var(--body); padding: 3px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
 #trainTbl select { width: 250px; max-width: 100%; }
 .tbl.pick tbody tr { cursor: pointer; }
+tr[data-mpick], tr[data-pick] { cursor: pointer; } .tok[data-lpick], .tok[data-mref], tr[data-mref] { cursor: pointer; } tr[data-mpick]:hover td { background: rgba(226,176,74,.06); }
 .tbl.pick tbody tr.sel td { background: rgba(226, 176, 74, .12); }
 .tbl.pick tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
 .bc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -344,6 +421,19 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; font-varian
 .rounds .tl { font-size: 12px; color: var(--text); margin-top: 2px; }
 .rounds .tl span:first-child { font-weight: 600; margin-right: 6px; }
 .sub { font: 700 15px var(--display); text-transform: uppercase; letter-spacing: .06em; margin: 6px 0 0; color: var(--text); }
+[data-drag] { touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+.drag-ghost { position: fixed; z-index: 9999; pointer-events: none; opacity: .92; transform: translate(-50%, -60%) rotate(-3deg) scale(1.04); box-shadow: 0 10px 24px rgba(0,0,0,.5); }
+.dragging-src { opacity: .35; }
+[data-drop].drop-ok { outline: 2px dashed var(--gold); outline-offset: 2px; background: rgba(226,176,74,.10); }
+[data-drop].drop-no { outline: 2px dashed #c8414f; outline-offset: 2px; }
+.chip-b { display: inline-flex; align-items: center; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px 4px 7px; font: 600 12px var(--body); color: var(--text); }
+.chip-b small { color: var(--muted); font-weight: 500; } .chip-b .x { margin-left: 2px; color: var(--muted); cursor: pointer; border: 0; background: none; font: 700 13px var(--body); padding: 0 2px; }
+.ev-pool { background: var(--panel2); border: 1px dashed var(--line); border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+.ev-pool h4, .ev h4 { margin: 0 0 6px; font: 700 11px var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.ev-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 30px; align-items: center; margin-top: 6px; }
+.ev-chips:empty::after { content: 'Arraste um bender para cá'; font-size: 12px; color: var(--muted); opacity: .7; }
+.ev-pool .ev-chips:empty::after { content: 'Todos têm evento nesta semana'; }
+.ev-msg { min-height: 18px; font-size: 12px; color: #ff9a6b; margin-top: 6px; }
 .ev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; margin-top: 8px; }
 .ev { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); }
 .ev b { color: var(--text); font-size: 13px; font-weight: 600; }
@@ -397,7 +487,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.11.2 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.17 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -463,10 +553,18 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     <div class="page" data-page="roster" hidden>
       <section class="panel">
         <h2>Escalação</h2>
-        <p class="hint">Em cada partida jogam 3 titulares, um de cada elemento. Para pôr um reserva em quadra, escale-o no lugar do titular do mesmo elemento.</p>
-        <div class="lineup" id="lineupBox"></div>
+        <p class="hint">Começam 3 titulares, um de cada elemento. Arraste um reserva para o campo (ou sobre o titular) para escalá-lo no lugar de quem é do mesmo elemento. Clique num bender para ver a ficha. Na partida, os reservas sadios ficam no banco e podem entrar entre os rounds.</p>
+        <div class="lineup2">
+          <div class="prep-field">
+            <div class="pitch" id="rosterPitch" data-drop="rpitch">
+              <div class="pz z1"><span>Zona 1</span></div><div class="pz z2"><span>Zona 2</span></div><div class="pz z3"><span>Zona 3</span></div>
+              <div class="pline"></div><div class="pline-l">Linha central</div>
+            </div>
+            <p class="hint pitch-note" id="rosterPitchNote"></p>
+          </div>
+          <div class="prep-list"><table class="tbl pick"><thead><tr><th>Bender</th><th class="num">Nota</th><th class="num">Idade</th><th>Energia</th><th>Estresse</th><th></th></tr></thead><tbody id="lineupRows"></tbody></table></div>
+        </div>
       </section>
-      <section class="panel" id="benderCard"></section>
       <section class="panel">
         <h2>Elenco</h2>
         <p class="hint" id="rosterHint"></p>
@@ -476,7 +574,10 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 
     <div class="page" data-page="train" hidden>
       <section class="panel">
-        <h2>Treino da semana</h2>
+        <h2>Semana</h2>
+        <p class="hint" id="weekHint"></p>
+        <div class="week-strip" id="weekStrip"></div>
+        <div id="evPool"></div>
         <div class="train-bar">
           <div class="seg" role="group" aria-label="Tipo de treino" id="trainSeg">
             <button type="button" data-m="team">Treino em equipe</button><button type="button" data-m="ind">Treino individual</button>
@@ -485,7 +586,6 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         </div>
         <p class="hint" id="trainHint"></p>
         <div class="tbl-wrap"><table class="tbl" id="trainTbl"></table></div>
-        <div id="eventsBox"></div>
       </section>
     </div>
 
@@ -498,13 +598,13 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       </section>
       <section class="panel" id="faPanel">
         <h2>Agentes livres</h2>
-        <p class="hint">Contratar custa luvas (2 rodadas de salário, mais caras para benders populares). O salário entra na folha a partir da 1ª rodada.</p>
+        <p class="hint">Contratar custa luvas (2 rodadas de salário, mais caras para benders populares). O salário entra na folha a partir da 1ª rodada. Clique num bender para ver a ficha com os atributos.</p>
         <div class="train-bar"><label class="f inline chk"><input type="checkbox" data-budget> Só quem cabe no orçamento</label></div>
         <div class="tbl-wrap" id="marketWrap"><table class="tbl" id="marketTbl"></table></div>
       </section>
       <section class="panel" id="othersPanel">
         <h2>Benders de outros times</h2>
-        <p class="hint">Comprar custa o valor de mercado. O time vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 3 no elenco.</p>
+        <p class="hint">Comprar custa o valor de mercado. O time vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 6 no elenco. Clique num bender para ver a ficha com os atributos.</p>
         <div class="train-bar">
           <label class="f inline" for="othersDiv">Divisão <select id="othersDiv"><option value="all">Todas</option><option value="0">Primeira</option><option value="1">Segunda</option><option value="2">Terceira</option></select></label>
           <label class="f inline chk" for="othersAvail"><input type="checkbox" id="othersAvail" checked> Só os que estão à venda</label>
@@ -554,7 +654,11 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <p class="hint">As dicas de primeira vez aparecem no topo de cada página e na primeira partida. Já fechou todas? Dá para ver de novo.</p>
         <div><button class="btn sm" type="button" data-tipsreset>Rever dicas</button></div>
       </section>
-      <section class="panel">
+      <div class="gtabs" data-gtabs>
+        <div class="seg gtab" role="tablist" aria-label="Guia">
+          <button type="button" data-gtab="attrs" aria-pressed="true">Atributos</button><button type="button" data-gtab="tactics" aria-pressed="false">Táticas da partida</button>
+        </div>
+      <section class="panel" data-gpane="attrs">
         <h2>Guia dos atributos</h2>
           <dl class="gloss">
             <dt>POD · Poder</dt><dd>Força do golpe: quanto empurra o rival.</dd>
@@ -563,57 +667,67 @@ details summary { cursor: pointer; margin-bottom: 6px; }
             <dt>FIR · Firmeza</dt><dd>Aguenta golpes sem ser empurrado. Na terra, também bloqueia com discos.</dd>
             <dt>DIS · Disciplina</dt><dd>Evita faltas (pisar na linha e golpes acima dos ombros).</dd>
             <dt>LEI · Leitura de jogo</dt><dd>Escolhe melhor o alvo, reage mais rápido e antecipa golpes para esquivar.</dd>
-            <dt>Temperamento</dt><dd>Calmo puxa a postura para a defesa, explosivo para o ataque: o jogador segue 65% a sua ordem e 35% o próprio jeito. Explosivos cometem um pouco mais de faltas. Não se treina.</dd>
-            <dt>Energia</dt><dd>Todos recuperam 10 por semana. Partida gasta 15, treino gasta 10, descanso recupera mais 35 e reserva que não joga recupera mais 8. Treinar 2 semanas e descansar 1 mantém a energia estável. Cansado rende menos (até 22% a menos com energia zero) e treina pior.</dd>
-            <dt>Nota</dt><dd>Média dos atributos, pesando mais os que mais decidem partidas (Poder e Firmeza).</dd>
-            <dt>Salário e contrato</dt><dd>Pago a cada rodada, fixado no contrato: mesmo que o bender melhore, o salário só muda na renovação. Contratos duram de 1 a 3 temporadas (agentes livres jovens assinam por 3, os demais por 2). Quando o contrato termina, você renova na pré-temporada pelo salário que ele pede (benders populares pedem mais) ou ele vai embora de graça.</dd>
-            <dt>Idade</dt><dd>Jovens evoluem mais rápido no treino (até 20 anos ×1,5; até 23 ×1,25) e amadurecem sozinhos a cada temporada até os 24. A partir dos 30, perdem Agilidade e Poder (e um pouco de Firmeza e Precisão), compensando um pouco com Leitura e Disciplina. A partir dos 33 podem se aposentar; aos 37 todos se aposentam.</dd>
+            <dt>Temperamento</dt><dd>Calmo puxa a postura para a defesa, explosivo para o ataque: o jogador segue principalmente a sua ordem, mas sempre com um pouco do próprio jeito. Em quadra, o <b>explosivo esquenta</b> quando o time está atrás (ou quando ele é empurrado para trás): empurra mais e ataca mais rápido, mas comete mais faltas. O <b>calmo fica frio</b> quando o time não está atrás: esquiva mais e comete menos faltas. Não se treina.</dd>
+            <dt>Semana</dt><dd>Na segunda você decide; na quarta é o treino (ou descanso); os eventos acontecem na terça, quinta, sexta ou sábado; no domingo é o jogo. O treino e os eventos da semana acontecem antes do jogo, então o cansaço deles já pesa no domingo.</dd>
+            <dt>Energia</dt><dd>Cada dia livre recupera energia, e quanto mais cansado o bender estiver, mais ele recupera. Treinar na quarta cansa bastante; descansar na quarta recupera mais que um dia livre comum. Evento ocupa o dia (não recupera) e cansa. A partida também cansa; reserva que não entra tem o domingo livre. Alternar semanas de treino com semanas de descanso mantém o titular inteiro para os jogos. Cansado rende menos em quadra e treina pior.</dd>
+            <dt>Nota</dt><dd>Resume os atributos, pesando mais os que mais decidem partidas (Poder e Firmeza).</dd>
+            <dt>Salário e contrato</dt><dd>Pago a cada rodada, fixado no contrato: mesmo que o bender melhore, o salário só muda na renovação. Contratos duram algumas temporadas (agentes livres jovens assinam por mais tempo). Quando o contrato termina, você renova na pré-temporada pelo salário que ele pede (benders populares pedem mais) ou ele vai embora de graça.</dd>
+            <dt>Idade</dt><dd>Jovens evoluem mais rápido no treino e ainda amadurecem sozinhos a cada temporada. Com a idade, os veteranos perdem Agilidade e Poder (e um pouco de Firmeza e Precisão), compensando um pouco com Leitura e Disciplina. Os mais velhos podem se aposentar no fim da temporada.</dd>
             <dt>Limite de evolução</dt><dd>Cada bender tem um limite até onde pode evoluir, que você não vê. Jovens costumam ter muito espaço para crescer; veteranos já estão perto do limite. Quando o treino passa a render quase nada, é sinal de que ele chegou lá.</dd>
-            <dt>POP · Popularidade do bender</dt><dd>De 0 a 100. Sobe quando o bender joga, vence, empurra rivais, derruba alguém na água e faz eventos; cai 1 por semana na reserva. Explosivos ganham popularidade mais rápido. Aumenta a renda dos eventos, o valor de mercado e as luvas.</dd>
-            <dt>Popularidade do time</dt><dd>De 0 a 100. Sobe com vitórias, nocautes, playoffs, título e acesso, e um pouco com os eventos dos seus benders; cai com derrotas e rebaixamento. Times populares recebem propostas de patrocínio maiores, mas com metas mais difíceis, e enchem a arquibancada. Em compensação, a torcida cobra mais: perder estressa mais os benders.</dd>
-            <dt>Reputação do técnico</dt><dd>De 0 a 100, é a sua. No começo de cada temporada a diretoria espera uma posição conforme a força do elenco (o ranking de notas da divisão). No fim, a reputação sobe ou cai 2,5 pontos por posição acima ou abaixo do esperado, com bônus por playoffs (+3), título (+12 na Primeira, +8 na Segunda, +6 na Terceira) e acesso (+8), e perda por rebaixamento (−10). Nas divisões de baixo os ganhos valem menos e têm teto (Segunda: 60%, até 70; Terceira: 45%, até 45). Com mais reputação, times maiores fazem propostas para você no fim da temporada.</dd>
-            <dt>Confiança da diretoria</dt><dd>De 0 a 100, só durante a temporada. Começa entre 40 e 70 (quanto maior a sua reputação, maior). Vitória +5, derrota −6; a partir da 3ª rodada, ±1 por posição acima ou abaixo da expectativa; −3 por rodada com o caixa no vermelho; −4 a mais em sequência de 3 derrotas. Se chegar a zero a partir da 4ª rodada, você é demitido na hora. No fim da temporada, também é demitido com confiança abaixo de 20 ou se for rebaixado com um elenco montado para brigar em cima. Demissão custa 6 pontos de reputação, e você escolhe um novo time entre os que aceitam você.</dd>
-            <dt>Estresse</dt><dd>De 0 a 100. Sobe a cada partida, mais ainda nas derrotas e quanto mais popular for o time; metas de patrocínio em aberto, treinos e eventos também pesam. Explosivos se estressam mais rápido, calmos aguentam mais. Descansar alivia bastante; vencer e ficar na reserva aliviam um pouco. Estresse derruba principalmente Precisão, Disciplina e Leitura de jogo (até −25%) e, acima de 60, faz o bender ignorar instruções com mais frequência.</dd>
-            <dt>Eventos</dt><dd>No lugar do treino, um bender pode fazer um evento: rende dinheiro e popularidade, mas cansa e não evolui atributos. Alguns exigem popularidade mínima e têm poucas vagas.</dd>
+            <dt>POP · Popularidade do bender</dt><dd>Sobe quando o bender joga, vence, empurra rivais, derruba alguém na água e faz eventos; cai um pouco a cada semana na reserva. Explosivos ganham popularidade mais rápido. Aumenta a renda dos eventos, o valor de mercado e as luvas.</dd>
+            <dt>Popularidade do time</dt><dd>Sobe com vitórias, nocautes, playoffs, título e acesso, e um pouco com os eventos dos seus benders; cai com derrotas e rebaixamento. Times populares recebem propostas de patrocínio maiores, mas com metas mais difíceis, e enchem a arquibancada. Em compensação, a torcida cobra mais: perder estressa mais os benders.</dd>
+            <dt>Reputação do técnico</dt><dd>É a sua. No começo de cada temporada a diretoria espera uma posição conforme a força do elenco em relação à divisão. No fim, a reputação sobe se você superar a expectativa e cai se ficar abaixo; playoffs, título e acesso dão um bônus, e o rebaixamento pesa contra. Nas divisões de baixo os ganhos valem menos e têm um teto. Com mais reputação, times maiores fazem propostas para você no fim da temporada.</dd>
+            <dt>Confiança da diretoria</dt><dd>Só existe durante a temporada e começa mais alta quanto maior a sua reputação. Vitórias aumentam, derrotas diminuem; também pesam a posição na tabela em relação à expectativa, o caixa no vermelho e sequências de derrotas. Se ela se esgotar no meio da temporada, você é demitido na hora. No fim da temporada, também é demitido com a confiança muito baixa ou se for rebaixado com um elenco montado para brigar em cima. A demissão custa reputação, e você escolhe um novo time entre os que aceitam você.</dd>
+            <dt>Estresse</dt><dd>Sobe a cada partida, mais ainda nas derrotas e quanto mais popular for o time; metas de patrocínio em aberto, treinos e eventos também pesam. Explosivos se estressam mais rápido, calmos aguentam mais. Descansar na quarta alivia bastante; cada dia livre alivia um pouco; vencer e ficar na reserva também. Estresse derruba principalmente Precisão, Disciplina e Leitura de jogo e, quando está muito alto, faz o bender ignorar instruções com mais frequência.</dd>
+            <dt>Eventos</dt><dd>Além do treino de quarta, um bender pode fazer um evento por semana, no dia do evento: rende dinheiro e popularidade, mas ocupa o dia e cansa. Evento no começo da semana pesa menos no domingo do que no sábado. Alguns exigem popularidade mínima e têm poucas vagas.</dd>
+            <dt>Lesão</dt><dd>Mostra por quantas semanas (rodadas) o bender fica fora. Na partida, cada vez que ele é empurrado de zona, cai na água ou leva um golpe acima dos ombros (a jogada que dá falta) há uma pequena chance de se machucar (cansado se machuca mais); treinar com energia baixa também pode machucar. Quem se lesiona numa partida joga o resto dela com Poder, Agilidade e Firmeza reduzidos, até você trocá-lo no intervalo. Lesionado não treina nem faz eventos que exigem o físico (exibição, festival, aula), mas pode descansar e fazer eventos tranquilos (beneficente, entrevista, rádio, autógrafos). Só entra em quadra se não houver outro bender sadio do elemento.</dd>
+            <dt>Elenco e banco</dt><dd>O elenco tem um mínimo e um máximo de benders (a aba Elenco mostra as vagas). Cada partida começa com os titulares, um de cada elemento; os reservas sadios ficam no banco e podem entrar no intervalo entre os rounds, à vontade, sempre no lugar de alguém do mesmo elemento. Quem entra em quadra conta como quem jogou (gasta energia e acumula estresse).</dd>
           </dl>
       </section>
-      <section class="panel">
+      <section class="panel" data-gpane="tactics" hidden>
         <h2>Táticas da partida</h2>
         <p class="hint">Você escolhe tudo isto antes de cada round, no intervalo. Durante o round as ordens ficam travadas.</p>
-        <h3 class="sub">Postura do time</h3>
+      <div class="seg gsub" role="tablist" aria-label="Táticas da partida">
+          <button type="button" data-gsub="posture" aria-pressed="true">Postura do time</button><button type="button" data-gsub="instr" aria-pressed="false">Instruções</button>
+        </div>
+        <div data-gsubpane="posture">
         <dl class="gloss">
           <dt>Agressiva</dt><dd>Joga mais perto da linha e ataca com mais frequência, mas esquiva e bloqueia menos e comete bem mais faltas.</dd>
           <dt>Equilibrada</dt><dd>O meio-termo: distância, ritmo de ataque e faltas normais.</dd>
-          <dt>Defensiva</dt><dd>Joga mais recuada e ataca mais devagar, mas esquiva e bloqueia mais e comete metade das faltas.</dd>
-          <dt>Temperamento</dt><dd>A postura de cada bender mistura a sua ordem (65%) com o jeito dele (35%): um explosivo puxa para o ataque mesmo numa postura defensiva, e um calmo puxa para a defesa. Explosivos também cometem mais faltas.</dd>
+          <dt>Defensiva</dt><dd>Joga mais recuada e ataca mais devagar, mas esquiva e bloqueia mais e comete bem menos faltas.</dd>
         </dl>
+        </div>
+        <div data-gsubpane="instr" hidden>
         <h3 class="sub">Escolha de alvo</h3>
         <dl class="gloss">
-          <dt>IA decide</dt><dd>Cada bender escolhe sozinho, pesando quem está mais perto de ser empurrado e a distância que combina com o elemento dele (o fogo prefere alvos longe, a terra, perto).</dd>
+          <dt>Leitura do bender</dt><dd>Cada bender escolhe o próprio alvo, e tudo depende da <b>Leitura de jogo</b>. Quem lê bem acha o rival mais perto de ser empurrado e o alvo que combina com o seu elemento; quem lê mal se distrai com quem está perto e erra bastante. É uma aposta na inteligência do seu elenco.</dd>
           <dt>Foco no mais vulnerável</dt><dd>Todos atacam quem está mais perto de cair para a próxima zona ou na água. Quem tem pouca Leitura às vezes não percebe e ataca outro.</dd>
-          <dt>Duelo de elementos</dt><dd>Cada um ataca o rival do mesmo elemento (água contra água, e assim por diante), a não ser que outro rival esteja bem mais vulnerável.</dd>
+          <dt>Duelo de elementos</dt><dd>Jogo defensivo: os benders atacam menos e, quando um ataque rival chega perto de um companheiro, tentam rebatê-lo no ar com o próprio elemento (Precisão e Leitura ajudam). O jogo fica travado, com poucos empurrões dos dois lados: serve para segurar o placar.</dd>
           <dt>Foco no mais perigoso</dt><dd>Prefere o rival com mais Poder, para tirar de quadra quem empurra mais. Ainda considera quem está quase sendo empurrado.</dd>
           <dt>Foco no mais próximo</dt><dd>Prefere o rival mais perto. Ainda considera quem está quase sendo empurrado.</dd>
           <dt>Caçar a estrela</dt><dd>Prefere o rival com a maior soma de atributos. Ainda considera quem está quase sendo empurrado.</dd>
         </dl>
         <h3 class="sub">Formação</h3>
         <dl class="gloss">
-          <dt>Aberta</dt><dd>O time se espalha por toda a largura da arena. Sem bônus nem penalidade.</dd>
-          <dt>Compacta</dt><dd>O time se junta no centro e tende a concentrar os ataques no mesmo alvo. O preço: um golpe num bender também empurra (com menos força) um companheiro colado nele.</dd>
-          <dt>Escalonada</dt><dd>Um bender segura a linha: a terra, se estiver em quadra, ou quem tiver mais Firmeza. Ele joga mais à frente e aguenta mais os empurrões, mas comete mais faltas de linha. Os outros dois jogam um pouco atrás e esquivam um pouco mais.</dd>
+          <dt>Aberta</dt><dd>O time se espalha por toda a largura da arena e ataca de vários ângulos.</dd>
+          <dt>Compacta</dt><dd>O time se junta no centro e tende a concentrar os ataques no mesmo alvo. O preço: um golpe num bender também empurra um companheiro colado nele.</dd>
+          <dt>Escalonada</dt><dd>Um bender segura a linha: a terra, se estiver em quadra, ou quem tiver mais Firmeza. Ele joga bem à frente e aguenta mais os empurrões, mas ataca mais devagar. Os outros dois jogam atrás e esquivam um pouco mais.</dd>
+          <dt>Formação do rival</dt><dd>Não aparece em lugar nenhum: observe o desenho do time na arena e o mapa de calor do resumo do round. Cada formação se sai melhor contra umas do que contra outras; descobrir qual funciona contra qual faz parte do jogo.</dd>
         </dl>
         <h3 class="sub">Instruções individuais</h3>
         <dl class="gloss">
           <dt>Sem instrução</dt><dd>O bender segue a tática do time.</dd>
-          <dt>Pressionar</dt><dd>Joga colado na linha, prefere alvos perto e ataca um pouco mais rápido. Comete bem mais faltas de linha.</dd>
-          <dt>Manter distância</dt><dd>Joga mais atrás, prefere alvos longe, se movimenta mais e esquiva mais. Combina com o fogo.</dd>
+          <dt>Pressionar</dt><dd>Joga colado na linha, prefere alvos perto e ataca um pouco mais rápido. Em troca, esquiva menos (fica exposto) e comete bem mais faltas de linha. Combina com a terra, mais forte de perto.</dd>
+          <dt>Manter distância</dt><dd>Prefere alvos longe, se movimenta mais e esquiva mais, mas ataca um pouco mais devagar. Combina com o fogo, mais forte de longe.</dd>
           <dt>Mais agressivo</dt><dd>Puxa a postura daquele bender para a agressiva, sem mudar a do time.</dd>
           <dt>Mais cauteloso</dt><dd>Puxa a postura daquele bender para a defensiva, sem mudar a do time.</dd>
-          <dt>Proteger</dt><dd>Esquiva mais; quem não é de terra recua um pouco. Na terra, tenta erguer um disco para interceptar ataques que vão num companheiro próximo.</dd>
+          <dt>Proteger</dt><dd>Esquiva mais, mas ataca um pouco mais devagar. Na terra, também tenta erguer um disco para interceptar ataques que vão num companheiro próximo.</dd>
           <dt>Marcar um rival</dt><dd>Ataca sempre o rival escolhido, ignorando a escolha de alvo do time.</dd>
-          <dt>Desobediência</dt><dd>Uma ordem contra o temperamento pode ser ignorada naquele round: explosivos resistem a Mais cauteloso, Manter distância e Proteger; calmos resistem a Mais agressivo e Pressionar. Com estresse acima de 60, qualquer ordem pode ser ignorada. O risco aparece ao lado da instrução. Quem desobedece joga do próprio jeito (o explosivo ataca, o calmo se retrai).</dd>
+          <dt>Mesma instrução para todos</dt><dd>Dar a mesma instrução a todos os benders em quadra deixa o time <b>previsível</b>: naquele round o rival antecipa os movimentos (o time esquiva bem menos e ataca um pouco mais devagar). Misture as instruções, ou deixe alguém sem instrução.</dd>
         </dl>
+        </div>
       </section>
+      </div>
     </div>
   </section>
 
@@ -649,6 +763,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <button class="btn" id="guideBtn" type="button">Guia</button>
       <button class="btn lg" id="scoutBtn" type="button">Rival</button>
       <button class="btn" id="breakBtn" type="button" hidden>Resumo do round</button>
+      <button class="btn primary" id="prepBtn" type="button" hidden>Preparação</button>
       <div class="seg sbx" role="group" aria-label="Plataforma" id="arenaSeg">
         <button type="button" data-a="round" aria-pressed="true">Arena redonda</button><button type="button" data-a="square">Arena quadrada</button>
       </div>
@@ -656,6 +771,34 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <button class="btn sbx" id="newBtn" type="button">Novos times</button>
       <button class="btn sbx" id="homeBtn" type="button">Voltar ao início</button>
     </div>
+
+    <section class="prep" id="prepPanel" hidden aria-label="Preparação do round">
+      <div class="prep-head">
+        <div><h2 id="prepTitle">Preparação</h2><p class="hint" id="prepSub"></p></div>
+        <div class="btnrow">
+          <span class="seg" id="prepTeams" role="group" aria-label="Time"></span>
+          <button class="btn sm" id="prepSummary" type="button" hidden>Resumo do round</button>
+          <button class="btn sm" id="prepGuide" type="button">Guia</button>
+          <button class="btn sm lg" id="prepRival" type="button">Rival</button>
+          <button class="btn sm" id="prepHide" type="button">Ver a arena</button>
+          <button class="btn primary" id="prepStart" type="button">Começar round</button>
+        </div>
+      </div>
+      <div class="prep-body">
+        <div class="prep-tac">
+          <label class="f" for="prepPost">Postura<select id="prepPost"></select></label>
+          <label class="f" for="prepTg">Escolha de alvo<select id="prepTg"></select></label>
+          <div class="f">Formação<div class="fm-pick" id="prepFm" role="group" aria-label="Formação"></div></div>
+        </div>
+        <div class="prep-field">
+          <div class="pitch" id="prepPitch" data-drop="pitch">
+            <div class="pz z1"><span>Zona 1</span></div><div class="pz z2"><span>Zona 2</span></div><div class="pz z3"><span>Zona 3</span></div>
+            <div class="pline"></div><div class="pline-l">Linha central</div>
+          </div>
+        </div>
+        <div class="prep-list"><table class="tbl"><thead><tr><th>Bender</th><th class="num">Nota</th><th>Energia</th><th>Estresse</th><th>Instrução</th></tr></thead><tbody id="prepRows"></tbody></table></div>
+      </div>
+    </section>
 
     <section class="hud-info hud-wide" id="scoutPanel" hidden>
       <div class="hud-info-head"><h2>Rival</h2><button class="btn sm" id="scoutClose" type="button">Fechar</button></div>
@@ -667,6 +810,12 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <div id="breakBody"></div>
     </section>
 
+    <section class="hud-info duel-pick" id="duelPanel" hidden role="dialog" aria-modal="true" aria-labelledby="duelTitle">
+      <div class="hud-info-head"><h2 id="duelTitle">Desempate: quem vai duelar?</h2></div>
+      <p class="hint" id="duelHint"></p>
+      <div class="duel-grid" id="duelGrid"></div>
+    </section>
+
     <section class="hud-info" id="infoPanel" hidden>
       <div class="hud-info-head"><h2>Regras da partida</h2><button class="btn sm" id="infoClose" type="button">Fechar</button></div>
       <p class="hint">Atributos, táticas, formações e instruções estão no <b>Guia</b>.</p>
@@ -674,7 +823,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <li><b>3 contra 3</b>: água, terra e fogo. Cada lado da arena tem 3 zonas e todos começam na Zona 1.</li>
         <li>Quem é empurrado para trás <b>não pode voltar</b> para a zona anterior. Se o time inteiro recua, o rival <b>avança uma zona</b>.</li>
         <li>Caiu pela borda do fundo, <b>caiu na água</b> e está fora do round. Derrubar os três é <b>nocaute</b> e encerra a partida.</li>
-        <li>Rounds de <b>3 minutos</b>, melhor de 3. Vence o round quem avançou mais. Se a linha estiver no centro, conta quem tem jogadores mais à frente. Empate total vira <b>duelo 1 contra 1</b> numa plataforma no centro.</li>
+        <li>Rounds de <b>3 minutos</b>, melhor de 3. Vence o round quem avançou mais. Se a linha estiver no centro, conta quem tem jogadores mais à frente. Empate total vira <b>duelo 1 contra 1</b> numa plataforma no centro: o técnico escolhe quem duela, entre os benders que não caíram na água no round.</li>
         <li><b>Alcance</b>: o fogo fica mais forte quanto mais longe acerta, a terra é mais forte de perto e a água não muda. Por isso o fogo joga mais recuado e a terra encosta na linha.</li>
         <li><b>Faltas</b>: pisar além da linha ou acertar acima dos ombros manda o infrator uma zona para trás. Se ele já está na Zona 3, recua o aliado mais à frente. Se o time inteiro está na Zona 3, o infrator fica <b>20 segundos fora</b> (a suspensão termina junto com o round).</li>
       </ul>
@@ -694,6 +843,27 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   </div>
   </div>
 
+  <div class="modal-back" id="introModal" hidden>
+    <section class="modal intro-modal" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+      <h2 id="introTitle">Sabe como funciona a Dobra Esportiva?</h2>
+      <div class="intro-body">
+        <div class="intro-arena"><canvas id="introCv" width="560" height="320" aria-label="Uma partida acontecendo"></canvas><span class="intro-cap">Uma partida de verdade, simulada agora</span></div>
+        <div class="intro-text">
+          <p>Dois times de três benders, um de <b style="color:#4aa3ff">água</b>, um de <b style="color:#7ec35a">terra</b> e um de <b style="color:#ff7a3c">fogo</b>, se enfrentam numa arena suspensa sobre a água. Cada lado da arena é dividido em três zonas.</p>
+          <p>Ninguém marca gols: o objetivo é <b>empurrar os rivais para trás</b> com golpes do próprio elemento. Quando o time rival inteiro recua, o seu avança e ganha território. Quem é empurrado para além da última zona <b>cai na água</b> e fica fora do round.</p>
+          <p>No fim do tempo, vence o round quem tiver avançado mais. Derrubar os três rivais na água é <b>nocaute</b> e encerra a partida na hora. Quem vencer dois rounds leva o jogo.</p>
+          <p><b>Você é o técnico.</b> Monta o elenco, decide o treino e os eventos da semana, cuida da energia e do estresse de cada bender e, nos jogos, escolhe a postura, a formação e as instruções antes de cada round. Em quadra, quem joga são eles: o resultado depende de como você os preparou.</p>
+        </div>
+      </div>
+      <div class="btnrow modal-actions"><button class="btn primary lgb" type="button" id="introOk">Vamos lá</button></div>
+    </section>
+  </div>
+  <div class="modal-back" id="benderModal" hidden>
+    <section class="modal guide-modal" role="dialog" aria-modal="true" aria-label="Ficha do bender">
+      <div class="gm-head"><h2>Ficha do bender</h2><button class="btn sm" id="benderClose" type="button">Fechar</button></div>
+      <div id="benderModalBody"></div>
+    </section>
+  </div>
   <div class="modal-back" id="guideModal" hidden>
     <section class="modal guide-modal" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
       <div class="gm-head"><h2 id="guideTitle">Guia do jogo</h2><button class="btn sm" id="guideClose" type="button">Fechar</button></div>
@@ -807,6 +977,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     defs = d;
     const seed = Math.floor(Math.random() * 1e9);
     match = createMatch(defs, seed, arena, coach);
+    match.chooser = true; // partida na tela: o técnico escolhe o duelista do desempate
+    duelFor = -1; $('duelPanel').hidden = true;
     falls.clear();
     particles = []; floats = []; flashBanner = null; trails.clear(); lastRoundEv = null; mvp = null;
     logEl.innerHTML = '';
@@ -814,6 +986,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     $('seed').textContent = `Semente ${seed}`;
     $('rematchBtn').classList.remove('glow');
     readyRound = 0; recs = {}; breakShown = 0; $('breakPanel').hidden = true; $('scoutPanel').hidden = true;
+    prepShownFor = 0; prepHidden = false; prepTeam = -1; $('prepPanel').hidden = true;
     buildBoard(); buildRosters(); updateBoard(); updateRosters();
   }
 
@@ -884,6 +1057,9 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       case 'foul':
         float(sp[0], sp[1] - 26, 'FALTA', '#ffd34d'); addLog(ev.text, ev.team); sfx.whistle(); break;
       case 'back': addLog(ev.text, ev.team); break;
+      case 'injury': float(sp[0], sp[1] - 30, 'LESÃO', '#ff6b7a'); addLog(ev.text, ev.team, true); break;
+      case 'sub': addLog(ev.text, ev.team, true); break;
+      case 'readplan': if (!match.teams[ev.team].auto && match.teams.some((t) => t.auto)) addLog('Seus três benders estão com a mesma instrução: o time fica previsível neste round.', ev.team, true); break;
       case 'block':
         burst(sp[0], sp[1], '#b48a52', 8, 120, 3, 'sq');
         if (match.clock - lastBlockLog > 8) { addLog(ev.text, ev.team); lastBlockLog = match.clock; }
@@ -898,6 +1074,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         ring(sp[0], sp[1], '#ffffff', 2, 40, 0.3); break;
       case 'start': addLog(ev.text, null, true); sfx.bell(); break;
       case 'tiebreak': addLog(ev.text, null, true); sfx.whistle(); break;
+      case 'tbpick': addLog(ev.text, null, true); sfx.whistle(); break;
       case 'disobey': float(sp[0], sp[1] - 30, 'IGNOROU A ORDEM', '#ff9a6b'); addLog(ev.text, ev.team, true); break;
       case 'roundEnd': hype[ev.team] = 1.2; lastRoundEv = ev; addLog(ev.text, ev.team, true); sfx.bell(); break;
       case 'over': {
@@ -1384,7 +1561,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       if (atBreak()) bannerBox(`Round ${m.round}`, score, '#e2b04a', 1, `Intervalo: ajuste as táticas e clique em Começar round ${m.round}`);
       else bannerBox(`Round ${m.round}`, score, '#e2b04a', Math.min(1, m.modeT * 2));
     }
-    else if (m.mode === 'tbPre') bannerBox('Desempate', `${m.tb.champs[0].name} contra ${m.tb.champs[1].name}: quem cair da plataforma perde`, '#e2b04a', 1);
+    else if (m.mode === 'tbPre') bannerBox('Desempate', `${m.tb.champs[0].name} contra ${m.tb.champs[1].name}. Quem sair dos limites do círculo perderá o duelo`, '#e2b04a', 1);
     else if (m.mode === 'roundEnd' && lastRoundEv) {
       const t = m.teams[lastRoundEv.team];
       const title = lastRoundEv.reason === 'ko' ? 'Nocaute!' : t.name;
@@ -1407,7 +1584,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     if (match.mode !== 'play') return;
     let R = recs[match.round];
     if (!R) {
-      R = recs[match.round] = { start: {}, heat: [new Array(HX * HY).fill(0), new Array(HX * HY).fill(0)], terr: [], lastT: -1, pushed: {}, fell: {} };
+      R = recs[match.round] = { start: {}, heat: [new Array(HX * HY).fill(0), new Array(HX * HY).fill(0)], terr: [], lastT: -1, pushed: {}, fell: {}, shape: [{ w: 0, g: 0, n: 0 }, { w: 0, g: 0, n: 0 }] };
       for (const p of allPlayers(match)) R.start[p.id] = { ...p.stats };
     }
     if (match.clock - R.lastT < 0.25) return;
@@ -1418,6 +1595,12 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       R.heat[p.team][cy * HX + cx]++;
     }
     R.terr.push([ROUND_TIME - match.time, (match.teams[0].limit - AL / 2) / ZW]);
+    // desenho do time na arena: largura ocupada e quanto o da frente se adianta dos outros
+    match.teams.forEach((T, ti) => {
+      const ps = T.players.filter((p) => p.alive && p.active); if (ps.length < 3) return;
+      const ys = ps.map((p) => p.y), dl = ps.map((p) => p.limitD - (p.team === 0 ? p.x : AL - p.x)).sort((a, b) => a - b);
+      const S = R.shape[ti]; S.w += Math.max(...ys) - Math.min(...ys); S.g += (dl[1] + dl[2]) / 2 - dl[0]; S.n++;
+    });
   }
   function heatSvg(R, ti) {
     const cells = R.heat[ti], max = Math.max(1, ...cells), col = match.teams[ti].color, cw = AL / HX, ch = AW / HY;
@@ -1451,7 +1634,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     const rows = match.teams.map((t) => t.players.map((p) => ({ p, s: d(p) })));
     const sum = (ti, k) => rows[ti].reduce((a, x) => a + (x.s[k] || 0), 0);
     const acc = (ti) => { const sh = sum(ti, 'shots'); return sh ? Math.round(sum(ti, 'hits') / sh * 100) : 0; };
-    const metrics = [['Acertos', (ti) => sum(ti, 'hits')], ['Precisão %', acc], ['Empurrões', (ti) => sum(ti, 'pushes')], ['Derrubadas na água', (ti) => sum(ti, 'falls')], ['Esquivas', (ti) => sum(ti, 'dodges')], ['Bloqueios', (ti) => sum(ti, 'blocks')], ['Faltas', (ti) => sum(ti, 'fouls')]];
+    const metrics = [['Acertos', (ti) => sum(ti, 'hits')], ['Precisão %', acc], ['Empurrões', (ti) => sum(ti, 'pushes')], ['Derrubadas na água', (ti) => sum(ti, 'falls')], ['Esquivas', (ti) => sum(ti, 'dodges')], ['Bloqueios', (ti) => sum(ti, 'blocks')], ['Ataques rebatidos', (ti) => sum(ti, 'icpt')], ['Faltas', (ti) => sum(ti, 'fouls')]];
     const T = match.teams, mc = T[me].color, oc = T[op].color;
     const cmp = metrics.map(([lab, f]) => { const a = f(me), b = f(op), mx = Math.max(1, a, b);
       return `<div class="l">${a}<i style="width:${a / mx * 100}%;background:${mc}"></i></div><div class="lab">${lab}</div><div class="r"><i style="width:${b / mx * 100}%;background:${oc}"></i>${b}</div>`; }).join('');
@@ -1465,6 +1648,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     if (foul && foul.s.fouls >= 2) reads.push(`<b>${esc(foul.p.name)}</b> cometeu ${foul.s.fouls} faltas. Pressionar e postura Agressiva aumentam as faltas; Disciplina baixa também.`);
     const cold = rows[me].filter((x) => x.s.shots >= 8).sort((a, b) => a.s.hits / a.s.shots - b.s.hits / b.s.shots)[0];
     if (cold && cold.s.hits / cold.s.shots < 0.3) reads.push(`<b>${esc(cold.p.name)}</b> acertou só ${Math.round(cold.s.hits / cold.s.shots * 100)}% dos ataques. ${cold.p.elem === 'fire' ? 'O fogo rende mais de longe: Manter distância pode ajudar.' : cold.p.elem === 'earth' ? 'A terra rende mais de perto: Pressionar pode ajudar.' : 'Mirar quem está mais vulnerável costuma render mais.'}`);
+    if (T[me].sameInstr) reads.push('Seus três benders tinham a mesma instrução e o time ficou previsível. Misture as instruções no próximo round.');
     const dis = rows[me].filter((x) => x.p.obey === false);
     if (dis.length) reads.push(`${dis.map((x) => `<b>${esc(x.p.name)}</b>`).join(' e ')} ignorou a instrução neste round. O risco aparece ao lado de cada instrução.`);
     const prow = (ti) => rows[ti].map(({ p, s }) => `<tr><td><span class="dot" style="background:${T[ti].color}"></span>${icon(p.elem)} ${esc(p.name)}</td><td class="num">${s.hits}<span class="hint"> (${s.shots ? Math.round(s.hits / s.shots * 100) : 0}%)</span></td>
@@ -1478,12 +1662,182 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <div class="brk-card"><h3>Território ao longo do round</h3>${terrSvg(R, me)}</div>
         <div class="brk-card"><h3>Comparação do round</h3><div class="cmp">${cmp}</div></div>
       </div>
-      ${reads.length ? `<div class="brk-card"><h3>Leituras do round</h3><ul class="reads">${reads.slice(0, 4).map((x) => `<li>${x}</li>`).join('')}</ul></div>` : ''}
+      ${reads.length ? `<div class="brk-card"><h3>Leituras do round</h3><ul class="reads">${reads.slice(0, 5).map((x) => `<li>${x}</li>`).join('')}</ul></div>` : ''}
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Bender</th><th class="num">Acertos</th><th class="num">Empurrões</th><th class="num">Derrubou</th><th class="num">Foi empurrado</th><th class="num">Esquivas</th><th class="num">Faltas</th></tr></thead>
         <tbody>${prow(me)}${prow(op)}</tbody></table></div>
       <p class="hint">No mapa de calor, quanto mais forte a cor, mais tempo o time passou naquela parte da arena. A linha dourada é o centro; os números são as zonas de cada lado.</p>`;
     return true;
   }
+  // ---------- HUD de preparação (antes e entre os rounds) ----------
+  let prepTeam = -1, prepHidden = false, prepShownFor = 0;
+  const manualTeams = () => match.teams.map((t, i) => (t.auto ? -1 : i)).filter((i) => i >= 0);
+  const FM_ICON = {
+    open: '<svg viewBox="0 0 34 22"><circle cx="5" cy="7" r="3.2"/><circle cx="17" cy="7" r="3.2"/><circle cx="29" cy="7" r="3.2"/></svg>',
+    compact: '<svg viewBox="0 0 34 22"><circle cx="10.5" cy="7" r="3.2"/><circle cx="17" cy="7" r="3.2"/><circle cx="23.5" cy="7" r="3.2"/></svg>',
+    stagger: '<svg viewBox="0 0 34 22"><circle cx="17" cy="4" r="3.2"/><circle cx="7" cy="16" r="3.2"/><circle cx="27" cy="16" r="3.2"/></svg>',
+  };
+  // onde cada bender começa o round, com a mesma regra da simulação (largura da formação, distância da linha)
+  function prepSpots(t) {
+    const spread = t.formation === 'compact' ? 0.55 : t.formation === 'open' ? 1.0 : 0.9, n = t.players.length, anchor = anchorOf(t);
+    return t.players.map((p, i) => {
+      const post = playerPosture(t, p), ins = p.instr || 'none';
+      let extra = 0;
+      if (t.formation === 'stagger') extra += p === anchor ? TAC.anchorDepth : TAC.backDepth;
+      if (ins === 'press') extra += TAC.pressDepth; else if (ins === 'distance') extra += TAC.distDepth;
+      const depth = Math.max(4, post.depth + ELEM_DEPTH[p.elem] + extra);
+      return { p, x: 0.5 + ((i + 1) / (n + 1) - 0.5) * spread, y: depth / (3 * ZW) };
+    });
+  }
+  // selo curto da instrução sobre o bender (o nome completo está na lista ao lado)
+  const INS_GLYPH = { press: '↑', distance: '↓', aggr: '+', caut: '−', protect: '◆', mark: '◎' };
+  function placeTokens(animate) {
+    const t = match.teams[prepTeam], pitch = $('prepPitch'), here = new Set(t.players.map((p) => String(p.id)));
+    // quem saiu de quadra desce e some
+    pitch.querySelectorAll('.tok:not(.ghost)').forEach((el) => { if (!here.has(el.dataset.p)) { el.classList.add('out', 'ghost'); setTimeout(() => el.remove(), 480); } });
+    for (const s of prepSpots(t)) {
+      let el = pitch.querySelector(`.tok[data-p="${s.p.id}"]:not(.ghost)`);
+      // todos ficam dentro da Zona 1; a distância da linha é ampliada para as diferenças aparecerem
+      const left = (10 + s.x * 80).toFixed(1) + '%', top = (5 + Math.min(1, (s.y * 3 * ZW) / 62) * 20).toFixed(1) + '%';
+      const insTxt = s.p.instr && s.p.instr !== 'none' ? (s.p.instr.startsWith('mark:') ? 'Marcar' : INSTR[s.p.instr]) : '';
+      if (!el) {
+        el = document.createElement('div'); el.className = animate ? 'tok in' : 'tok'; el.dataset.p = s.p.id; el.dataset.drop = 'tok:' + s.p.id; if (s.p.ref !== undefined) el.dataset.mref = s.p.ref;
+        if (canSubstitute(match)) el.dataset.drag = 'sub:' + s.p.id;
+        el.innerHTML = `<span class="shp ${s.p.elem}"></span><b></b><i></i>`; el.style.left = left; el.style.top = top; pitch.appendChild(el);
+      } else if (animate && (el.style.left !== left || el.style.top !== top)) {
+        // rastro: um fantasma fica onde ele estava e some enquanto o bender é arrastado para a nova posição
+        const g = el.cloneNode(true); g.classList.add('ghost'); pitch.appendChild(g);
+        requestAnimationFrame(() => g.classList.add('fade')); setTimeout(() => g.remove(), 650);
+        el.classList.add('drag'); setTimeout(() => el.classList.remove('drag'), 560);
+        el.style.left = left; el.style.top = top;
+      } else { el.style.left = left; el.style.top = top; }
+      el.style.setProperty('--tc', t.color); el.classList.toggle('hurt', !!s.p.injured);
+      el.querySelector('b').textContent = s.p.name; const tag = el.querySelector('i'); tag.textContent = insTxt ? (INS_GLYPH[s.p.instr.startsWith('mark:') ? 'mark' : s.p.instr] || '•') : ''; tag.title = insTxt; el.title = s.p.name + (insTxt ? ' · ' + insTxt : '');
+    }
+  }
+  function prepRefresh() { // atualiza riscos e avisos sem redesenhar a lista (não perde o foco dos seletores)
+    const t = match.teams[prepTeam];
+    for (const p of t.players) {
+      const r = $('prisk' + p.id), ch = Math.round(disobeyChance(p) * 100);
+      if (r) r.textContent = ch > 0 ? `Pode desobedecer (${ch}%)` : '';
+    }
+    const ins = t.players.map((p) => p.instr || 'none'), same = ins[0] !== 'none' && ins.every((x) => x === ins[0]);
+    $('prepSub').innerHTML = `${esc(t.name)} · ${match.round > 1 ? `placar em rounds ${match.teams[0].roundWins} × ${match.teams[1].roundWins}` : 'início da partida'}`
+      + (same ? ' · <span class="prep-warn">os três estão com a mesma instrução: o time fica previsível</span>' : '');
+    for (const b of $('prepFm').children) b.setAttribute('aria-pressed', b.dataset.fm === t.formation ? 'true' : 'false');
+  }
+  let prepPitchKey = {};
+  function renderPrep() {
+    const mts = manualTeams(); if (!mts.length) return;
+    if (!mts.includes(prepTeam)) prepTeam = mts[0];
+    const t = match.teams[prepTeam], ti = prepTeam;
+    $('prepTitle').textContent = `Preparação · Round ${match.round}`;
+    $('prepStart').textContent = `Começar round ${match.round}`;
+    $('prepTeams').hidden = mts.length < 2;
+    $('prepTeams').innerHTML = mts.length < 2 ? '' : mts.map((i) => `<button type="button" data-pt="${i}" aria-pressed="${i === ti}">${esc(match.teams[i].short || match.teams[i].name)}</button>`).join('');
+    $('prepPost').innerHTML = Object.entries(POSTURE).map(([k, v]) => `<option value="${k}"${k === t.posture ? ' selected' : ''}>${v.name}</option>`).join('');
+    $('prepTg').innerHTML = Object.entries(TARGETING).map(([k, v]) => `<option value="${k}"${k === t.targeting ? ' selected' : ''}>${v}</option>`).join('');
+    $('prepFm').innerHTML = Object.entries(FORMATION).map(([k, v]) => `<button type="button" data-fm="${k}" aria-pressed="${k === t.formation}">${FM_ICON[k]}${v}</button>`).join('');
+    const foes = match.teams[1 - ti].players;
+    const insOpts = (p) => Object.entries(INSTR).map(([k, v]) => `<option value="${k}"${k === p.instr ? ' selected' : ''}>${v}</option>`).join('') +
+      `<optgroup label="Marcar">${foes.map((o) => `<option value="mark:${o.id}"${p.instr === 'mark:' + o.id ? ' selected' : ''}>Marcar ${esc(o.name)}</option>`).join('')}</optgroup>`;
+    const canSub = canSubstitute(match);
+    $('prepRows').innerHTML = t.players.map((p) => `<tr data-mref="${p.ref ?? ''}" data-drop="row:${p.id}"${canSub ? ` data-drag="sub:${p.id}"` : ''}>
+      <td>${icon(p.elem)} <b>${esc(p.name)}</b> <span class="hint">${ELN[p.elem]}</span>${p.injured ? '<span class="inj-tag" title="Joga com Poder, Agilidade e Firmeza reduzidos até ser substituído">Lesionado</span>' : ''}</td>
+      <td class="num ov">${p.st.ovr ?? '—'}</td>
+      <td>${p.st.energy !== undefined ? energyBar(p.st.energy) : '<span class="hint">—</span>'}</td>
+      <td>${stressBar(p.st.stress || 0)}</td>
+      <td><select data-pins="${p.id}" aria-label="Instrução para ${esc(p.name)}">${insOpts(p)}</select><span class="risk" id="prisk${p.id}"></span></td></tr>`).join('') +
+      // banco: entra sempre no lugar de quem é do mesmo elemento (os três elementos continuam em quadra)
+      (t.bench && t.bench.length ? `<tr class="bench-h"><td colspan="5">Banco · arraste para o campo para substituir</td></tr>` +
+        t.bench.slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || (b.st.ovr || 0) - (a.st.ovr || 0)).map((q) => {
+          const on = t.players.find((p) => p.elem === q.elem);
+          return `<tr class="bench" data-mref="${q.ref ?? ''}" data-drop="bench:${q.id}"${canSub && !q.injured ? ` data-drag="sub:${q.id}"` : ''}><td>${icon(q.elem)} ${esc(q.name)} <span class="hint">${ELN[q.elem]}</span>${q.injured ? '<span class="inj-tag">Lesionado</span>' : ''}</td>
+          <td class="num ov">${q.st.ovr ?? '—'}</td><td>${q.st.energy !== undefined ? energyBar(q.st.energy) : '<span class="hint">—</span>'}</td><td>${stressBar(q.st.stress || 0)}</td>
+          <td>${on && canSub && !q.injured ? `<button class="btn sm" type="button" data-sub="${q.id}" data-out="${on.id}" title="Entrar no lugar de ${esc(on.name)}">Entra ⇄ ${esc(on.name)}</button>` : ''}</td></tr>`;
+        }).join('') : '');
+    // mesmo time na mesma partida: mantém os bonecos e anima as mudanças (substituição); senão redesenha do zero
+    const same = prepPitchKey.m === match && prepPitchKey.t === ti;
+    if (!same) { $('prepPitch').querySelectorAll('.tok').forEach((e) => e.remove()); prepPitchKey = { m: match, t: ti }; }
+    placeTokens(same); prepRefresh();
+  }
+  // aplica pelo mesmo caminho dos seletores do painel do time (salva a tática do seu time na liga)
+  function prepSet(id, v) { const el = $(id); if (!el) return; el.value = v; el.dispatchEvent(new Event('change', { bubbles: true })); }
+  $('prepPanel').addEventListener('change', (e) => {
+    const ti = prepTeam; if (ti < 0) return;
+    if (e.target.id === 'prepPost') prepSet('post' + ti, e.target.value);
+    else if (e.target.id === 'prepTg') prepSet('tg' + ti, e.target.value);
+    else if (e.target.dataset.pins) prepSet('ins' + e.target.dataset.pins, e.target.value);
+    placeTokens(true); prepRefresh();
+  });
+  // substituição arrastando: banco → campo (no campo todo, num boneco ou na linha de quem sai) ou quem está em quadra → banco
+  function subPair(key, drop) {
+    if (!match || prepTeam < 0 || !canSubstitute(match)) return null;
+    const t = match.teams[prepTeam], id = +key.split(':')[1], [kind, did] = drop.split(':');
+    const onField = (x) => t.players.find((p) => p.id === x), onBench = (x) => t.bench.find((p) => p.id === x);
+    let out, inn;
+    if (onBench(id)) { inn = onBench(id); out = kind === 'pitch' ? t.players.find((p) => p.elem === inn.elem) : (kind === 'tok' || kind === 'row') ? onField(+did) : null; }
+    else if (onField(id)) { out = onField(id); inn = kind === 'bench' ? onBench(+did) : null; }
+    if (!out || !inn) return null;
+    return inn.elem === out.elem && !inn.injured ? { out, inn } : false;
+  }
+  onDrag('sub', (key, drop) => { const r = subPair(key, drop); return r === null ? null : !!r; }, (key, drop) => {
+    const r = subPair(key, drop); if (!r) return;
+    if (substitute(match, prepTeam, r.out.id, r.inn.id)) { for (const ev of match.events) handle(ev); match.events.length = 0; buildRosters(); syncTacticsLock(); renderPrep(); }
+  });
+  $('prepPanel').addEventListener('click', (e) => {
+    const fm = e.target.closest('[data-fm]');
+    if (fm) { prepSet('fm' + prepTeam, fm.dataset.fm); placeTokens(true); prepRefresh(); return; }
+    const pt = e.target.closest('[data-pt]'); if (pt) { prepTeam = +pt.dataset.pt; renderPrep(); return; }
+    const sb = e.target.closest('[data-sub]');
+    if (sb && substitute(match, prepTeam, +sb.dataset.out, +sb.dataset.sub)) {
+      for (const ev of match.events) handle(ev); match.events.length = 0;
+      buildRosters(); syncTacticsLock(); renderPrep();
+    }
+  });
+  $('prepStart').addEventListener('click', () => { $('prepPanel').hidden = true; $('hud').classList.remove('prepping'); $('playBtn').click(); });
+  $('prepHide').addEventListener('click', () => { prepHidden = true; $('prepPanel').hidden = true; $('hud').classList.remove('prepping'); });
+  $('prepBtn').addEventListener('click', () => { prepHidden = false; renderPrep(); $('prepPanel').hidden = false; });
+  $('prepGuide').addEventListener('click', () => openGuide());
+  $('prepRival').addEventListener('click', () => $('scoutBtn').click());
+  $('prepSummary').addEventListener('click', () => { if (renderBreak()) $('breakPanel').hidden = false; });
+  function syncPrep(open) {
+    const can = open && manualTeams().length > 0;
+    if (can && prepShownFor < match.round) { prepShownFor = match.round; prepHidden = false; renderPrep(); }
+    $('prepPanel').hidden = !can || prepHidden;
+    $('hud').classList.toggle('prepping', !$('prepPanel').hidden);
+    $('prepBtn').hidden = !can || !prepHidden;
+    $('prepSummary').hidden = !(can && recs[match.round - 1]);
+  }
+
+  // ---------- desempate: o técnico escolhe o duelista ----------
+  let duelFor = -1;
+  function renderDuelPick() {
+    const ti = match.teams.findIndex((t, i) => !t.auto && !match.tbPick[i]);
+    if (ti < 0) { $('duelPanel').hidden = true; duelFor = -1; return; }
+    if (duelFor === ti && !$('duelPanel').hidden) return;
+    duelFor = ti;
+    const T = match.teams[ti], el = new Set(duelEligible(match, ti).map((p) => p.id));
+    const both = match.teams.every((t) => !t.auto);
+    $('duelTitle').textContent = both ? `Desempate: quem duela por ${T.name}?` : 'Desempate: quem vai duelar?';
+    $('duelHint').innerHTML = 'Empate no território. Um bender de cada time sobe na plataforma do centro. Quem sair dos limites do círculo perderá o duelo. <b>Quem caiu na água neste round não pode duelar.</b>';
+    $('duelGrid').innerHTML = T.players.map((p) => {
+      const ok = el.has(p.id);
+      return `<button class="duel-card" type="button" data-duel="${p.id}"${ok ? '' : ' disabled aria-disabled="true" title="Caiu na água neste round: não pode duelar"'} style="border-top:3px solid ${ELC[p.elem]}">
+        <span class="dn">${icon(p.elem)} ${esc(p.name)}</span>
+        <span class="hint">${ELN[p.elem]} · ${tmpLabel(p.st.tmp)}</span>
+        <span class="bars">${STAT_LABELS.map(([k, l]) => `<span class="bar"><span>${l} ${p.st[k]}</span><i><b style="width:${p.st[k]}%"></b></i></span>`).join('')}</span>
+        ${ok ? '<span class="pick-cta">Escolher para o duelo</span>' : '<span class="ban">Caiu na água</span>'}
+      </button>`;
+    }).join('');
+    $('duelPanel').hidden = false;
+    const first = $('duelGrid').querySelector('.duel-card:not(:disabled)'); if (first) first.focus();
+  }
+  $('duelGrid').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-duel]'); if (!b || b.disabled || duelFor < 0) return;
+    chooseDuelist(match, duelFor, +b.dataset.duel);
+    $('duelPanel').hidden = true; duelFor = -1;
+    if (match.mode === 'tbPick') renderDuelPick();
+  });
   function buildBoard() {
     ['A', 'B'].forEach((k, i) => {
       const t = match.teams[i];
@@ -1589,6 +1943,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   function syncTacticsLock() {
     const open = atBreak(), over = match.mode === 'over';
     $('hud').classList.toggle('break', open);
+    syncPrep(open);
+    if (match.mode === 'tbPick' && match.chooser) renderDuelPick(); else if (!$('duelPanel').hidden) $('duelPanel').hidden = true;
     $('breakBtn').hidden = !(open && recs[match.round - 1]);
     if (open && match.round > 1 && breakShown < match.round && recs[match.round - 1]) { breakShown = match.round; if (renderBreak()) $('breakPanel').hidden = false; }
     if (!open && !$('breakPanel').hidden) $('breakPanel').hidden = true;
@@ -1619,7 +1975,9 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         continue;
       }
       a.disabled = b.disabled = c.disabled = !open;
-      const txt = open ? 'Intervalo: escolha a tática e as instruções individuais para o próximo round.' : over ? 'Partida encerrada.' : 'Táticas travadas durante o round.';
+      const ins = t.players.map((p) => p.instr || 'none'), same = ins[0] !== 'none' && ins.every((x) => x === ins[0]);
+      const txt = (open ? 'Intervalo: escolha a tática e as instruções individuais para o próximo round.' : over ? 'Partida encerrada.' : 'Táticas travadas durante o round.')
+        + (open && same ? ' Atenção: os três estão com a mesma instrução, o time fica previsível.' : '');
       if (l.textContent !== txt) l.textContent = txt;
       l.classList.toggle('open', open);
     }
@@ -1668,6 +2026,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   // avança a partida até o fim sem animação (os intervalos usam a tática atual)
   $('skipBtn').addEventListener('click', () => {
     const snd = soundOn; soundOn = false;
+    match.chooser = false; $('duelPanel').hidden = true; // ao pular, o duelista é escolhido automaticamente
     let n = 0;
     while (match.mode !== 'over' && n++ < 200000) {
       if (atBreak()) readyRound = match.round;
@@ -1810,9 +2169,17 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   });
   $('continueBtn').addEventListener('click', () => { const s = loadSave(); if (s) { L = s; mode = 'league'; renderHub(); firstGuide(); } });
   // guia em janela: conteúdo da aba Guia (sem o quadro de dicas)
+  // abas do guia: Atributos / Táticas da partida, e dentro das táticas: Postura do time / Instruções
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-gtab], [data-gsub]'); if (!b) return;
+    const root = b.closest('[data-gtabs]'); if (!root) return;
+    const [attr, pane] = b.dataset.gtab ? ['gtab', 'gpane'] : ['gsub', 'gsubpane'], v = b.dataset[attr];
+    root.querySelectorAll(`[data-${attr}]`).forEach((x) => x.setAttribute('aria-pressed', x.dataset[attr] === v ? 'true' : 'false'));
+    root.querySelectorAll(`[data-${pane}]`).forEach((x) => { x.hidden = x.dataset[pane] !== v; });
+  });
   function openGuide() {
-    const panels = [...document.querySelectorAll('#viewHub .page[data-page="guide"] > .panel')].slice(1);
-    $('guideBody').innerHTML = panels.map((p) => `<section class="panel">${p.innerHTML}</section>`).join('');
+    const tabs = document.querySelector('#viewHub .page[data-page="guide"] [data-gtabs]');
+    $('guideBody').innerHTML = tabs ? tabs.outerHTML : '';
     $('guideModal').hidden = false; $('guideModal').scrollTop = 0;
     if (inMatchView && !paused && !atBreak()) { paused = true; guidePaused = true; syncTacticsLock(); }
   }
@@ -1822,6 +2189,56 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     if (L) { L.tips = L.tips || {}; if (!L.tips.guide) { L.tips.guide = 1; save(); } }
     if (guidePaused) { guidePaused = false; paused = false; syncTacticsLock(); }
   }
+  // ---------- abertura: só na primeira vez que o jogo abre, antes de tudo ----------
+  const INTRO_ON = true;
+  let introRaf = 0;
+  function introSeen() { try { return localStorage.getItem('sbm-intro') === '1'; } catch (e) { return false; } }
+  function showIntro() {
+    $('introModal').hidden = false;
+    const cv = $('introCv'), g = cv.getContext('2d'), W = cv.width, H = cv.height;
+    const pad = 30, sx = (W - pad * 2) / AL, top = (H - AW * sx) / 2, X = (x) => pad + x * sx, Y = (y) => top + y * sx;
+    const COL = { water: '#4aa3ff', earth: '#7ec35a', fire: '#ff7a3c' }, TEAM = ['#ff5a7a', '#f2ead6'];
+    let m = null, seed = 1;
+    const fresh = () => { const d = makeTeams(1000 + seed); d[0].color = TEAM[0]; d[1].color = TEAM[1]; m = createMatch(d, 77 + seed++, 'square'); m.mode = 'play'; m.modeT = 0; };
+    fresh();
+    const shape = (p, x, y, r) => {
+      g.fillStyle = COL[p.elem]; g.strokeStyle = TEAM[p.team]; g.lineWidth = 2.5; g.beginPath();
+      if (p.elem === 'water') g.arc(x, y, r, 0, 7);
+      else if (p.elem === 'earth') g.rect(x - r, y - r, r * 2, r * 2);
+      else { g.moveTo(x, y - r * 1.15); g.lineTo(x + r, y + r * 0.85); g.lineTo(x - r, y + r * 0.85); g.closePath(); }
+      g.fill(); g.stroke();
+    };
+    const frame = () => {
+      if ($('introModal').hidden) return;
+      for (let i = 0; i < 2; i++) { step(m); m.events.length = 0; if (m.mode === 'over') break; }
+      if (m.mode === 'over' || m.round > 2) fresh();
+      if (m.mode === 'roundEnd' || m.mode === 'pre') { m.mode = 'play'; m.modeT = 0; }
+      if (m.mode === 'tbPick' || m.mode === 'tbPre' || m.mode === 'tb') fresh();
+      // água, plataforma e zonas
+      g.fillStyle = '#0b2a3a'; g.fillRect(0, 0, W, H);
+      g.fillStyle = '#123a4f'; for (let i = 0; i < 9; i++) { g.fillRect(0, (i * 37 + performance.now() / 40) % H, W, 2); }
+      for (let z = 0; z < 6; z++) { g.fillStyle = z % 2 ? '#3a4a5c' : '#435568'; g.fillRect(X(z * ZW), Y(0), ZW * sx, AW * sx); }
+      // cada metade com um toque da cor do time que a defende
+      g.globalAlpha = 0.12; g.fillStyle = TEAM[0]; g.fillRect(X(0), Y(0), (m.teams[0].limit) * sx, AW * sx); g.fillStyle = TEAM[1]; g.fillRect(X(m.teams[0].limit), Y(0), (AL - m.teams[0].limit) * sx, AW * sx); g.globalAlpha = 1;
+      g.fillStyle = 'rgba(226,176,74,.9)'; g.fillRect(X(m.teams[0].limit) - 1.5, Y(0), 3, AW * sx);
+      g.strokeStyle = 'rgba(239,232,216,.25)'; g.lineWidth = 1; g.setLineDash([4, 4]);
+      for (let z = 1; z < 6; z++) { g.beginPath(); g.moveTo(X(z * ZW), Y(0)); g.lineTo(X(z * ZW), Y(AW)); g.stroke(); }
+      g.setLineDash([]);
+      // ataques
+      for (const pr of m.projs) { if (pr.dead) continue; g.fillStyle = COL[pr.elem]; g.beginPath(); g.arc(X(pr.x), Y(pr.y), Math.max(2.5, pr.r * sx), 0, 7); g.fill(); }
+      // benders
+      for (const t of m.teams) for (const p of t.players) {
+        if (!p.alive) { g.globalAlpha = Math.max(0, 0.6 - p.fallT * 0.5); }
+        shape(p, X(p.x), Y(p.y), 8);
+        g.globalAlpha = 1;
+      }
+      g.fillStyle = 'rgba(239,232,216,.8)'; g.font = '600 12px system-ui, sans-serif';
+      g.fillText(`Round ${m.round}`, 10, 18);
+      introRaf = requestAnimationFrame(frame);
+    };
+    cancelAnimationFrame(introRaf); introRaf = requestAnimationFrame(frame);
+  }
+  $('introOk').addEventListener('click', () => { $('introModal').hidden = true; cancelAnimationFrame(introRaf); try { localStorage.setItem('sbm-intro', '1'); } catch (e) {} });
   function firstGuide() { if (L && !(L.tips && L.tips.guide)) openGuide(); }
   $('guideClose').addEventListener('click', closeGuide);
   $('guideModal').addEventListener('click', (e) => { if (e.target === $('guideModal') || e.target.closest('[data-guideok]')) closeGuide(); });
@@ -1836,7 +2253,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   });
 
   function phaseLabel() {
-    return { preseason: 'Pré-temporada', season: `Rodada ${L.week + 1} de ${WEEKS}${L.week >= WEEKS / 2 ? ' (returno)' : ''}`, semis: 'Semifinais', final: 'Final', done: 'Encerrada' }[L.phase];
+    const dia = ['season', 'semis', 'final'].includes(L.phase) ? (L.day === 'sun' ? ' · domingo (dia de jogo)' : ' · segunda-feira') : '';
+    return { preseason: 'Pré-temporada', season: `Rodada ${L.week + 1} de ${WEEKS}${L.week >= WEEKS / 2 ? ' (returno)' : ''}`, semis: 'Semifinais', final: 'Final', done: 'Encerrada' }[L.phase] + dia;
   }
   function contractCell(p) {
     if (p.expiring) return '<span class="neg">Encerrado</span>';
@@ -1919,7 +2337,143 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     return `<svg viewBox="0 0 320 300" role="img" aria-label="Gráfico de competências">${g}</svg>`;
   }
   const dec1 = (v) => (Math.round(v * 10) / 10).toFixed(1).replace('.', ',');
-  function benderCardHtml(me, p) {
+  // ---------- arrastar e soltar (mouse e toque) ----------
+  // fonte: [data-drag="tipo:id"]; alvo: [data-drop="..."]. canDrop(fonte, alvo) diz se pode; onDrop faz.
+  // as regras ficam numa lista global: a HUD de preparação registra a sua antes deste trecho do script
+  function onDrag(prefix, canDrop, onDrop) { (window.__dragRules = window.__dragRules || []).push({ prefix, canDrop, onDrop }); }
+  (() => {
+    let st = null;
+    const ruleOf = (key) => (window.__dragRules || []).find((r) => key.startsWith(r.prefix + ':'));
+    const targetAt = (x, y) => { const el = document.elementFromPoint(x, y); return el ? el.closest('[data-drop]') : null; };
+    const clearHover = () => document.querySelectorAll('.drop-ok, .drop-no').forEach((e) => e.classList.remove('drop-ok', 'drop-no'));
+    document.addEventListener('pointerdown', (e) => {
+      const src = e.target.closest('[data-drag]');
+      if (!src || e.button > 0 || e.target.closest('select, button, input, option, a')) return;
+      st = { src, key: src.dataset.drag, x0: e.clientX, y0: e.clientY, ghost: null, id: e.pointerId };
+    });
+    document.addEventListener('pointermove', (e) => {
+      if (!st || e.pointerId !== st.id) return;
+      if (!st.ghost) {
+        if (Math.hypot(e.clientX - st.x0, e.clientY - st.y0) < 6) return;
+        // linha de tabela vira um chip com a primeira célula (elemento e nome); o resto é clonado como está
+        let g;
+        if (st.src.tagName === 'TR') { g = document.createElement('span'); g.className = 'chip-b'; g.innerHTML = st.src.cells[0].innerHTML; }
+        else { g = st.src.cloneNode(true); g.style.width = Math.min(st.src.getBoundingClientRect().width, 420) + 'px'; }
+        g.classList.add('drag-ghost'); g.removeAttribute('data-drag'); document.body.appendChild(g); st.ghost = g; st.src.classList.add('dragging-src');
+      }
+      e.preventDefault();
+      st.ghost.style.left = e.clientX + 'px'; st.ghost.style.top = e.clientY + 'px';
+      clearHover();
+      const t = targetAt(e.clientX, e.clientY), r = ruleOf(st.key);
+      if (t && r) { const ok = r.canDrop(st.key, t.dataset.drop); if (ok !== null) t.classList.add(ok === true ? 'drop-ok' : 'drop-no'); }
+    }, { passive: false });
+    const end = (e) => {
+      if (!st || e.pointerId !== st.id) return;
+      const s0 = st; st = null; clearHover();
+      if (!s0.ghost) return;
+      s0.ghost.remove(); s0.src.classList.remove('dragging-src');
+      const t = targetAt(e.clientX, e.clientY), r = ruleOf(s0.key);
+      if (t && r && e.type === 'pointerup') r.onDrop(s0.key, t.dataset.drop);
+    };
+    document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
+  })();
+  // eventos da semana: bender → evento (ou de volta para "sem evento")
+  function evCheck(key, drop) {
+    if (!drop.startsWith('event:') || !L || L.day === 'sun') return null;
+    const me = L.teams[L.user], p = me.roster.find((q) => q.id === +key.split(':')[1]), k = drop.slice(6);
+    if (!p) return null;
+    if (k === 'none') return true;
+    if (p.ev === k) return true;
+    const E = EVENTS[k];
+    if (E.phys && isInjured(p)) return `${p.name} está lesionado e ${E.name} exige o físico.`;
+    if (p.st.pop < E.req) return `${E.name} precisa de popularidade ${E.req} (${p.name} tem ${r0(p.st.pop)}).`;
+    if (eventTaken(L, k, p.id) >= E.slots) return `${E.name} não tem mais vagas.`;
+    return true;
+  }
+  onDrag('ev', (key, drop) => { const c = evCheck(key, drop); return c === null ? null : c === true; }, (key, drop) => {
+    const c = evCheck(key, drop); if (c === null) return;
+    if (c !== true) { const m = $('evMsg'); if (m) m.textContent = c; return; }
+    const p = L.teams[L.user].roster.find((q) => q.id === +key.split(':')[1]); p.ev = drop === 'event:none' ? null : drop.slice(6);
+    save(); renderHub();
+  });
+  // ficha do bender: sempre numa janela, em qualquer lugar onde um bender pode ser clicado
+  // (elenco, escalação, treino, finanças, mercado, observação do rival)
+  document.addEventListener('click', (e) => {
+    const row = e.target.closest('[data-mpick], [data-pick], [data-lpick], [data-mref]');
+    if (!row || !L || e.target.closest('button, select, a, input, option')) return;
+    // na HUD de preparação, data-mref é o bender da liga por trás do jogador da partida (só existe no modo liga)
+    const id = row.dataset.mpick || row.dataset.pick || row.dataset.lpick || row.dataset.mref; if (id === '' || id === undefined) return;
+    if (row.dataset.mref !== undefined && !(mode === 'league' && inMatchView)) return;
+    openBenderCard(+id);
+  });
+  function openBenderCard(id) {
+    const fa = L.freeAgents.find((q) => q.id === id), t = fa ? null : L.teams.find((x) => x.roster.some((q) => q.id === id));
+    const p = fa || (t && t.roster.find((q) => q.id === id)); if (!p) return;
+    const mine = t && t.idx === L.user;
+    const label = mine ? undefined : fa ? '<span class="badge-res">Agente livre</span>' : `<span class="badge-res"><span class="dot" style="background:${t.color}"></span>${esc(t.name)}${t.starters[p.elem] === p.id ? ' · titular' : ''}</span>`;
+    selBender = id;
+    $('benderModalBody').innerHTML = benderCardHtml(t || { starters: {} }, p, label);
+    $('benderModal').hidden = false; $('benderModal').scrollTop = 0;
+  }
+  $('benderClose').addEventListener('click', () => { $('benderModal').hidden = true; });
+  $('benderModal').addEventListener('click', (e) => { if (e.target.id === 'benderModal') $('benderModal').hidden = true; });
+  // ---------- elenco: campo com os titulares e lista no estilo da HUD de preparação ----------
+  // posições no campo pelas mesmas regras da partida (postura e formação salvas da última partida, sem instruções)
+  function lineupTeam(me) {
+    return { posture: me.posture || 'bal', formation: me.formation || 'open', players: starters(me).map((p) => ({ id: p.id, name: p.name, elem: p.elem, st: p.st, instr: 'none', inj: p.inj })) };
+  }
+  function renderLineup(me) {
+    const t = lineupTeam(me), pitch = $('rosterPitch'), here = new Set(t.players.map((p) => String(p.id)));
+    pitch.querySelectorAll('.tok:not(.ghost)').forEach((el) => { if (!here.has(el.dataset.p)) { el.classList.add('out', 'ghost'); setTimeout(() => el.remove(), 480); } });
+    for (const sp of prepSpots(t)) {
+      const left = (10 + sp.x * 80).toFixed(1) + '%', top = (5 + Math.min(1, (sp.y * 3 * ZW) / 62) * 20).toFixed(1) + '%';
+      let el = pitch.querySelector(`.tok[data-p="${sp.p.id}"]:not(.ghost)`);
+      if (!el) {
+        el = document.createElement('div'); el.className = pitch.dataset.ready ? 'tok in' : 'tok'; el.dataset.p = sp.p.id;
+        el.dataset.drop = 'stk:' + sp.p.id; el.dataset.lpick = sp.p.id;
+        el.innerHTML = `<span class="shp ${sp.p.elem}"></span><b></b><i></i>`; pitch.appendChild(el);
+      }
+      el.style.left = left; el.style.top = top; el.style.setProperty('--tc', me.color);
+      el.classList.toggle('hurt', (sp.p.inj || 0) > 0); el.classList.toggle('sel', sp.p.id === selBender);
+      el.querySelector('b').textContent = sp.p.name;
+    }
+    pitch.dataset.ready = '1';
+    $('rosterPitchNote').textContent = `Posição pela formação ${(FORMATION[t.formation] || '').toLowerCase()} e postura ${(POSTURE[t.posture] ? POSTURE[t.posture].name : '').toLowerCase()} da sua última partida.`;
+    const st = starters(me), res = me.roster.filter((p) => !st.includes(p)).sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st));
+    const row = (p, starter) => {
+      const cur = me.roster.find((q) => q.id === me.starters[p.elem]);
+      return `<tr data-lpick="${p.id}" class="${p.id === selBender ? 'sel' : ''}${starter ? '' : ' bench'}" data-drop="${starter ? 'srow' : 'rrow'}:${p.id}"${!starter && !isInjured(p) ? ` data-drag="lres:${p.id}"` : starter ? ` data-drag="lst:${p.id}"` : ''}>
+        <td>${icon(p.elem)} <b>${esc(p.name)}</b> <span class="hint">${ELN[p.elem]}</span>${injTag(p)}</td>
+        <td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td><td>${energyBar(p.energy)}</td><td>${stressBar(p.stress || 0)}</td>
+        <td>${starter ? '<span class="badge-st">Titular</span>' : isInjured(p) ? '' : `<button class="btn sm" type="button" data-starter="${p.id}" title="Escalar no lugar de ${esc(cur ? cur.name : '')}">Escalar ⇄ ${esc(cur ? cur.name : '')}</button>`}</td></tr>`;
+    };
+    $('lineupRows').innerHTML = st.map((p) => row(p, true)).join('') +
+      (res.length ? `<tr class="bench-h"><td colspan="6">Reservas · arraste para o campo para escalar</td></tr>` + res.map((p) => row(p, false)).join('') : '');
+  }
+  // arrastar na escalação: reserva → campo/titular, ou titular → reserva (sempre do mesmo elemento)
+  function lineupPair(key, drop) {
+    if (!L || hubPage !== 'roster') return null;
+    const me = L.teams[L.user], id = +key.split(':')[1], [kind, did] = drop.split(':'), byId = (x) => me.roster.find((q) => q.id === x);
+    const src = byId(id); if (!src) return null;
+    const isSt = (p) => me.starters[p.elem] === p.id;
+    let inn, out;
+    if (!isSt(src)) { inn = src; out = kind === 'rpitch' ? byId(me.starters[src.elem]) : (kind === 'stk' || kind === 'srow') ? byId(+did) : null; }
+    else { out = src; inn = kind === 'rrow' ? byId(+did) : null; }
+    if (!inn || !out) return null;
+    return inn.elem === out.elem && isSt(out) && !isInjured(inn) ? { inn, out } : false;
+  }
+  onDrag('lres', (k, d) => { const r = lineupPair(k, d); return r === null ? null : !!r; }, (k, d) => { const r = lineupPair(k, d); if (r) { L.teams[L.user].starters[r.inn.elem] = r.inn.id; selBender = r.inn.id; save(); renderHub(); } });
+  onDrag('lst', (k, d) => { const r = lineupPair(k, d); return r === null ? null : !!r; }, (k, d) => { const r = lineupPair(k, d); if (r) { L.teams[L.user].starters[r.inn.elem] = r.inn.id; selBender = r.inn.id; save(); renderHub(); } });
+  function weekLogHtml(w) {
+    const items = [];
+    if (w.gains.length) items.push(`<b>Treino de quarta:</b> ${w.gains.map((g) => `${esc(g.name)} +${String(g.d).replace('.', ',')} ${ATTRS.find((a) => a[0] === g.k)[1]}`).join(' · ')}`);
+    if (w.events.length) items.push(`<b>Eventos:</b> ${w.events.map((e) => `${DAY_NAME[e.day]}: ${esc(e.name)} (${esc(e.event)}, ${yen(e.amount)})`).join(' · ')}`);
+    for (const x of w.injuries) items.push(`<span class="neg">${esc(x.name)} se lesionou no ${esc(x.where)}: fora ${x.weeks} sem.</span>`);
+    for (const x of w.subs || []) items.push(`${esc(x.in)} assume o lugar de ${esc(x.out)} como titular.`);
+    return `<h3 class="sub">Como foi a semana</h3>${items.length ? `<ul class="news">${items.map((i) => `<li>${i}</li>`).join('')}</ul>` : '<p class="hint">Todos descansaram.</p>'}`;
+  }
+  const injTag = (p) => (p.inj > 0 ? `<span class="inj-tag" title="Lesionado: não treina nem faz eventos físicos; só joga se não houver outro do elemento">Lesão ${p.inj} sem.</span>` : '');
+  function benderCardHtml(me, p, label) {
     if (!p) return '<p class="hint">Nenhum bender no elenco.</p>';
     // na pré-temporada o histórico ainda é o da temporada passada: só mostra os valores atuais
     const hist = (L.phase !== 'preseason' && p.hist && p.hist.length ? p.hist : []), first = hist[0], now = {};
@@ -1932,7 +2486,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     const weeks = hist.length > 1 ? hist : [];
     return `<div class="bc-head">
         <div><div class="bc-name" style="color:${ELC[p.elem]}">${icon(p.elem)} ${esc(p.name)}</div>
-          <div class="bc-meta" style="margin-top:6px"><span>${st ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</span><span>${ELN[p.elem]}</span><span><b>${p.age}</b> anos</span>
+          <div class="bc-meta" style="margin-top:6px"><span>${label !== undefined ? label : st ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}${injTag(p)}</span><span>${ELN[p.elem]}</span><span><b>${p.age}</b> anos</span>
             <span>Temperamento <b>${tmpLabel(p.st.tmp).toLowerCase()}</b> (${p.st.tmp})</span><span>Popularidade <b>${r0(p.st.pop)}</b></span></div></div>
         <div class="kv"><b>${ovr(p.st)}</b><span>Nota</span></div>
       </div>
@@ -1972,11 +2526,11 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <div class="scout">
         <div><span class="hint">Últimos jogos</span><div>${formBadges(rival.idx)}</div></div>
         <div><span class="hint">Técnico (estilo ${STYLES[rival.style].toLowerCase()})</span>
-          <div>Costuma começar com postura <b>${POSTURE[T.posture].name}</b>, formação <b>${FORMATION[T.formation]}</b> e ${T.instr}. Quando está perdendo, fica agressivo e compacto, e a terra pressiona.</div></div>
+          <div>Costuma começar com postura <b>${POSTURE[T.posture].name}</b> e ${T.instr}. Quando está perdendo, fica agressivo e a terra pressiona.</div></div>
         <div><span class="hint">Estado dos titulares</span><div>Rival: energia ${avg(st, 'energy')}, estresse ${avg(st, 'stress')} · Seu time: energia ${avg(mine, 'energy')}, estresse ${avg(mine, 'stress')}</div></div>
       </div>
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Elemento</th><th>Bender</th><th class="num">Nota</th><th class="num">POD</th><th class="num">FIR</th><th class="num">AGI</th><th>Temperamento</th><th>Energia</th><th>Estresse</th><th></th></tr></thead><tbody>
-        ${st.map((p) => `<tr><td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td>
+        ${st.map((p) => `<tr data-mpick="${p.id}" title="Clique para ver a ficha"><td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td>
           <td class="num">${r0(p.st.pow)}</td><td class="num">${r0(p.st.fir)}</td><td class="num">${r0(p.st.agi)}</td>
           <td>${tmpLabel(p.st.tmp)}</td><td>${energyBar(p.energy)}</td><td>${stressBar(p.stress || 0)}</td>
           <td>${[p === danger ? '<span class="tag-s">Mais perigoso</span>' : '', p === star ? '<span class="tag-s">Estrela</span>' : ''].join(' ')}</td></tr>`).join('')}
@@ -2002,7 +2556,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     return `<details class="mrep" open><summary><h3 class="sub">Relatório da sua partida</h3></summary>
       ${mvp ? `<p>Destaque: <b>${esc(mvp.name)}</b> (${esc(sides[d.players[0].includes(mvp) ? 0 : 1].name)})</p>` : ''}
       <ul class="rounds">${d.rounds.map((x) => `<li><b>Round ${x.round}</b> · ${esc(L.teams[x.winner].name)} venceu ${REASON[x.reason] || ''}
-        ${x.tactics ? `<div class="tl"><span style="color:${H.color}">${esc(H.short)}</span> ${tacticLine(x.tactics[0], d.players[0])}</div><div class="tl"><span style="color:${A.color}">${esc(A.short)}</span> ${tacticLine(x.tactics[1], d.players[1])}</div>` : ''}</li>`).join('')}</ul>
+        ${x.tactics ? (r.h === L.user ? `<div class="tl"><span style="color:${H.color}">${esc(H.short)}</span> ${tacticLine(x.tactics[0], d.players[0])}</div>` : `<div class="tl"><span style="color:${A.color}">${esc(A.short)}</span> ${tacticLine(x.tactics[1], d.players[1])}</div>`) : ''}</li>`).join('')}</ul>
       ${notes.length ? `<p class="hint">${notes.join(' ')}</p>` : ''}
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Time</th><th>Bender</th><th class="num">Acertos</th><th class="num">Precisão</th><th class="num">Empurrões</th><th class="num">Na água</th><th class="num">Esquivas</th><th class="num">Bloqueios</th><th class="num">Faltas</th><th class="num">Desobed.</th><th>Estresse</th></tr></thead><tbody>
       ${d.players.map((side, si) => side.map((p) => `<tr class="${si === mineSide ? 'me' : ''}"><td><span class="dot" style="background:${sides[si].color}"></span>${esc(sides[si].short)}</td>
@@ -2040,6 +2594,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <ul class="checklist">
           <li class="${L.sponsors.length ? 'ok' : ''}">Patrocínios assinados: ${L.sponsors.length} de 2 <button class="btn sm" type="button" data-page="sponsors">Ver propostas</button></li>
           <li class="${ok ? 'ok' : ''}">Titulares definidos (um por elemento) <button class="btn sm" type="button" data-page="roster">Ver elenco</button></li>
+          <li class="${rosterShort(L) ? '' : 'ok'}">Elenco com pelo menos ${MIN_ROSTER} benders: ${me.roster.filter((p) => !p.expiring).length}${rosterShort(L) ? ` · <span class="neg">faltam ${rosterShort(L)}</span>` : ''} <button class="btn sm" type="button" data-page="market">Abrir mercado</button></li>
           ${expN ? `<li class="${blockers.length ? '' : 'ok'}">Contratos encerrados: ${expN}${blockers.length ? ` · <span class="neg">sem renovar, você ficaria sem bender de ${blockers.map((e) => ELN[e]).join(' e ')}</span>` : ' (sem renovar, eles saem ao começar a temporada)'} <button class="btn sm" type="button" data-page="finance">Ver contratos</button></li>` : ''}
           <li class="${W.offers.length ? '' : 'ok'}">Ofertas pelos seus benders: ${W.offers.length} <button class="btn sm" type="button" data-page="market">Abrir mercado</button></li>
         </ul>
@@ -2079,17 +2634,21 @@ details summary { cursor: pointer; margin-bottom: 6px; }
           <div class="x">×</div>
           <div class="r"><div class="sn" style="color:${A.color}">${esc(A.name)}</div><div class="facts">Nota ${teamOVR(A)} · ${A.rec.w}V ${A.rec.l}D</div></div>
         </div>
-        <p class="hint">Arena ${H.arena === 'round' ? 'redonda' : 'quadrada'} (casa de ${esc(H.name)}). O treino da semana vale depois desta partida.${L.coach.expect ? ` Expectativa da diretoria: <b>${L.coach.expect}º lugar</b> (${BOARD_GOAL(me.div, L.coach.expect).toLowerCase()}).` : ''}</p>
+        <p class="hint">Arena ${H.arena === 'round' ? 'redonda' : 'quadrada'} (casa de ${esc(H.name)}). ${L.day === 'sun' ? 'Domingo, dia de jogo: o treino e os eventos da semana já aconteceram.' : 'A partida é no domingo. Decida hoje (segunda) o treino de quarta e os eventos da semana: o cansaço deles já pesa neste jogo.'}${L.coach.expect ? ` Expectativa da diretoria: <b>${L.coach.expect}º lugar</b> (${BOARD_GOAL(me.div, L.coach.expect).toLowerCase()}).` : ''}</p>
         ${L.coach.conf !== undefined && L.phase === 'season' ? `<div class="conf"><span class="hint">Confiança da diretoria</span> ${confBar(L.coach.conf)} <b>${confLabel(L.coach.conf)}</b>
           ${L.coach.conf < 25 ? `<span class="neg">A diretoria está perdendo a paciência${L.week >= 3 ? ': se chegar a zero, você é demitido' : ''}.</span>` : ''}</div>` : ''}
+        ${L.day === 'sun' && L.weekLog ? weekLogHtml(L.weekLog) : ''}
         ${scoutHtml(rival, me)}`;
       // os botões da partida ficam no cabeçalho, visíveis em todas as páginas da central
-      $('headAction').innerHTML = `<button class="btn" id="quickBtn" type="button">Simular rápido</button> <button class="btn primary" id="playMatchBtn" type="button">Ir para a partida</button>`;
-      $('playMatchBtn').onclick = playLeagueMatch;
+      // segunda: o técnico decide e avança a semana; domingo: dia de jogo
+      const sunday = L.day === 'sun';
+      $('headAction').innerHTML = `<button class="btn" id="quickBtn" type="button">Simular rápido</button> ${sunday ? '<button class="btn primary" id="playMatchBtn" type="button">Ir para a partida</button>' : '<button class="btn primary" id="toSundayBtn" type="button">Avançar para domingo</button>'}`;
+      if (sunday) $('playMatchBtn').onclick = playLeagueMatch;
+      else $('toSundayBtn').onclick = () => { runWeekDays(L); save(); renderHub(); };
       $('quickBtn').onclick = () => busy($('quickBtn'), () => { const m = quickUserMatch(); finishWeek(L, m); save(); hubPage = 'home'; renderHub(); });
     } else {
       np.innerHTML = `<h2>${phaseLabel()}</h2><p class="hint">Seu time não está nesta fase. Acompanhe os resultados.</p>
-        <div class="btnrow"><button class="btn primary" id="simPhaseBtn" type="button">Simular ${phaseLabel().toLowerCase()}</button></div>`;
+        <div class="btnrow"><button class="btn primary" id="simPhaseBtn" type="button">Simular ${({ semis: 'semifinais', final: 'final' })[L.phase] || 'rodada'}</button></div>`;
       $('simPhaseBtn').onclick = () => busy($('simPhaseBtn'), () => { finishWeek(L, null); save(); renderHub(); });
     }
 
@@ -2146,6 +2705,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
           ${rep.fameBefore !== undefined ? `<dt>Popularidade do time</dt><dd>${r0(rep.fameBefore)} → <b>${r0(rep.fameAfter)}</b></dd>` : ''}
           ${rep.confBefore !== undefined && rep.confAfter !== undefined && rep.confBefore !== rep.confAfter ? `<dt>Confiança da diretoria</dt><dd>${r0(rep.confBefore)} → <b>${r0(rep.confAfter)}</b></dd>` : ''}
         </dl>
+        ${rep.injuries && (rep.injuries.mine.length || (rep.injuries.subs || []).length) ? `<div class="gains"><span>Lesões:</span>${rep.injuries.mine.map((x) => x.healed ? `<span>${esc(x.name)} <b class="pos">recuperado</b></span>` : `<span>${esc(x.name)} <b class="neg">fora ${x.weeks} sem.</b> (${x.where})</span>`).join('')}${(rep.injuries.subs || []).map((x) => `<span>${esc(x.in)} assume o lugar de ${esc(x.out)}</span>`).join('')}</div>` : ''}
         ${rep.gains.length ? `<div class="gains"><span>Treino:</span>${rep.gains.map((g) => `<span>${esc(g.name)} <b>+${String(g.d).replace('.', ',')} ${ATTRS.find((a) => a[0] === g.k)[1]}</b></span>`).join('')}</div>` : ''}`;
     }
 
@@ -2154,85 +2714,90 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     for (const b of $('trainSeg').children) b.setAttribute('aria-pressed', b.dataset.m === L.trainMode ? 'true' : 'false');
     $('teamPlanWrap').hidden = !team;
     $('teamPlan').innerHTML = `<option value="rest">Todos descansam</option>` + ATTRS.map(([k, , n]) => `<option value="${k}"${L.teamPlan === k ? ' selected' : ''}>Treinar ${n}</option>`).join('') +
-      `<option value="ev:praca">Todos: ${EVENTS.praca.name}</option>`;
+'';
     $('teamPlan').value = L.teamPlan;
-    const planOpts = (p) => `<option value="rest"${p.plan === 'rest' ? ' selected' : ''}>Descansar</option>` +
-      `<optgroup label="Treino">` + ATTRS.map(([k, , n]) => `<option value="${k}"${p.plan === k ? ' selected' : ''}>Treinar ${n}</option>`).join('') + `</optgroup>` +
-      `<optgroup label="Eventos (rendem dinheiro)">` + L.events.map((k) => {
-        const E = EVENTS[k], sel = p.plan === 'ev:' + k, ok = sel || canDoEvent(L, p, k);
-        const why = p.st.pop < E.req ? ` (precisa popularidade ${E.req})` : !ok ? ' (sem vaga)' : ` · +${yen(eventIncome(L, p, k))}`;
-        return `<option value="ev:${k}"${sel ? ' selected' : ''}${ok ? '' : ' disabled'}>${E.name}${why}</option>`;
-      }).join('') + `</optgroup>`;
-    // planos de evento que deixaram de valer (evento saiu da semana) voltam para descanso
-    for (const p of me.roster) if (p.plan && p.plan.startsWith('ev:') && !L.events.includes(p.plan.slice(3))) p.plan = 'rest';
-    if (L.teamPlan && L.teamPlan.startsWith('ev:') && L.teamPlan !== 'ev:praca') L.teamPlan = 'rest';
-    $('eventsBox').innerHTML = `<h3 class="sub">Eventos da semana</h3>
-      <p class="hint">No lugar do treino, um bender pode fazer um evento: rende dinheiro e popularidade, mas cansa e não evolui atributos. A Exibição na praça está sempre disponível; os outros mudam a cada rodada.</p>
-      <div class="ev-grid">${L.events.map((k) => {
-        const E = EVENTS[k], used = eventTaken(L, k, -1);
-        return `<div class="ev"><b>${E.name}</b>
-          <span>${E.base || E.perPop ? `${yen(E.base * D.mult)} + ${yen(E.perPop * D.mult)} por ponto de popularidade` : 'Não paga'}</span>
-          <span>Energia −${E.energy} · Popularidade +${String(Math.round(E.pop * PER_MATCH * 10) / 10).replace(".", ",")}</span>
-          <span>${E.req ? `Precisa popularidade ${E.req}` : 'Qualquer bender'} · ${E.slots >= 99 ? 'vagas livres' : `${used} de ${E.slots} vaga${E.slots > 1 ? 's' : ''}`}</span></div>`;
-      }).join('')}</div>`;
-    $('trainHint').textContent = team ? 'Treino em equipe: todo o elenco segue o mesmo foco nesta semana.' : 'Treino individual: escolha o plano de cada bender para esta semana. Treinar gasta energia e aumenta o estresse; descansar recupera os dois.';
+    const planOpts = (p) => `<option value="rest"${p.plan === 'rest' || !TRAINABLE.includes(p.plan) ? ' selected' : ''}>Descansar</option>` +
+      `<optgroup label="Treino${isInjured(p) ? ' (lesionado não treina)' : ''}">` + ATTRS.map(([k, , n]) => `<option value="${k}"${p.plan === k ? ' selected' : ''}${isInjured(p) ? ' disabled' : ''}>Treinar ${n}</option>`).join('') + `</optgroup>`;
+    for (const p of me.roster) if (p.ev && !L.events.includes(p.ev)) p.ev = null;
+    if (L.teamPlan && L.teamPlan.startsWith('ev:')) L.teamPlan = 'rest';
+    // lesionado: o treino vira descanso e o evento que exige o físico sai do plano
+    for (const p of me.roster) if (isInjured(p)) { if (TRAINABLE.includes(p.plan)) p.plan = 'rest'; if (p.ev && EVENTS[p.ev] && EVENTS[p.ev].phys) p.ev = null; }
+    const locked = L.day === 'sun', inWeek = ['season', 'semis', 'final'].includes(L.phase);
+    // eventos: arraste o bender para o evento; quem não for arrastado para nenhum não faz evento (descansa nos dias livres)
+    const chip = (p) => `<span class="chip-b"${locked ? '' : ` data-drag="ev:${p.id}"`} title="${locked ? '' : 'Arraste para um evento'}">${icon(p.elem)} ${esc(p.name)} <small>${r0(p.energy)}⚡</small>${injTag(p)}${p.ev && !locked ? `<button class="x" type="button" data-unev="${p.id}" title="Tirar do evento" aria-label="Tirar ${esc(p.name)} do evento">×</button>` : ''}</span>`;
+    const byElem = (a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st);
+    // a faixa da semana é o quadro dos eventos: cada dia de evento recebe os benders arrastados
+    { const fx = userFixture(L), rv = fx ? L.teams[fx.h === L.user ? fx.a : fx.h] : null;
+      $('weekHint').textContent = locked ? 'A semana já aconteceu: as decisões voltam na segunda, depois do jogo.'
+        : 'Arraste os benders para os dias de evento. Quem não for a nenhum evento descansa nos dias livres. O treino de quarta fica na tabela abaixo.';
+      $('weekStrip').innerHTML = DAYS.map((d) => {
+        const k = L.events.find((x) => evDayOf(L, x) === d), now = inWeek && ((d === 'seg' && !locked) || (d === 'dom' && locked)), done = inWeek && locked && d !== 'dom';
+        if (k) {
+          const E = EVENTS[k], used = eventTaken(L, k, -1);
+          const tags = [E.base || E.perPop ? `<span title="Renda: base mais um valor por ponto de popularidade do bender">${yen(E.base * D.mult)} + ${yen(E.perPop * D.mult)}/POP</span>` : '<span>Não paga</span>',
+            `<span title="Energia gasta no dia">−${E.energy}⚡</span>`, `<span title="Vagas">${used}/${E.slots} vaga${E.slots > 1 ? 's' : ''}</span>`];
+          if (E.req) tags.push(`<span title="Popularidade mínima">POP ${E.req}+</span>`);
+          if (E.phys) tags.push('<span title="Lesionado não participa">físico</span>');
+          return `<div class="wd ev-day${done ? ' done' : ''}" data-drop="event:${k}"><b>${DAY_NAME[d]}</b><strong>${E.name}</strong><div class="ev-tags">${tags.join('')}</div>
+            <div class="ev-chips">${me.roster.filter((p) => p.ev === k).map(chip).join('')}</div></div>`;
+        }
+        const what = d === 'seg' ? 'Decisões do técnico' : d === 'qua' ? 'Treino (ou descanso)' : d === 'dom' ? (rv ? `Jogo contra ${esc(rv.short || rv.name)}` : 'Jogo') : 'Livre: recupera energia';
+        return `<div class="wd${now ? ' now' : ''}${done ? ' done' : ''}"><b>${DAY_NAME[d]}</b><span>${what}</span></div>`;
+      }).join('');
+      $('evPool').innerHTML = `<div class="ev-pool" data-drop="event:none"><h4>Sem evento · descansam nos dias livres</h4><div class="ev-chips">${me.roster.filter((p) => !p.ev).sort(byElem).map(chip).join('')}</div></div>
+        <div class="ev-msg" id="evMsg" role="status"></div>`; }
+    $('trainHint').textContent = team ? 'Treino em equipe: todo o elenco segue o mesmo foco na quarta.' : 'Treino individual: escolha o plano de quarta de cada bender (treinar um atributo ou descansar).';
     const isSt = (p) => me.starters[p.elem] === p.id;
-    $('trainTbl').innerHTML = `<thead><tr><th>Status</th><th>Elemento</th><th>Bender</th><th class="num">Nota</th>${ATTRS.map((a) => `<th class="num" title="${a[2]}">${a[1]}</th>`).join('')}<th>Energia</th><th>Estresse</th><th>Plano da semana</th></tr></thead><tbody>` +
-      me.roster.slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || isSt(b) - isSt(a)).map((p) => `<tr>
-        <td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</td>
+    $('trainTbl').innerHTML = `<thead><tr><th>Status</th><th>Elemento</th><th>Bender</th><th class="num">Nota</th>${ATTRS.map((a) => `<th class="num" title="${a[2]}">${a[1]}</th>`).join('')}<th>Energia</th><th>Estresse</th><th>Quarta</th></tr></thead><tbody>` +
+      me.roster.slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || isSt(b) - isSt(a)).map((p) => `<tr data-mpick="${p.id}">
+        <td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}${injTag(p)}</td>
         <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td>
         ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
         <td>${energyBar(p.energy)}</td><td>${stressBar(p.stress || 0)}</td>
-        <td><select data-plan="${p.id}" aria-label="Plano de ${esc(p.name)}"${team ? ' disabled' : ''}>${planOpts(p)}</select></td></tr>`).join('') + '</tbody>';
+        <td><select data-plan="${p.id}" aria-label="Plano de quarta de ${esc(p.name)}"${team || locked ? ' disabled' : ''}>${planOpts(p)}</select></td></tr>`).join('') + '</tbody>';
 
     // ---- elenco: escalação, ficha do bender e tabela ----
-    $('lineupBox').innerHTML = ELEMS.map((e) => {
-      const stp = me.roster.find((p) => p.id === me.starters[e]), res = me.roster.filter((p) => p.elem === e && p !== stp);
-      return `<div class="slot"><div class="slot-h">${icon(e)} ${ELN[e]}</div>
-        ${stp ? `<div class="slot-st"><span><span class="badge-st">Titular</span> <b>${esc(stp.name)}</b></span><span class="ovn">${ovr(stp.st)}</span></div>
-          <div class="bc-meta"><span>Energia <b>${r0(stp.energy)}</b></span><span>Estresse <b>${r0(stp.stress || 0)}</b></span></div>` : '<p class="hint">Sem titular</p>'}
-        ${res.length ? res.map((q) => `<div class="slot-res"><span><span class="badge-res">Reserva</span> ${esc(q.name)} · <b>${ovr(q.st)}</b> <span class="hint">energia ${r0(q.energy)}</span></span>
-          <button class="btn sm" type="button" data-starter="${q.id}">Escalar no lugar de ${esc(stp ? stp.name : '')}</button></div>`).join('') : '<p class="hint">Nenhum reserva deste elemento.</p>'}</div>`;
-    }).join('');
+    if (!me.roster.some((p) => p.id === selBender)) selBender = (starters(me)[0] || me.roster[0] || {}).id;
+    renderLineup(me);
     if (!me.roster.some((p) => p.id === selBender)) selBender = (starters(me)[0] || me.roster[0] || {}).id;
     const roster = sortRows(me.roster, 'roster', Object.assign({}, benderGetters, {
-      starter: (p) => (isSt(p) ? 0 : 1), energy: (p) => p.energy, stress: (p) => p.stress || 0, value: (p) => valueOf(L, p) }));
+      starter: (p) => (isSt(p) ? 0 : 1), energy: (p) => p.energy, stress: (p) => p.stress || 0, inj: (p) => p.inj || 0, value: (p) => valueOf(L, p) }));
     const exp = me.roster.filter((p) => p.expiring);
     $('renewBox').innerHTML = pre && exp.length ? `<h3 class="sub">Contratos encerrados</h3>
       <p class="hint">Renove agora pelo salário que eles pedem, ou eles vão embora de graça quando a temporada começar.</p>
       <ul class="offers">${exp.map((p) => `<li><span>${icon(p.elem)} <b>${esc(p.name)}</b> · ${p.age} anos · nota ${ovr(p.st)} · salário atual ${yen(wageOf(p))} → pede <b>${yen(askWage(p))}</b></span>
         <span class="btnrow">${[1, 2, 3].map((y) => `<button class="btn sm" type="button" data-renew="${p.id}:${y}">Renovar ${y} temp.</button>`).join('')}</span></li>`).join('')}</ul>` : '';
-    $('rosterHint').textContent = `${me.roster.length} de 5 vagas. Clique num bender para ver a ficha completa e a evolução dos atributos na temporada.`;
-    $('rosterTbl').innerHTML = `<thead><tr>${sth('roster', 'starter', 'Status')}${sth('roster', 'elem', 'Elemento')}${sth('roster', 'name', 'Bender')}${sth('roster', 'ovr', 'Nota', 'num')}${sth('roster', 'age', 'Idade', 'num')}${attrHeads('roster')}${sth('roster', 'pop', 'POP', 'num', 'Popularidade')}${sth('roster', 'tmp', 'Temperamento')}${sth('roster', 'energy', 'Energia')}${sth('roster', 'stress', 'Estresse')}${pre ? '<th></th><th></th>' : ''}</tr></thead><tbody>` +
+    $('rosterHint').textContent = `${me.roster.length} de ${MAX_ROSTER} vagas (mínimo ${MIN_ROSTER}). Clique num bender para ver a ficha completa e a evolução dos atributos na temporada.${pre ? ' Vender e dispensar ficam em Finanças, na folha salarial.' : ''}`;
+    $('rosterTbl').innerHTML = `<thead><tr>${sth('roster', 'starter', 'Status')}${sth('roster', 'elem', 'Elemento')}${sth('roster', 'name', 'Bender')}${sth('roster', 'ovr', 'Nota', 'num')}${sth('roster', 'age', 'Idade', 'num')}${attrHeads('roster')}${sth('roster', 'pop', 'POP', 'num', 'Popularidade')}${sth('roster', 'tmp', 'Temperamento')}${sth('roster', 'energy', 'Energia')}${sth('roster', 'stress', 'Estresse')}${sth('roster', 'inj', 'Lesão')}</tr></thead><tbody>` +
       roster.map((p) => {
         const st = isSt(p), cur = me.roster.find((q) => q.id === me.starters[p.elem]);
         return `<tr data-pick="${p.id}" class="${p.id === selBender ? 'sel' : ''}">
-          <td>${st ? '<span class="badge-st">Titular</span>' : `<button class="btn sm" type="button" data-starter="${p.id}" title="Escalar no lugar de ${esc(cur ? cur.name : '')}">Escalar</button>`}</td>
+          <td>${st ? '<span class="badge-st">Titular</span>' : isInjured(p) ? '<span class="badge-res">Reserva</span>' : `<button class="btn sm" type="button" data-starter="${p.id}" title="Escalar no lugar de ${esc(cur ? cur.name : '')}">Escalar</button>`}</td>
           <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
           ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
           <td class="num pop">${r0(p.st.pop)}</td>
           <td>${tmpLabel(p.st.tmp)} <span style="color:var(--muted)">${p.st.tmp}</span></td>
           <td>${energyBar(p.energy)}</td>
           <td>${stressBar(p.stress || 0)}</td>
-          ${pre ? (() => { const q = sellQuote(L, p.id); return `<td><button class="btn sm" type="button" data-sell="${p.id}"${q && q.ok ? '' : ` disabled title="${esc(q ? q.why : '')}"`}>Vender${q && q.price ? ' · ' + yen(q.price) : ''}</button></td>`; })() : ''}
-          ${pre ? `<td><button class="btn sm" type="button" data-release="${p.id}"${canRelease(L, p.id) ? '' : ' disabled title="Precisa haver outro bender deste elemento no elenco"'}>Dispensar</button></td>` : ''}
+          <td>${p.inj > 0 ? injTag(p) : '<span class="hint">—</span>'}</td>
         </tr>`;
       }).join('') + '</tbody>';
-    $('benderCard').innerHTML = benderCardHtml(me, me.roster.find((p) => p.id === selBender));
     // ---- finanças: folha salarial ----
     const payRows = sortRows(me.roster, 'pay', Object.assign({}, benderGetters, { starter: (p) => (isSt(p) ? 0 : 1), value: (p) => valueOf(L, p) }));
     $('payHint').textContent = `Folha de ${yen(payroll(me))} por rodada, ${yen(payroll(me) * WEEKS)} na temporada (${WEEKS} rodadas). O salário é fixo até o fim do contrato.`;
-    $('payTbl').innerHTML = `<thead><tr>${sth('pay', 'starter', 'Status')}${sth('pay', 'elem', 'Elemento')}${sth('pay', 'name', 'Bender')}${sth('pay', 'ovr', 'Nota', 'num')}${sth('pay', 'age', 'Idade', 'num')}${sth('pay', 'pop', 'POP', 'num', 'Popularidade')}${sth('pay', 'salary', 'Salário', 'num')}${sth('pay', 'contract', 'Contrato')}${sth('pay', 'value', 'Valor', 'num', 'Valor de mercado')}</tr></thead><tbody>` +
-      payRows.map((p) => `<tr><td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</td>
+    $('payTbl').innerHTML = `<thead><tr>${sth('pay', 'starter', 'Status')}${sth('pay', 'elem', 'Elemento')}${sth('pay', 'name', 'Bender')}${sth('pay', 'ovr', 'Nota', 'num')}${sth('pay', 'age', 'Idade', 'num')}${sth('pay', 'pop', 'POP', 'num', 'Popularidade')}${sth('pay', 'salary', 'Salário', 'num')}${sth('pay', 'contract', 'Contrato')}${sth('pay', 'value', 'Valor', 'num', 'Valor de mercado')}${pre ? '<th></th><th></th>' : ''}</tr></thead><tbody>` +
+      payRows.map((p) => `<tr data-mpick="${p.id}"><td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</td>
         <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
-        <td class="num pop">${r0(p.st.pop)}</td><td class="num">${yen(wageOf(p))}</td><td>${contractCell(p)}</td><td class="num">${yen(valueOf(L, p))}</td></tr>`).join('') +
-      `<tr><td colspan="6" class="hint">Total por rodada</td><td class="num"><b>${yen(payroll(me))}</b></td><td></td><td class="num">${yen(me.roster.reduce((a, p) => a + valueOf(L, p), 0))}</td></tr></tbody>`;
+        <td class="num pop">${r0(p.st.pop)}</td><td class="num">${yen(wageOf(p))}</td><td>${contractCell(p)}</td><td class="num">${yen(valueOf(L, p))}</td>
+          ${pre ? (() => { const q = sellQuote(L, p.id); return `<td><button class="btn sm" type="button" data-sell="${p.id}"${q && q.ok ? '' : ` disabled title="${esc(q ? q.why : '')}"`}>Vender${q && q.price ? ' · ' + yen(q.price) : ''}</button></td>`; })() : ''}
+          ${pre ? `<td><button class="btn sm" type="button" data-release="${p.id}"${canRelease(L, p.id) ? '' : ' disabled title="Precisa haver outro bender deste elemento no elenco"'}>Dispensar</button></td>` : ''}</tr>`).join('') +
+      `<tr><td colspan="6" class="hint">Total por rodada</td><td class="num"><b>${yen(payroll(me))}</b></td><td></td><td class="num">${yen(me.roster.reduce((a, p) => a + valueOf(L, p), 0))}</td>${pre ? '<td></td><td></td>' : ''}</tr></tbody>`;
 
     // ---- mercado (só na pré-temporada) ----
     const full = me.roster.length >= MAX_ROSTER;
     $('faPanel').hidden = $('othersPanel').hidden = !pre;
     $('marketHint').textContent = !pre ? 'Mercado fechado. A janela de transferências abre na pré-temporada da próxima temporada.'
-      : `Janela de transferências: etapa ${L.window.step} de ${L.window.steps}. Elenco ${me.roster.length} de 5${full ? ' (cheio: venda ou dispense alguém para abrir vaga)' : ''}. A cada etapa, os outros times negociam e chegam novas ofertas.`;
+      : `Janela de transferências: etapa ${L.window.step} de ${L.window.steps}. Elenco ${me.roster.length} de ${MAX_ROSTER} (mínimo ${MIN_ROSTER})${full ? ' (cheio: venda ou dispense alguém para abrir vaga)' : ''}. A cada etapa, os outros times negociam e chegam novas ofertas.`;
     $('offersBox').innerHTML = !pre ? '' : `<h3 class="sub">Ofertas recebidas</h3>` + (L.window.offers.length ? `<ul class="offers">${L.window.offers.map((o) => {
       const p = me.roster.find((q) => q.id === o.pid), t = L.teams[o.team], v = valueOf(L, p), only = me.roster.filter((q) => q.elem === p.elem).length < 2;
       const diff = Math.round((o.amount / v - 1) * 100);
@@ -2251,11 +2816,10 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       let faList = L.freeAgents;
       if (budgetOnly) faList = faList.filter((p) => fitOf(signingFee(p), salary(p)).ok);
       const fa = sortRows(faList, 'market', benderGetters);
-      $('marketTbl').innerHTML = `<thead><tr>${sth('market', 'elem', 'Elemento')}${sth('market', 'name', 'Bender')}${sth('market', 'ovr', 'Nota', 'num')}${sth('market', 'age', 'Idade', 'num')}${attrHeads('market')}${sth('market', 'pop', 'POP', 'num', 'Popularidade')}${sth('market', 'tmp', 'Temperamento')}${sth('market', 'salary', 'Salário', 'num')}<th class="num" title="Luvas + salário nas rodadas da temporada">Custo na temporada</th><th class="num">Caixa depois</th><th>Orçamento</th><th></th></tr></thead><tbody>` +
+      $('marketTbl').innerHTML = `<thead><tr>${sth('market', 'elem', 'Elemento')}${sth('market', 'name', 'Bender')}${sth('market', 'ovr', 'Nota', 'num')}${sth('market', 'age', 'Idade', 'num')}${sth('market', 'pop', 'POP', 'num', 'Popularidade')}${sth('market', 'tmp', 'Temperamento')}${sth('market', 'salary', 'Salário', 'num')}<th class="num" title="Luvas + salário nas rodadas da temporada">Custo na temporada</th><th class="num">Caixa depois</th><th>Orçamento</th><th></th></tr></thead><tbody>` +
         fa.map((p) => {
           const fee = signingFee(p), emerg = me.cash < fee && seasonBlockers(L).includes(p.elem), can = !full && (me.cash >= fee || emerg);
-          return `<tr><td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
-            ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
+          return `<tr data-mpick="${p.id}" title="Clique para ver a ficha"><td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
             <td class="num pop">${r0(p.st.pop)}</td>
             <td>${tmpLabel(p.st.tmp)} <span style="color:var(--muted)">${p.st.tmp}</span></td>
             <td class="num">${yen(salary(p))}</td>
@@ -2269,15 +2833,14 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       if (budgetOnly) pool = pool.filter((x) => fitOf(valueOf(L, x.p), wageOf(x.p)).ok);
       const rows = sortRows(pool, 'others', Object.assign({}, ...Object.entries(benderGetters).map(([k, g]) => ({ [k]: (x) => g(x.p) })),
         { team: (x) => x.t.name, value: (x) => valueOf(L, x.p), tie: (a, b) => ovr(b.p.st) - ovr(a.p.st) }));
-      $('othersTbl').innerHTML = `<thead><tr>${sth('others', 'team', 'Time')}${sth('others', 'elem', 'Elemento')}${sth('others', 'name', 'Bender')}${sth('others', 'ovr', 'Nota', 'num')}${sth('others', 'age', 'Idade', 'num')}${attrHeads('others')}${sth('others', 'pop', 'POP', 'num', 'Popularidade')}${sth('others', 'tmp', 'Temperamento')}${sth('others', 'salary', 'Salário', 'num')}${sth('others', 'contract', 'Contrato')}${sth('others', 'value', 'Valor', 'num', 'Valor de mercado')}<th class="num">Caixa depois</th><th>Orçamento</th><th></th></tr></thead><tbody>` +
-        (rows.length ? rows.map(({ p, t, c }) => `<tr><td><span class="dot" style="background:${t.color}"></span>${esc(t.short)}</td>
-          <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}${t.starters[p.elem] === p.id ? ' <small class="hint">titular</small>' : ''}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
-          ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
+      $('othersTbl').innerHTML = `<thead><tr>${sth('others', 'team', 'Time')}${sth('others', 'elem', 'Elemento')}${sth('others', 'name', 'Bender')}${sth('others', 'ovr', 'Nota', 'num')}${sth('others', 'age', 'Idade', 'num')}${sth('others', 'pop', 'POP', 'num', 'Popularidade')}${sth('others', 'tmp', 'Temperamento')}${sth('others', 'salary', 'Salário', 'num')}${sth('others', 'contract', 'Contrato')}${sth('others', 'value', 'Valor', 'num', 'Valor de mercado')}<th class="num">Caixa depois</th><th>Orçamento</th><th></th></tr></thead><tbody>` +
+        (rows.length ? rows.map(({ p, t, c }) => `<tr data-mpick="${p.id}" title="Clique para ver a ficha"><td><span class="dot" style="background:${t.color}"></span>${esc(t.short)}</td>
+          <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}${t.starters[p.elem] === p.id ? ' <small class="hint">titular</small>' : ''}${injTag(p)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
           <td class="num pop">${r0(p.st.pop)}</td>
           <td>${tmpLabel(p.st.tmp)} <span style="color:var(--muted)">${p.st.tmp}</span></td>
           <td class="num">${yen(wageOf(p))}</td><td>${contractCell(p)}</td><td class="num">${yen(valueOf(L, p))}</td>
           ${(() => { const f = fitOf(valueOf(L, p), wageOf(p)); return `<td class="num ${f.after < 0 ? 'neg' : ''}">${yen(f.after)}</td><td><span class="fit ${f.ok ? 'ok' : 'no'}">${f.ok ? 'Cabe' : 'Não cabe'}</span></td>`; })()}
-          <td><button class="btn sm" type="button" data-buy="${p.id}"${c.ok ? '' : ` disabled title="${esc(c.why)}"`}>${c.ok ? 'Comprar' : esc(c.why || 'Indisponível')}</button></td></tr>`).join('')
+          <td><button class="btn sm" type="button" data-buy="${p.id}"${c.ok ? '' : ` disabled title="${esc(c.why)}"`}>${c.ok || c.why === 'Caixa insuficiente' ? 'Comprar' : esc(c.why || 'Indisponível')}</button></td></tr>`).join('')
           : `<tr><td colspan="18" class="hint">Nenhum bender disponível com esses filtros.</td></tr>`) + '</tbody>';
     }
 
@@ -2319,16 +2882,18 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     home: ['Bem-vindo, técnico!', `<p>Uma temporada segue sempre este caminho:</p><ol>
       <li><b>Pré-temporada:</b> assine até 2 patrocínios, renove contratos e reforce o elenco no Mercado.</li>
       <li><b>Elenco:</b> escolha um titular por elemento (Água, Terra, Fogo).</li>
-      <li><b>Semana:</b> defina o plano de cada bender: treinar um atributo, descansar ou fazer um evento.</li>
-      <li><b>Partida:</b> jogue ou pule para o resultado. Entre os rounds você ajusta a tática.</li>
+      <li><b>Segunda-feira:</b> defina o treino de quarta (ou descanso) de cada bender e quem faz os eventos da semana. Depois, avance para domingo.</li>
+      <li><b>Domingo:</b> veja como foi a semana, ajuste a escalação e jogue (ou pule para o resultado). Entre os rounds você ajusta a tática.</li>
       <li><b>Fim da temporada:</b> playoffs, acesso e rebaixamento, propostas de outros times e a janela de transferências.</li></ol>
       <p>A diretoria acompanha tudo: a barra de confiança aqui na Central mostra como está a sua situação.</p>`],
     roster: ['Elenco', `<ul>
-      <li>Só os <b>titulares</b> jogam, um de cada elemento. Na <b>Escalação</b>, use "Escalar no lugar de…" para pôr um reserva em quadra.</li>
+      <li>Cada partida começa com os <b>titulares</b>, um de cada elemento. Na <b>Escalação</b>, use "Escalar no lugar de…" para pôr um reserva em quadra. Durante a partida, os reservas ficam no banco e podem entrar entre os rounds.</li>
+      <li>O elenco tem de ${MIN_ROSTER} a ${MAX_ROSTER} benders. Lesionados aparecem com o selo de semanas fora.</li>
       <li>Clique num bender da tabela para ver a <b>ficha</b>: atributos, o gráfico de competências e a evolução de cada atributo ao longo da temporada.</li>
-      <li>Os reservas não jogam, mas recuperam mais energia e podem fazer eventos.</li></ul>`],
+      <li>Reservas que não entram recuperam mais energia e podem fazer eventos.</li></ul>`],
     train: ['Treino', `<ul>
-      <li><b>Treinar</b> evolui um atributo, mas gasta energia e aumenta o estresse. <b>Descansar</b> recupera os dois.</li>
+      <li>A semana: <b>segunda</b> você decide, <b>quarta</b> é o treino, os <b>eventos</b> têm o seu dia e o <b>jogo</b> é no domingo. O cansaço da semana já pesa no jogo.</li>
+      <li><b>Treinar</b> evolui um atributo, mas gasta energia e aumenta o estresse. <b>Descansar</b> na quarta recupera os dois.</li>
       <li>Cansado treina e joga pior; estressado decide pior e pode desobedecer. Alterne treino e descanso.</li>
       <li>Jovens evoluem mais rápido. Com o tempo, cada bender chega ao seu limite e o treino passa a render pouco.</li>
       <li><b>Treino em equipe</b> aplica o mesmo plano para todos; <b>individual</b> deixa escolher bender a bender.</li></ul>`],
@@ -2389,7 +2954,6 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     const p = L.teams[L.user].roster.find((q) => q.id === +id); if (p) { p.plan = e.target.value; save(); renderHub(); } // atualiza vagas dos eventos
   });
   $('viewHub').addEventListener('click', (e) => {
-    { const row = e.target.closest('[data-pick]'); if (row && L && !e.target.closest('button, select, a')) { selBender = +row.dataset.pick; renderHub(); return; } }
     const t = e.target.closest('button'); if (!t || !L) return;
     const me = L.teams[L.user];
     if (t.dataset.page) { showPage(t.dataset.page); window.scrollTo(0, 0); return; }
@@ -2398,8 +2962,9 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       if (s.key === key) s.dir = -s.dir; else { s.key = key; s.dir = TEXT_KEYS.has(key) || key === 'starter' ? 1 : -1; }
       renderHub(); return;
     }
+    if (t.dataset.unev) { const p = me.roster.find((q) => q.id === +t.dataset.unev); if (p) { p.ev = null; save(); renderHub(); } return; }
     if (t.dataset.m) { L.trainMode = t.dataset.m; save(); renderHub(); }
-    else if (t.dataset.starter) { const p = me.roster.find((q) => q.id === +t.dataset.starter); if (p) { me.starters[p.elem] = p.id; save(); renderHub(); } }
+    else if (t.dataset.starter) { const p = me.roster.find((q) => q.id === +t.dataset.starter); if (p && !isInjured(p)) { me.starters[p.elem] = p.id; save(); renderHub(); } }
     else if (t.dataset.release) { if (releasePlayer(L, +t.dataset.release)) { save(); renderHub(); } }
     else if (t.dataset.sign) { if (signPlayer(L, +t.dataset.sign)) { save(); renderHub(); } }
     else if (t.dataset.sponsor) { if (signSponsor(L, t.dataset.sponsor)) { save(); renderHub(); } }
@@ -2455,6 +3020,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     requestAnimationFrame(frame);
   }
   { const s = loadSave(); if (s) { L = s; renderHub(); } else renderStart(); }
+  if (INTRO_ON && !introSeen()) showIntro();
   requestAnimationFrame(frame);
 })();
 </script>

@@ -2,6 +2,10 @@
 const ZW = 100, AL = 600, AW = 300, PR = 12, ROUND_TIME = 180, DT = 1 / 60;
 const SUSPENSION = 20; // segundos fora por falta com o time todo na Zona 3
 const TB_R = 78, TB_TIME = 45;
+// lesão em partida: chance a cada vez que o bender é empurrado de zona ou cai na água (cansado se machuca mais).
+// Quem se lesiona joga o resto da partida com Poder, Agilidade e Firmeza reduzidos, até ser substituído no intervalo.
+// golpe acima dos ombros (a jogada que dá falta) também pode machucar quem foi atingido
+const INJ = { push: 0.022, fall: 0.08, head: 0.02, fatigue: 0.6, penalty: 0.85 };
 
 const ELEM = {
   fire:  { id: 'fire',  name: 'Fogo',  cd: 0.55, speed: 440, kb: 150, r: 6, home: 0,   life: 1.5 },
@@ -36,18 +40,36 @@ function playerPosture(team, p) {
   if (ins === 'aggr') order = lerpPosture(order, POSTURE.agg, 0.6);
   if (ins === 'caut') order = lerpPosture(order, POSTURE.def, 0.6);
   const eff = lerpPosture(order, nat, 0.35);
-  eff.foul *= 0.8 + tmp * 0.004;
+  eff.foul *= TAC.foulBase + tmp * TAC.foulTmp;
   return eff;
 }
 const TARGETING = {
-  free:    'IA decide',
+  free:    'Leitura do bender',
   focus:   'Foco no mais vulnerável',
   mirror:  'Duelo de elementos',
   danger:  'Foco no mais perigoso',
   nearest: 'Foco no mais próximo',
   star:    'Caçar a estrela',
 };
-// Formação: como o time se espalha na arena
+// Formação: como o time se espalha na arena. Pedra, papel e tesoura:
+// Compacta vence Escalonada, Escalonada vence Aberta, Aberta vence Compacta.
+const FORM_BEATS = { compact: 'stagger', stagger: 'open', open: 'compact' };
+// números das táticas (num lugar só, para equilibrar)
+const TAC = {
+  formEdge: { compact: 0.03, stagger: 0.06, open: 0.08 }, // empurrão a mais contra a formação que a sua vence (a Compacta vence anulando a âncora)
+  splash: 0.6,        // respingo num companheiro colado (formação compacta)
+  openSplash: 0.9,   // respingo quando a Aberta acerta um bloco de lado
+  compactFocus: 0.02, // Compacta: tendência a atacar o mesmo alvo
+  anchorDepth: -14, backDepth: 10, anchorBrace: 14, anchorCd: 1.2, backDodge: 0.05,
+  pressDepth: -8, pressCd: 0.95, pressFoul: 2.5, pressDodge: -0.05,
+  distDepth: 0, distDodge: 0.10, distCd: 1.05,
+  protDodge: 0.10, protCd: 1.05,
+  sameDodge: -0.18, sameCd: 1.08,
+  // temperamento: o explosivo esquenta quando está atrás; o calmo fica frio quando está à frente
+  rageKb: 0.05, rageCd: 0.05, calmDodge: 0.04, foulBase: 0.8, foulTmp: 0.004,
+  // duelo de elementos: mirar nos ataques que vêm na direção do time
+  duelChance: 0.14, duelPre: 0.002, duelLei: 0.001, duelRange: 230, duelCd: 0.7, duelSlow: 1.25, // os três com a mesma instrução: o rival lê o plano
+};
 const FORMATION = {
   open:    'Aberta',
   compact: 'Compacta',
@@ -112,14 +134,59 @@ function createMatch(defs, seed, arena = 'round', coach = null) {
   };
   m.teams = defs.map((d, ti) => ({
     name: d.name, short: d.short || d.name, color: d.color, posture: d.posture || 'bal',
-    targeting: d.targeting || 'free', formation: d.formation || 'open', auto: !!d.auto, pop: d.pop ?? 45, style: d.style || 'bal', limit: AL / 2, roundWins: 0, advances: 0, idx: ti,
-    players: d.players.map((pd, i) => ({
-      id: ti * 10 + i, team: ti, slot: i, name: pd.name, elem: pd.elem, st: { lei: 50, tmp: 50, ...pd.st }, ref: pd.id, instr: pd.instr || 'none', obey: true,
-      stats: { shots: 0, hits: 0, pushes: 0, falls: 0, dodges: 0, blocks: 0, fouls: 0, taken: 0 },
-    })),
+    targeting: d.targeting || 'free', baseTargeting: d.targeting || 'free', formation: d.formation || 'open', auto: !!d.auto, pop: d.pop ?? 45, style: d.style || 'bal', limit: AL / 2, roundWins: 0, advances: 0, idx: ti,
+    players: d.players.map((pd, i) => newMatchPlayer(ti, ti * 10 + i, i, pd)),
+    bench: (d.bench || []).map((pd, k) => newMatchPlayer(ti, ti * 10 + 3 + k, -1, pd)),
   }));
+  for (const t of m.teams) t.played = t.players.slice(); // todos que entraram em quadra (para o relatório e para a liga)
   resetRound(m);
   return m;
+}
+
+function newMatchPlayer(ti, id, slot, pd) {
+  const p = { id, team: ti, slot, name: pd.name, elem: pd.elem, st: { lei: 50, tmp: 50, ...pd.st }, ref: pd.id, instr: pd.instr || 'none', obey: true,
+    stats: { shots: 0, hits: 0, pushes: 0, falls: 0, dodges: 0, blocks: 0, fouls: 0, taken: 0 } };
+  if (pd.injured) injure(p, true); // lesionado que entra mesmo assim (não havia outro do elemento)
+  return p;
+}
+// lesão: reduz os atributos físicos até o fim da partida
+function injure(p, already) {
+  if (p.injured) return false;
+  p.injured = already ? 'pre' : 'match';
+  for (const k of ['pow', 'agi', 'fir']) p.st[k] = Math.round(p.st[k] * INJ.penalty);
+  return true;
+}
+function maybeInjure(m, p, kind) {
+  if (p.injured || m.mode === 'tb') return;
+  const e = p.st.energy ?? 100, ch = INJ[kind] * (1 + INJ.fatigue * (1 - e / 100) * 2 - INJ.fatigue * 0.5);
+  if (m.rng() < ch && injure(p)) emit(m, 'injury', { pid: p.id, team: p.team, x: p.x, y: p.y,
+    text: `${p.name} sente uma lesão e passa a jogar no sacrifício.` });
+}
+// substituição no intervalo: sempre pelo mesmo elemento (os três elementos continuam em quadra)
+function canSubstitute(m) { return (m.mode === 'pre' || m.mode === 'roundEnd') && m.winner === null; }
+function substitute(m, ti, outId, inId) {
+  const t = m.teams[ti], out = t.players.find((p) => p.id === outId), inn = t.bench.find((p) => p.id === inId);
+  if (!canSubstitute(m) || !out || !inn || out.elem !== inn.elem) return false;
+  const slot = out.slot;
+  inn.slot = slot; out.slot = -1; inn.instr = out.instr;
+  t.players[slot] = inn; t.bench[t.bench.indexOf(inn)] = out;
+  if (!t.played.includes(inn)) t.played.push(inn);
+  // quem marcava o bender que saiu passa a marcar quem entrou
+  for (const q of m.teams[1 - ti].players) if (q.instr === 'mark:' + out.id) q.instr = 'mark:' + inn.id;
+  initPlayer(m, t, inn, slot);
+  emit(m, 'sub', { team: ti, text: `${t.name}: sai ${out.name}, entra ${inn.name}.` });
+  return true;
+}
+// a IA (e o técnico que pula a partida) troca quem se lesionou pelo melhor reserva sadio do elemento
+function autoSubInjured(m, ti) {
+  const t = m.teams[ti];
+  for (const p of t.players.slice()) {
+    if (!p.injured) continue;
+    const opts = t.bench.filter((q) => q.elem === p.elem && !q.injured);
+    if (!opts.length) continue;
+    const best = opts.reduce((b, q) => ((q.st.ovr || 0) > (b.st.ovr || 0) ? q : b));
+    substitute(m, ti, p.id, best.id);
+  }
 }
 
 function allPlayers(m) { return m.teams[0].players.concat(m.teams[1].players); }
@@ -138,19 +205,21 @@ function resetRound(m) {
   }
   for (const t of m.teams) {
     t.limit = AL / 2;
-    t.players.forEach((p, i) => {
-      p.alive = true; p.active = true; p.fallT = 0; p.susp = 0; // suspensão acaba com o round
-      p.limitD = AL / 2; p.backEdge = AL / 2 - ZW;
-      p.laneF = (i + 1) / 4;
-      p.x = px(t.idx, AL / 2 - 22); p.y = laneToY(m.arena, p.laneF, p.x); p.laneY = p.y;
-      p.vx = 0; p.vy = 0; p.cvx = 0; p.cvy = 0;
-      p.stagger = 0; p.cd = 0.6 + m.rng() * 0.8; p.think = m.rng() * 0.2;
-      p.dodgeT = 0; p.dodgeDir = 0; p.burst = 0; p.target = null; p.lastHit = null; p.lastHitT = -99;
-      p.depthPref = m.rng() * 14;
-      p.wf = 0.8 + m.rng() * 1.2; p.wp = m.rng() * 6.28; p.wa = 14 + p.st.agi * 0.28;
-      p.goalX = p.x; p.goalY = p.y; p.flash = 0; p.post = playerPosture(t, p);
-    });
+    t.players.forEach((p, i) => initPlayer(m, t, p, i));
   }
+  if (m.coach) for (const t of m.teams) if (t.auto) autoSubInjured(m, t.idx);
+}
+function initPlayer(m, t, p, i) {
+  p.alive = true; p.active = true; p.fallT = 0; p.susp = 0; // suspensão acaba com o round
+  p.limitD = AL / 2; p.backEdge = AL / 2 - ZW;
+  p.laneF = (i + 1) / 4;
+  p.x = px(t.idx, AL / 2 - 22); p.y = laneToY(m.arena, p.laneF, p.x); p.laneY = p.y;
+  p.vx = 0; p.vy = 0; p.cvx = 0; p.cvy = 0;
+  p.stagger = 0; p.cd = 0.6 + m.rng() * 0.8; p.think = m.rng() * 0.2;
+  p.dodgeT = 0; p.dodgeDir = 0; p.burst = 0; p.target = null; p.lastHit = null; p.lastHitT = -99;
+  p.depthPref = m.rng() * 14;
+  p.wf = 0.8 + m.rng() * 1.2; p.wp = m.rng() * 6.28; p.wa = 14 + p.st.agi * 0.28;
+  p.goalX = p.x; p.goalY = p.y; p.flash = 0; p.post = playerPosture(t, p);
 }
 
 function step(m) {
@@ -158,11 +227,14 @@ function step(m) {
   switch (m.mode) {
     case 'pre':
       if ((m.modeT -= DT) <= 0) {
+        for (const t of m.teams) if (t.auto || !m.chooser) autoSubInjured(m, t.idx);
         m.mode = 'play'; emit(m, 'start', { text: `Round ${m.round}: começou!` });
         // registra a tática de cada time neste round (para o relatório pós-partida)
         m.tacticLog = m.tacticLog || [];
         m.tacticLog[m.round - 1] = m.teams.map((t) => ({ posture: t.posture, targeting: t.targeting, formation: t.formation, instr: t.players.map((p) => p.instr) }));
         // obediência: quem recebeu uma ordem contra o próprio temperamento pode ignorá-la neste round
+        // os três com a mesma instrução (não vale "sem instrução"): o rival lê o plano
+        for (const t of m.teams) { const ins = t.players.map((p) => p.instr || 'none'); t.sameInstr = ins.length >= 3 && ins[0] !== 'none' && ins.every((x) => x === ins[0]); if (t.sameInstr) emit(m, 'readplan', { team: t.idx, text: `${t.name} deu a mesma instrução aos três benders e ficou previsível: o rival antecipa os movimentos neste round.` }); }
         for (const p of allPlayers(m)) {
           p.obey = !(m.rng() < disobeyChance(p));
           p.post = playerPosture(m.teams[p.team], p);
@@ -188,6 +260,9 @@ function step(m) {
         else if (s1 > s0) finishRound(m, 1, 'zones');
         else startTiebreak(m);
       }
+      break;
+    case 'tbPick': // esperando o técnico escolher; sem tela (pular para o resultado), escolhe o mais forte
+      if (!m.chooser) { m.tbPick = m.tbPick.map((x, ti) => x || bestDuelist(m, ti)); beginDuel(m, m.tbPick); }
       break;
     case 'tbPre':
       if ((m.modeT -= DT) <= 0) { m.mode = 'tb'; emit(m, 'start', { text: 'Desempate: valendo!' }); }
@@ -255,36 +330,47 @@ function think(m, p) {
     if (m.rng() < (1 - read) * 0.35) tgt = foes[Math.floor(m.rng() * foes.length)];
     else tgt = foes.reduce((b, o) => (vulnerability(o) > vulnerability(b) ? o : b), foes[0]);
   } else if (team.targeting === 'mirror') {
-    const same = foes.find((o) => o.elem === p.elem);
-    tgt = same && vulnerability(same) + 0.5 >= Math.max(...foes.map(vulnerability)) ? same : foes.reduce((b, o) => (vulnerability(o) > vulnerability(b) ? o : b), foes[0]);
+    // Duelo de elementos: o time joga para segurar o jogo. Ataca o mais vulnerável com menos frequência
+    // e, no lugar, rebate no ar os ataques que chegam nos companheiros (ver updateProjs)
+    if (m.rng() < (1 - read) * 0.35) tgt = foes[Math.floor(m.rng() * foes.length)];
+    else tgt = foes.reduce((b, o) => (vulnerability(o) > vulnerability(b) ? o : b), foes[0]);
   } else {
     let best = -1e9;
     for (const o of foes) {
       const dist = Math.hypot(o.x - p.x, o.y - p.y);
-      let s = vulnerability(o) + dist * (ELEM_DIST_PREF[p.elem] + (ins === 'distance' ? 1 / 300 : ins === 'press' ? -1 / 300 : 0)) + m.rng() * (1.1 - read);
-      if (o.target === p) s += 0.3;
+      // Leitura do bender: quem lê bem acha o alvo mais vulnerável e que combina com o seu elemento;
+      // quem lê mal se distrai com quem está perto e erra bastante
+      let s = vulnerability(o) * read * 2 + dist * (ELEM_DIST_PREF[p.elem] * read * 0.6 + (ins === 'distance' ? 1 / 300 : ins === 'press' ? -1 / 300 : 0))
+        - dist / 160 * Math.max(0, 0.7 - read) + m.rng() * Math.pow(1.05 - read, 1.4) * 2.2;
+      if (o.target === p) s += 0.3 * (1 - read);
       if (p.target === o) s += 0.35;
       // formação compacta: os companheiros se ajudam a concentrar no mesmo alvo
-      if (team.formation === 'compact' && team.players.some((q) => q !== p && q.alive && q.target === o)) s += 0.04;
+      if (team.formation === 'compact' && team.players.some((q) => q !== p && q.alive && q.target === o)) s += TAC.compactFocus;
       if (s > best) { best = s; tgt = o; }
     }
   }
   p.target = tgt;
 
   let extra = 0;
-  if (team.formation === 'stagger') extra += p === anchorOf(team) ? -8 : 6;
-  if (ins === 'press') extra -= 8;
-  else if (ins === 'distance') extra += 6;
-  else if (ins === 'protect' && p.elem !== 'earth') extra += 8;
+  if (team.formation === 'stagger') extra += p === anchorOf(team) ? TAC.anchorDepth : TAC.backDepth;
+  if (ins === 'press') extra += TAC.pressDepth;
+  else if (ins === 'distance') extra += TAC.distDepth;
   const goalD = inTb ? p.limitD - 22 : p.limitD - Math.max(4, p.post.depth + ELEM_DEPTH[p.elem] + extra) - p.depthPref;
   p.goalX = px(p.team, goalD);
 
   // falta: pisar além da linha (afobação)
   if (!inTb && m.mode === 'play') {
-    const pressing = ins === 'press' || (team.formation === 'stagger' && p === anchorOf(team));
-    const pf = 0.0007 * (1.25 - p.st.dis / 100) * p.post.foul * SIM_TUNING.foulMul * (pressing ? 2.5 : 1);
+    const pf = 0.0007 * (1.25 - p.st.dis / 100) * p.post.foul * SIM_TUNING.foulMul * (ins === 'press' ? TAC.pressFoul : 1);
     if (m.rng() < pf) foul(m, p, 'linha');
   }
+}
+
+// temperamento em quadra: atrás no placar, no território ou empurrado para trás, o explosivo esquenta;
+// sem estar atrás, o calmo fica frio. Valores de 0 a 1.
+function moodOf(m, p) {
+  const t = m.teams[p.team], o = m.teams[1 - p.team], tmp = p.st.tmp ?? 50;
+  const behind = t.roundWins < o.roundWins || t.limit < AL / 2 || p.limitD < AL / 2 - 1;
+  return { rage: behind && tmp > 55 ? (tmp - 55) / 45 : 0, calm: !behind && tmp < 45 ? (45 - tmp) / 45 : 0 };
 }
 
 // formação escalonada: quem segura a linha na frente (a terra, se estiver em quadra; senão quem tem mais Firmeza)
@@ -368,6 +454,7 @@ function updatePlayer(m, p) {
       if (credit) credit.stats.pushes++;
       emit(m, 'push', { pid: p.id, team: p.team, x: p.x, y: p.y, zone: zoneLabel(m, p),
         text: `${p.name} é empurrado para ${zoneLabel(m, p)}${credit ? ` por ${credit.name}` : ''}!` });
+      maybeInjure(m, p, 'push');
     }
     if (d < 0) {
       p.alive = false; p.fallT = 0;
@@ -375,6 +462,7 @@ function updatePlayer(m, p) {
       if (credit) credit.stats.falls++;
       emit(m, 'water', { pid: p.id, team: p.team, x: p.x, y: p.y,
         text: `${p.name} cai na água${credit ? ` com golpe de ${credit.name}` : ''}! Fora do round.` });
+      maybeInjure(m, p, 'fall');
       return;
     }
   }
@@ -401,9 +489,9 @@ function zoneLabel(m, p) {
 }
 
 function shoot(m, p, isBurst) {
-  const E = ELEM[p.elem], t = p.target, team = m.teams[p.team];
-  const dx = t.x - p.x, dy = t.y - p.y;
-  const dist = Math.hypot(dx, dy);
+  const E = ELEM[p.elem], team = m.teams[p.team];
+  const t = p.target;
+  const dist = Math.hypot(t.x - p.x, t.y - p.y);
   const tt = dist / E.speed, lead = 0.45 + p.st.pre * 0.005;
   const ax = t.x + t.cvx * tt * lead, ay = t.y + t.cvy * tt * lead;
   const ang = Math.atan2(ay - p.y, ax - p.x) + gauss(m.rng) * (0.015 + (1 - p.st.pre / 100) * 0.48);
@@ -415,7 +503,7 @@ function shoot(m, p, isBurst) {
   });
   p.stats.shots++;
   if (!isBurst) {
-    p.cd = E.cd * (1.15 - p.st.agi * 0.003) * p.post.cd * (instrOf(p) === 'press' ? 0.9 : 1) * (0.85 + m.rng() * 0.3);
+    p.cd = E.cd * (1.15 - p.st.agi * 0.003) * p.post.cd * ({ press: TAC.pressCd, distance: TAC.distCd, protect: TAC.protCd }[instrOf(p)] || 1) * (team.formation === 'stagger' && p === anchorOf(team) ? TAC.anchorCd : 1) * (team.sameInstr ? TAC.sameCd : 1) * (1 - moodOf(m, p).rage * TAC.rageCd) * (team.targeting === 'mirror' ? TAC.duelSlow : 1) * (0.85 + m.rng() * 0.3);
     if (p.elem === 'fire' && m.rng() < 0.35) p.burst = 0.12;
   }
 }
@@ -436,6 +524,19 @@ function updateProjs(m) {
       pr.vx = Math.cos(na) * sp; pr.vy = Math.sin(na) * sp;
     }
     pr.x += pr.vx * DT; pr.y += pr.vy * DT; pr.life -= DT; pr.spin += DT * 9; pr.dist += E.speed * DT;
+    // Duelo de elementos: quando o ataque chega perto do alvo, um bender livre do time tenta rebatê-lo no ar
+    if (!pr.duelChecked && pr.target && pr.target.alive && m.teams[pr.target.team].targeting === 'mirror' && m.mode === 'play'
+        && Math.hypot(pr.target.x - pr.x, pr.target.y - pr.y) < 90) {
+      pr.duelChecked = true;
+      const D = m.teams[pr.target.team];
+      const g = D.players.filter((q) => q.alive && q.active && q.stagger <= 0 && (q.duelCd || 0) <= m.clock && Math.hypot(q.x - pr.x, q.y - pr.y) < TAC.duelRange)
+        .sort((a, b) => Math.hypot(a.x - pr.x, a.y - pr.y) - Math.hypot(b.x - pr.x, b.y - pr.y))[0];
+      if (g && m.rng() < TAC.duelChance + g.st.pre * TAC.duelPre + g.st.lei * TAC.duelLei) {
+        pr.dead = true; g.duelCd = m.clock + TAC.duelCd; g.stats.icpt = (g.stats.icpt || 0) + 1;
+        emit(m, 'clash', { x: pr.x, y: pr.y, elems: [pr.elem, g.elem] });
+        continue;
+      }
+    }
     // instrução Proteger na terra: tenta interceptar com um disco o ataque que vai num companheiro próximo
     if (!pr.guarded && pr.target && pr.target.alive) {
       const t = pr.target, tt = Math.hypot(t.x - pr.x, t.y - pr.y) / E.speed;
@@ -473,8 +574,8 @@ function updateProjs(m) {
         break;
       }
       const oi = instrOf(o), backline = m.teams[o.team].formation === 'stagger' && o !== anchorOf(m.teams[o.team]);
-      const prot = (oi === 'protect' ? 0.1 : oi === 'distance' ? 0.08 : 0) + (backline ? 0.05 : 0);
-      const ch = (0.1 + o.st.agi * 0.0045 + post.dodge + readB + prot - (pr.owner.st.pre - 60) * 0.004) * Math.min(1, tc / 0.4);
+      const prot = (oi === 'protect' ? TAC.protDodge : oi === 'distance' ? TAC.distDodge : oi === 'press' ? TAC.pressDodge : 0) + (backline ? TAC.backDodge : 0) + (m.teams[o.team].sameInstr ? TAC.sameDodge : 0);
+      const ch = (0.1 + o.st.agi * 0.0045 + post.dodge + readB + prot + moodOf(m, o).calm * TAC.calmDodge - (pr.owner.st.pre - 60) * 0.004) * Math.min(1, tc / 0.4);
       if (m.rng() < ch) {
         const side = rx * pr.vy - ry * pr.vx; // lado do projétil
         let dir = side > 0 ? -1 : 1;
@@ -510,9 +611,11 @@ function hit(m, pr, o) {
   const a = pr.owner, team = m.teams[a.team];
   a.stats.hits++;
   const pf = 0.012 * (1.25 - a.st.dis / 100) * a.post.foul * SIM_TUNING.foulMul;
-  if (m.mode !== 'tb' && m.rng() < pf) { foul(m, a, 'cabeca', o); return; }
-  const brace = m.teams[o.team].formation === 'stagger' && o === anchorOf(m.teams[o.team]) ? 14 : 0; // quem segura a linha finca o pé
-  const imp = pr.kb * rangeMul(pr.elem, pr.dist) * SIM_TUNING.kbMul * (0.6 + a.st.pow * 0.008) / (0.6 + (o.st.fir + brace) * 0.008);
+  if (m.mode !== 'tb' && m.rng() < pf) { foul(m, a, 'cabeca', o); maybeInjure(m, o, 'head'); return; }
+  const D = m.teams[o.team], edge = m.mode !== 'tb' && FORM_BEATS[team.formation] === D.formation;
+  // quem segura a linha finca o pé, a não ser contra ataque concentrado da Compacta
+  const brace = D.formation === 'stagger' && o === anchorOf(D) && !(edge && team.formation === 'compact') ? TAC.anchorBrace : 0;
+  const imp = pr.kb * rangeMul(pr.elem, pr.dist) * SIM_TUNING.kbMul * (0.6 + a.st.pow * 0.008) / (0.6 + (o.st.fir + brace) * 0.008) * (edge ? 1 + TAC.formEdge[team.formation] : 1) * (1 + moodOf(m, a).rage * TAC.rageKb);
   const L = Math.hypot(pr.vx, pr.vy);
   o.vx += pr.vx / L * imp; o.vy += pr.vy / L * imp * 0.5;
   o.stagger = Math.max(o.stagger, 0.22 + imp / 1200);
@@ -521,7 +624,8 @@ function hit(m, pr, o) {
   for (const q of m.teams[o.team].players) {
     if (q === o || !q.alive || !q.active) continue;
     if (Math.hypot(q.x - o.x, q.y - o.y) < 34) {
-      q.vx += pr.vx / L * imp * 0.4; q.vy += pr.vy / L * imp * 0.2;
+      const sp = edge && team.formation === 'open' ? TAC.openSplash : TAC.splash; // a Aberta acerta o bloco de lado
+      q.vx += pr.vx / L * imp * sp; q.vy += pr.vy / L * imp * sp * 0.5;
       q.stagger = Math.max(q.stagger, 0.12); q.lastHit = a; q.lastHitT = m.clock;
     }
   }
@@ -571,10 +675,28 @@ function checkKO(m) {
   }
 }
 
+// desempate: cada time escolhe quem duela, entre os que NÃO caíram na água no round.
+// Times da IA (ou partidas sem tela, como as simuladas) escolhem o mais forte em Poder + Agilidade + Precisão.
+function duelEligible(m, ti) { return m.teams[ti].players.filter((p) => p.alive); }
+function bestDuelist(m, ti) {
+  const el = duelEligible(m, ti), pool = el.length ? el : m.teams[ti].players;
+  return pool.reduce((b, p) => (p.st.pow + p.st.agi + p.st.pre > b.st.pow + b.st.agi + b.st.pre ? p : b), pool[0]);
+}
 function startTiebreak(m) {
   m.projs = [];
-  const champs = m.teams.map((t) => t.players.reduce((b, p) =>
-    (p.st.pow + p.st.agi + p.st.pre > b.st.pow + b.st.agi + b.st.pre ? p : b), t.players[0]));
+  m.tbPick = m.teams.map((t, ti) => (t.auto || !m.chooser ? bestDuelist(m, ti) : null));
+  if (m.tbPick.some((x) => !x)) { m.mode = 'tbPick'; emit(m, 'tbpick', { text: 'Empate no território! Escolha quem vai duelar.' }); return; }
+  beginDuel(m, m.tbPick);
+}
+// o técnico escolhe o duelista (só quem não caiu na água)
+function chooseDuelist(m, ti, pid) {
+  if (m.mode !== 'tbPick') return false;
+  const p = duelEligible(m, ti).find((q) => q.id === pid); if (!p) return false;
+  m.tbPick[ti] = p;
+  if (m.tbPick.every(Boolean)) beginDuel(m, m.tbPick);
+  return true;
+}
+function beginDuel(m, champs) {
   for (const p of allPlayers(m)) {
     p.alive = true; p.active = champs.includes(p);
     p.vx = p.vy = 0; p.stagger = 0; p.burst = 0; p.dodgeT = 0; p.target = null;
@@ -585,7 +707,7 @@ function startTiebreak(m) {
   });
   m.tb = { champs, time: TB_TIME };
   m.mode = 'tbPre'; m.modeT = 2.2;
-  emit(m, 'tiebreak', { text: `Empate no território! Desempate: ${champs[0].name} contra ${champs[1].name}.` });
+  emit(m, 'tiebreak', { text: `Desempate: ${champs[0].name} contra ${champs[1].name}.` });
 }
 
 function finishRound(m, wi, reason) {
@@ -605,15 +727,32 @@ function finishRound(m, wi, reason) {
 }
 
 // ================= GERAÇÃO DE TIMES =================
-const NAMES = ['Tano', 'Kiyo', 'Ahnah', 'Bao', 'Sura', 'Jin-Ho', 'Meiling', 'Daiki', 'Nuka', 'Ryo', 'Lian', 'Taka',
-  'Yuna', 'Oyuun', 'Shen', 'Ari', 'Nanuq', 'Tuya', 'Kenji', 'Ming', 'Rin', 'Toshi', 'Amak', 'Kaya', 'Wen', 'Jae',
-  'Hana', 'Sedna', 'Lu Ten', 'Pakku-Ro', 'Iluk', 'Mei', 'Goro', 'Sayo', 'Akna', 'Huan', 'Tsuro', 'Qilak',
-  'Anuk', 'Bai Lun', 'Chiyo', 'Dorje', 'Eska-Ri', 'Fen', 'Gyatso-Lin', 'Hiro-Ta', 'Ikaika', 'Jun', 'Kallik', 'Lao Bei', 'Miki',
-  'Noriko', 'Oki', 'Pasang', 'Qiu', 'Renji', 'Siku', 'Tenzi', 'Ulu', 'Vesna', 'Wei', 'Xiu', 'Yaro', 'Zhen', 'Aput', 'Bolat',
-  'Cheng', 'Dawa', 'Enkhe', 'Fumi', 'Gan', 'Hei', 'Itzel', 'Jinpa', 'Koda', 'Lhamo', 'Misu', 'Nima', 'Orla', 'Pema-Lu', 'Sora', 'Tashi',
-  'Aiyana', 'Bodhi', 'Chen-Li', 'Desna', 'Eiko', 'Feng', 'Gyalt', 'Hoshi', 'Inuk', 'Jiro', 'Kenta', 'Lumi', 'Maru', 'Nao', 'Odi',
-  'Pakka', 'Rei', 'Saiko', 'Tamsin', 'Uki', 'Vito-Li', 'Wan', 'Xin', 'Yori', 'Zhu', 'Akio', 'Botan', 'Chiaki', 'Dai', 'Emiko',
-  'Fuyu', 'Genji', 'Hira', 'Isamu', 'Jia', 'Kaede', 'Lio', 'Mikka', 'Nori', 'Oren', 'Pim', 'Ruki', 'Suzu', 'Tobi', 'Umi', 'Yuki'];
+const NAMES = [
+  'Tano', 'Kiyo', 'Ahnah', 'Bao', 'Sura', 'Jin-Ho', 'Meiling', 'Daiki', 'Nuka', 'Ryo', 'Lian', 'Taka', 'Yuna', 'Oyuun',
+  'Shen', 'Ari', 'Nanuq', 'Tuya', 'Kenji', 'Ming', 'Rin', 'Toshi', 'Amak', 'Kaya', 'Wen', 'Jae', 'Hana', 'Sedna',
+  'Lu Ten', 'Pakku-Ro', 'Iluk', 'Mei', 'Goro', 'Sayo', 'Akna', 'Huan', 'Tsuro', 'Qilak', 'Anuk', 'Bai Lun', 'Chiyo',
+  'Dorje', 'Eska-Ri', 'Fen', 'Gyatso-Lin', 'Hiro-Ta', 'Ikaika', 'Jun', 'Kallik', 'Lao Bei', 'Miki', 'Noriko', 'Oki',
+  'Pasang', 'Qiu', 'Renji', 'Siku', 'Tenzi', 'Ulu', 'Vesna', 'Wei', 'Xiu', 'Yaro', 'Zhen', 'Aput', 'Bolat', 'Cheng',
+  'Dawa', 'Enkhe', 'Fumi', 'Gan', 'Hei', 'Itzel', 'Jinpa', 'Koda', 'Lhamo', 'Misu', 'Nima', 'Orla', 'Pema-Lu', 'Sora',
+  'Tashi', 'Aiyana', 'Bodhi', 'Chen-Li', 'Desna', 'Eiko', 'Feng', 'Gyalt', 'Hoshi', 'Inuk', 'Jiro', 'Kenta', 'Lumi',
+  'Maru', 'Nao', 'Odi', 'Pakka', 'Rei', 'Saiko', 'Tamsin', 'Uki', 'Vito-Li', 'Wan', 'Xin', 'Yori', 'Zhu', 'Akio',
+  'Botan', 'Chiaki', 'Dai', 'Emiko', 'Fuyu', 'Genji', 'Hira', 'Isamu', 'Jia', 'Kaede', 'Lio', 'Mikka', 'Nori', 'Oren',
+  'Pim', 'Ruki', 'Suzu', 'Tobi', 'Umi', 'Yuki', 'Aklak', 'Amaruq', 'Anori', 'Arnaq', 'Atka', 'Avik', 'Ayasha', 'Elu',
+  'Iqaluk', 'Kanik', 'Kiviuq', 'Malik', 'Miki-Ra', 'Nakoma', 'Natsiq', 'Nilak', 'Nuniq', 'Pana', 'Pilip', 'Quannik',
+  'Saqqaq', 'Silla', 'Taqqiq', 'Tikaani', 'Tulugaq', 'Tupaq', 'Uyarak', 'Yuka', 'Aputi', 'Ivalu', 'Kirima', 'Naja',
+  'Panik', 'Sakari', 'Tiva', 'An-Lei', 'Bai', 'Bo-Ran', 'Cai', 'Chang', 'Chun', 'Daxi', 'Dong', 'Fai', 'Gao', 'Guo',
+  'Hai-Lin', 'Hong', 'Hua', 'Jiang', 'Kai-Lu', 'Kang', 'Lan-Yi', 'Lei', 'Liang', 'Lin-Fa', 'Long', 'Mao', 'Min-Jie',
+  'Mu', 'Nian', 'Ping', 'Qing', 'Rong', 'Shan', 'Shu', 'Song', 'Tao', 'Tian', 'Wu-Ji', 'Xiao', 'Xu', 'Yan', 'Yao',
+  'Yi-Ru', 'Yong', 'Yu-Lan', 'Zan', 'Zhao', 'Zi', 'Akane', 'Arata', 'Ayumi', 'Chika', 'Daisuke', 'Eiji', 'Fujiko',
+  'Haru', 'Hayate', 'Hikari', 'Ichiro', 'Izumi', 'Kazu', 'Keiko', 'Kohana', 'Kuma', 'Madoka', 'Masa', 'Michi', 'Nagi',
+  'Natsu', 'Osamu', 'Raiden', 'Ren', 'Riku', 'Saburo', 'Satsuki', 'Shiori', 'Shun', 'Takeru', 'Tamaki', 'Tetsu',
+  'Tomoe', 'Yasu', 'Yoshi', 'Yumi', 'Zenji', 'Asuka', 'Hotaru', 'Kagami', 'Chodak', 'Dakpa', 'Dechen', 'Dolma',
+  'Gompo', 'Jampa', 'Karma', 'Kelsang', 'Lobsang', 'Nawang', 'Ngawang', 'Norbu', 'Palden', 'Pemba', 'Phuntsok',
+  'Rinchen', 'Samdup', 'Sonam', 'Tenpa', 'Thubten', 'Tsering', 'Wangdu', 'Yangchen-Ro', 'Yeshe', 'Zopa', 'Lhakpa',
+  'Choden', 'Dekyi', 'Kunga', 'Losel', 'Ahiga', 'Anouk', 'Batu', 'Bayar', 'Chimeg', 'Dalai-Ri', 'Erdene', 'Ganzo',
+  'Khulan', 'Munkh', 'Naran', 'Oyun-Ra', 'Saran', 'Temur', 'Tsetseg', 'Altan', 'Bolor', 'Jargal', 'Sarnai', 'Tumen',
+  'Arnav', 'Devi-Lu', 'Hasu', 'Ilka', 'Juno-Ri', 'Keko', 'Lalo', 'Moana', 'Nalu', 'Oska', 'Pua', 'Rahi', 'Sefa',
+  'Tavi', 'Vaia', 'Wiki', 'Ziru', 'Amka', 'Bryn-Lo', 'Cass-Ri'];
 const TEAM_NAMES = [
   ['Lótus Carmesim', 'LÓT'], ['Lanternas de Prata', 'LAN'], ['Gaivotas do Porto', 'GAI'], ['Tigres da Ilha', 'TIG'],
   ['Corvos de Jade', 'COR'], ['Raposas do Deserto', 'RAP'], ['Tartarugas de Ferro', 'TAR'], ['Garças da Neve', 'GAR'],
@@ -646,4 +785,4 @@ function runHeadless(defs, seed, arena = 'round', maxSteps = 200000) {
   return m;
 }
 
-if (typeof module !== 'undefined') module.exports = { TARGETING, FORMATION, INSTR, disobeyChance, rangeMul, mulberry32, gauss, clamp, randStat, NAMES, TEAM_NAMES, playerPosture, halfW, createMatch, step, makeTeams, runHeadless, SIM_TUNING, ELEM, POSTURE };
+if (typeof module !== 'undefined') module.exports = { INJ, substitute, canSubstitute, autoSubInjured, chooseDuelist, duelEligible, TAC, FORM_BEATS, TARGETING, FORMATION, INSTR, disobeyChance, rangeMul, mulberry32, gauss, clamp, randStat, NAMES, TEAM_NAMES, playerPosture, halfW, createMatch, step, makeTeams, runHeadless, SIM_TUNING, ELEM, POSTURE };
