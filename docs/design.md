@@ -44,7 +44,9 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
 - Saves feitos com duas divisões ganham a Terceira na virada de temporada seguinte.
 
 **Temporada** (igual nas três divisões)
-- **Fase de pontos:** 7 rodadas em turno único (todos contra todos uma vez). ✅
+- **Fase de pontos:** 14 rodadas em **turno e returno**: cada time enfrenta cada rival duas vezes, uma em casa e outra fora (o returno repete as rodadas do turno com o mando invertido). ✅
+- **Efeito no descanso e no estresse (simulado):** com 7 rodadas, o estresse dos titulares não chegava a acumular antes do fim da temporada. Com 14 rodadas e a mesma recuperação, um técnico que treina 2 semanas e descansa 1 via o estresse médio dos titulares chegar a ~50 e passar de 60 (onde começam as desobediências). Com a recuperação natural de −4 por semana, a mesma rotina fica abaixo de 60, com média entre 10 e 40 conforme os resultados. Quem não descansa sente o returno.
+- **Temporada mais longa, mesmo ritmo:** o que acontece a cada semana (energia, estresse, salários, patrocínio, renda da IA) continua igual. O que é um total "da temporada" vale metade por partida, para a temporada inteira render o mesmo que antes com 7 rodadas: ganho de treino, popularidade dos benders e do time por partida e por evento. ✅
 - **Playoffs:** os 4 primeiros vão às semifinais (1º × 4º e 2º × 3º); os vencedores fazem a final, que decide o campeão da divisão. ✅
 - Na Primeira Divisão, os playoffs valem o título e não mudam o rebaixamento. Na Segunda e na Terceira, o campeão dos playoffs tem acesso garantido. ✅
 - **Campeão da Segunda ou da Terceira** recebe troféu/título, prêmio em dinheiro e o acesso. ✅
@@ -129,10 +131,10 @@ Os valores de patrocínio e prêmios acima são os da **Primeira Divisão**. Na 
 **Exemplos de meta** (*iniciais*)
 | Dificuldade | Meta |
 |---|---|
-| Fácil | Vencer 3 partidas · Conseguir 1 nocaute |
-| Média | Vencer 5 partidas · Terminar entre os 4 primeiros · 3 nocautes |
-| Difícil | Chegar à final · Terminar a fase de pontos em 1º · Vencer 3 partidas seguidas |
-| Especial | Ser campeão · Nenhuma derrota em casa · Conseguir o acesso (só na Segunda e na Terceira) |
+| Fácil | Vencer 6 partidas · Conseguir 2 nocautes |
+| Média | Vencer 9 partidas · Terminar entre os 4 primeiros · 5 nocautes |
+| Difícil | Chegar à final · Terminar a fase de pontos em 1º · Vencer 4 partidas seguidas |
+| Especial | Ser campeão · Perder no máximo 1 vez em casa · Conseguir o acesso (só na Segunda e na Terceira) |
 
 Os patrocinadores são marcas inventadas do universo (lojas, fábricas e serviços da Cidade República), nunca marcas reais.
 
@@ -194,8 +196,8 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 - **Aceitar:** na virada de temporada o técnico assume o novo time, com o elenco, o caixa, a popularidade e os patrocínios dele (recebe propostas novas, sem as renovações do time antigo). O time antigo passa a ser da IA. O histórico registra o time de cada temporada.
 - **Confiança da diretoria e demissão** ✅
   - **Confiança da diretoria** (0 a 100), só durante a temporada. Começa entre 40 e 70: 55 + 0,3 × (reputação − 30).
-  - **A cada rodada:** vitória +5, derrota −6, ajustadas pela força do adversário (±0,5 a 0,6 por posição de diferença na expectativa; vitória de +2 a +8, derrota de −2 a −9); a partir da 3ª rodada, ±1 por posição acima ou abaixo da expectativa; −3 com o caixa no vermelho; −4 a mais em sequência de 3 derrotas. A Central mostra a barra com o estado (Firme, Atenção, Pressão, Por um fio) e avisa quando está baixa.
-  - **Demissão no meio da temporada:** confiança zerada a partir da 4ª rodada. O técnico escolhe na hora um dos times que o aceitam (pelo menos 2, de nível menor) e termina a temporada no comando dele, com confiança 60 e sem os patrocínios do time anterior.
+  - **A cada rodada** (valores × 0,5 desde o turno e returno, para a temporada inteira pesar o mesmo que antes): vitória +5, derrota −6, ajustadas pela força do adversário (±0,5 a 0,6 por posição de diferença na expectativa; vitória de +2 a +8, derrota de −2 a −9); a partir da 3ª rodada, ±1 por posição acima ou abaixo da expectativa; −3 com o caixa no vermelho; −4 a mais em sequência de 3 derrotas. A Central mostra a barra com o estado (Firme, Atenção, Pressão, Por um fio) e avisa quando está baixa.
+  - **Demissão no meio da temporada:** confiança zerada a partir da 8ª rodada (início do returno). O técnico escolhe na hora um dos times que o aceitam (pelo menos 2, de nível menor) e termina a temporada no comando dele, com confiança 60 e sem os patrocínios do time anterior.
   - **Demissão no fim da temporada:** confiança abaixo de 20 *e* posição final pior que a expectativa (quem cumpre a expectativa não cai por confiança), ou rebaixamento com expectativa de 4º lugar ou melhor. As propostas normais são trocadas por propostas de resgate, e é preciso escolher uma para avançar.
   - **Toda demissão custa 6 pontos de reputação** e fica registrada no histórico.
   - **Referência simulada:** em 16 temporadas com um técnico descuidado (treino sem descanso), houve 1 demissão no meio e poucas no fim, sempre em campanhas ruins.
@@ -283,7 +285,7 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 
 **Popularidade do time** (0 a 100), separada da dos benders. ✅
 - **Inicial:** Primeira Divisão entre ~40 e ~75, conforme a força do time; Segunda Divisão entre ~12 e ~45.
-- **Muda com:** vitória +2 (+1 se for por nocaute), derrota −1,5, cada evento feito por um bender do time +0,3, semifinal +3, chegar à final +4, título +8, acesso +10, rebaixamento −10.
+- **Muda com** (por partida e por evento, valores × 0,5 desde o turno e returno): vitória +1,5 (+0,8 se for por nocaute), derrota −1,2, cada evento feito por um bender do time +0,3, semifinal +3, chegar à final +4, título +8, acesso +10, rebaixamento −10.
 - **Expectativa dos patrocinadores:** valores das propostas × (0,85 + popularidade × 0,004), ou seja, popularidade 20 ≈ ×0,93 e 60 ≈ ×1,09. As **metas ficam mais exigentes**:
   | Popularidade do time | Propostas |
   |---|---|
@@ -331,7 +333,7 @@ Cada bender tem **estresse** de 0 a 100.
 | Descansar | −15 |
 | Vitória | −3 |
 | Ficar na reserva sem jogar | −4 |
-| Recuperação natural, toda semana | −3 |
+| Recuperação natural, toda semana | −4 (era −3; com 14 rodadas o estresse acumulava demais) |
 
 **Efeitos**
 - Em quadra, o estresse reduz os **atributos mentais** (Precisão, Disciplina, Leitura de jogo) em até **25%** com estresse 100, e os físicos em até 8%. Disciplina menor gera mais faltas.
@@ -528,6 +530,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.10 / Doc, 03/11/2026**: turno e returno (14 rodadas); treino, popularidade, fama e confiança valem metade por partida; metas de patrocínio ajustadas; recuperação natural de estresse −4 por semana.
 - **Doc, 03/11/2026**: Guia ganha a seção Táticas da partida.
 - **v0.9 / Doc, 03/11/2026**: nome do jogo passa a ser Sport Bend Manager; botão da janela de transferências no cabeçalho, ao lado de Recomeçar (tipografia pixel art testada e revertida).
 - **v0.8 / Doc, 03/11/2026**: partida em tela cheia com HUD; táticas do adversário escondidas; narração em formato de chat.

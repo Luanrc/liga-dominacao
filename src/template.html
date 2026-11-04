@@ -336,7 +336,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.9 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.10 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -1604,7 +1604,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   });
 
   function phaseLabel() {
-    return { preseason: 'Pré-temporada', season: `Rodada ${L.week + 1} de 7`, semis: 'Semifinais', final: 'Final', done: 'Encerrada' }[L.phase];
+    return { preseason: 'Pré-temporada', season: `Rodada ${L.week + 1} de ${WEEKS}${L.week >= WEEKS / 2 ? ' (returno)' : ''}`, semis: 'Semifinais', final: 'Final', done: 'Encerrada' }[L.phase];
   }
   function contractCell(p) {
     if (p.expiring) return '<span class="neg">Encerrado</span>';
@@ -2011,7 +2011,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <li>Os patrocínios não pagam a folha inteira: <b>prêmios, metas e eventos</b> fecham a conta.</li>
       <li>Caixa no vermelho reduz a confiança da diretoria.</li></ul>`],
     table: ['Classificação', `<ul>
-      <li>Cada divisão tem 8 times e 7 rodadas. Os 4 primeiros vão às semifinais.</li>
+      <li>Cada divisão tem 8 times e 14 rodadas, em turno e returno: cada confronto acontece uma vez em cada casa. Os 4 primeiros vão às semifinais.</li>
       <li>Entre duas divisões, sobem o campeão de baixo e o melhor dos outros; caem os 2 últimos de cima.</li></ul>`],
     guide: ['Guia', '<p>Aqui estão os atributos e as regras de cada partida. Volte quando tiver dúvida.</p>'],
     match: ['Sua primeira partida', `<ul>
