@@ -541,7 +541,7 @@ Ataques de times opostos que se chocam no ar se anulam.
 
 ## 9c. Dicas de primeira vez ✅
 
-- **Abertura** (v0.17): na primeira vez que o jogo abre, antes de tudo (escolha de time, Guia e dicas), aparece a janela **"Sabe como funciona a Dobra Esportiva?"** com um resumo do esporte (times de três benders, um de cada elemento; arena sobre a água com zonas; empurrar para ganhar território; queda na água; vitória por território ou nocaute; melhor de três rounds) e do papel do técnico (elenco, semana, energia e estresse, tática antes de cada round; em quadra, quem joga são os benders). Ao lado do texto, uma partida de verdade roda ao vivo num campo visto de cima (benders com a forma do elemento e a cor do time, ataques, linha de território), recomeçando sozinha. O botão **Vamos lá** fecha a janela, e ela não volta (fica salvo neste navegador).
+- **Abertura** (v0.17): na primeira vez que o jogo abre, antes de tudo (escolha de time, Guia e dicas), aparece a janela **"Sabe como funciona a Dobra Esportiva?"** com um resumo do esporte (times de três benders, um de cada elemento; arena sobre a água com zonas; empurrar para ganhar território; queda na água; vitória por território ou nocaute; melhor de três rounds) e do papel do técnico (elenco, semana, energia e estresse, tática antes de cada round; em quadra, quem joga são os benders). Ao lado do texto, uma partida de verdade roda ao vivo num campo visto de cima (benders com a forma do elemento e a cor do time, ataques, linha de território), recomeçando sozinha, em velocidade normal (1x, desde a v0.17.1; antes rodava em 2x). O botão **Vamos lá** fecha a janela, e ela não volta (fica salvo neste navegador).
 
 - Na primeira visita, cada página da central (Central, Elenco e treino, Mercado, Patrocínios, Finanças, Classificação, Guia) mostra no topo um quadro curto com o essencial daquela página. O quadro some ao clicar em **Entendi**.
 - A dica da **Central** é a de boas-vindas: o caminho de uma temporada (pré-temporada → elenco → semana → partida → fim da temporada) e a barra de confiança.
@@ -629,6 +629,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.17.1 / Doc, 04/11/2026**: a partida da abertura roda em velocidade normal (1x).
 - **v0.17 / Doc, 04/11/2026**: abertura "Sabe como funciona a Dobra Esportiva?" na primeira vez que o jogo abre, com uma partida ao vivo ao lado do texto.
 - **v0.16.9 / Doc, 04/11/2026**: na HUD de preparação, clicar num bender (boneco do campo, linha em quadra ou do banco) abre a ficha em janela.
 - **v0.16.8 / Doc, 04/11/2026**: a ficha do bender abre sempre numa janela, em qualquer lugar; vender e dispensar passam do Elenco para a folha salarial em Finanças.

@@ -487,7 +487,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.17 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.17.1 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -2198,7 +2198,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     const cv = $('introCv'), g = cv.getContext('2d'), W = cv.width, H = cv.height;
     const pad = 30, sx = (W - pad * 2) / AL, top = (H - AW * sx) / 2, X = (x) => pad + x * sx, Y = (y) => top + y * sx;
     const COL = { water: '#4aa3ff', earth: '#7ec35a', fire: '#ff7a3c' }, TEAM = ['#ff5a7a', '#f2ead6'];
-    let m = null, seed = 1;
+    let m = null, seed = 1, acc = 0, last = performance.now();
     const fresh = () => { const d = makeTeams(1000 + seed); d[0].color = TEAM[0]; d[1].color = TEAM[1]; m = createMatch(d, 77 + seed++, 'square'); m.mode = 'play'; m.modeT = 0; };
     fresh();
     const shape = (p, x, y, r) => {
@@ -2210,7 +2210,9 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     };
     const frame = () => {
       if ($('introModal').hidden) return;
-      for (let i = 0; i < 2; i++) { step(m); m.events.length = 0; if (m.mode === 'over') break; }
+      // velocidade normal (1x): passos da simulação pelo tempo real, não pela taxa de quadros da tela
+      const now = performance.now(); acc += Math.min(0.1, (now - last) / 1000); last = now;
+      while (acc >= DT) { step(m); m.events.length = 0; acc -= DT; if (m.mode === 'over') break; }
       if (m.mode === 'over' || m.round > 2) fresh();
       if (m.mode === 'roundEnd' || m.mode === 'pre') { m.mode = 'play'; m.modeT = 0; }
       if (m.mode === 'tbPick' || m.mode === 'tbPre' || m.mode === 'tb') fresh();
