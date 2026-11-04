@@ -90,6 +90,24 @@ body.in-match { overflow: hidden; }
 .hud-controls { right: 10px; bottom: 10px; max-width: calc(100% - min(400px, calc(50% - 20px)) - 40px); padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; align-items: center; }
 .hud-controls .btn { padding: 7px 11px; }
 .hud-info { left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(640px, calc(100% - 32px)); max-height: calc(100% - 40px); overflow: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; z-index: 3; background: rgba(13, 15, 28, .95); }
+.hud-wide { width: min(760px, calc(100% - 660px)); min-width: min(520px, calc(100% - 32px)); }
+@media (max-width: 1180px) { .hud-wide { width: calc(100% - 32px); } }
+.brk-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 700px) { .brk-grid { grid-template-columns: minmax(0, 1fr); } }
+.brk-card { background: var(--panel2); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.brk-card h3 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; }
+.brk-card svg { width: 100%; height: auto; display: block; }
+.cmp { display: grid; grid-template-columns: 1fr 96px 1fr; gap: 4px 8px; align-items: center; font-size: 12px; }
+.cmp .l { display: flex; justify-content: flex-end; align-items: center; gap: 6px; }
+.cmp .r { display: flex; align-items: center; gap: 6px; }
+.cmp .lab { text-align: center; color: var(--muted); font-size: 11px; }
+.cmp i { display: block; height: 8px; border-radius: 2px; }
+.reads { margin: 0; padding-left: 18px; font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
+.hud-th { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.hud-min { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 4px; width: 26px; height: 22px; cursor: pointer; font: 700 13px var(--body); line-height: 1; flex: none; }
+.hud-min:hover { border-color: var(--gold); color: var(--text); }
+.hud-team.min > :not(.hud-th) { display: none !important; }
+.hud-team.min { max-height: none; }
 .hud-info-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .hud-info .lab { display: flex; flex-direction: column; gap: 8px; }
 #viewMatch > .tip { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4; width: min(620px, calc(100% - 32px)); margin: 0; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
@@ -195,6 +213,12 @@ body[data-mode="league"] .sbx, body[data-mode="sandbox"] .lg { display: none !im
 .modal ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .modal li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; font-size: 13px; }
 .modal li small { color: var(--muted); }
+.guide-modal { width: min(880px, 100%); }
+.gm-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.gm-note { margin: 0; padding: 8px 12px; border: 1px solid rgba(226,176,74,.4); border-radius: 6px; background: rgba(226,176,74,.08); font-size: 13px; }
+#guideBody { display: flex; flex-direction: column; gap: 14px; }
+#guideBody .panel { padding: 0; border: 0; background: none; }
+#guideModal { z-index: 80; }
 .modal-actions { justify-content: flex-end; gap: 8px; display: flex; flex-wrap: wrap; }
 .btn.lgb { font-size: 15px; padding: 10px 18px; }
 .tcard:hover { border-color: var(--gold); border-left-color: var(--tc); }
@@ -232,6 +256,43 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; font-varian
 .energy i { display: block; width: 46px; height: 6px; border-radius: 3px; background: var(--panel2); overflow: hidden; }
 .energy b { display: block; height: 100%; }
 .tag-s { font: 500 11px var(--body); padding: 3px 8px; border-radius: 99px; border: 1px solid var(--line); background: var(--panel2); color: var(--muted); cursor: pointer; }
+.budget { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 10px 12px; background: var(--panel2); border-radius: 6px; font-size: 13px; color: var(--muted); }
+.budget b { color: var(--text); font-weight: 600; }
+.fit { font-size: 11px; padding: 2px 7px; border-radius: 99px; white-space: nowrap; }
+.fit.ok { color: #a4e38f; border: 1px solid #2f5e27; } .fit.no { color: #ff9a6b; border: 1px solid #6e3a22; }
+.lineup { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 760px) { .lineup { grid-template-columns: minmax(0, 1fr); } }
+.slot { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.slot-h { display: flex; align-items: center; gap: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.slot-st { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.slot-st b { font-size: 15px; }
+.slot-st .ovn { font-family: var(--display); font-weight: 800; font-size: 22px; }
+.slot-res { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px dashed var(--line); padding-top: 8px; font-size: 13px; }
+.slot-res .hint { font-size: 12px; }
+.badge-st { font: 600 11px var(--body); padding: 3px 8px; border-radius: 99px; background: var(--gold); color: var(--ink); white-space: nowrap; }
+.badge-res { font: 500 11px var(--body); padding: 3px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+#trainTbl select { width: 250px; max-width: 100%; }
+.tbl.pick tbody tr { cursor: pointer; }
+.tbl.pick tbody tr.sel td { background: rgba(226, 176, 74, .12); }
+.tbl.pick tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
+.bc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.bc-name { font-family: var(--display); font-weight: 800; font-size: 30px; text-transform: uppercase; letter-spacing: .02em; line-height: 1; display: flex; align-items: center; gap: 10px; }
+.bc-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; color: var(--muted); }
+.bc-meta b { color: var(--text); font-weight: 600; }
+.bc-body { display: grid; grid-template-columns: minmax(260px, 360px) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 860px) { .bc-body { grid-template-columns: minmax(0, 1fr); } }
+.radar svg { width: 100%; height: auto; display: block; }
+.radar-leg { display: flex; gap: 14px; justify-content: center; font-size: 12px; color: var(--muted); }
+.radar-leg i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+.attr-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.attr-row { display: grid; grid-template-columns: 120px 40px 52px minmax(0, 1fr); gap: 10px; align-items: center; font-size: 13px; }
+.attr-row .v { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.attr-row .d { font-size: 12px; font-variant-numeric: tabular-nums; }
+.attr-row .bar2 { height: 6px; background: var(--panel2); border-radius: 3px; position: relative; overflow: hidden; }
+.attr-row .bar2 i { position: absolute; left: 0; top: 0; bottom: 0; background: #4a6fa5; }
+.attr-row .bar2 b { position: absolute; top: 0; bottom: 0; background: var(--gold); }
+.matrix td, .matrix th { text-align: center; font-size: 12px; padding: 5px 6px; }
+.matrix td:first-child, .matrix th:first-child { text-align: left; }
 .tag-s.on { background: var(--gold); color: var(--ink); border-color: var(--gold); font-weight: 600; cursor: default; }
 .res { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .res li { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 44px; gap: 10px; align-items: center; font-size: 13px; }
@@ -336,7 +397,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.10 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.11.2 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -385,7 +446,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     </div>
     <nav class="hub-nav" id="hubNav" aria-label="Seções da central do time">
       <button type="button" data-page="home">Central</button>
-      <button type="button" data-page="roster">Elenco e treino</button>
+      <button type="button" data-page="roster">Elenco</button>
+      <button type="button" data-page="train">Treino</button>
       <button type="button" data-page="market">Mercado<span class="nb" id="nbMarket"></span></button>
       <button type="button" data-page="sponsors">Patrocínios<span class="nb" id="nbSponsors"></span></button>
       <button type="button" data-page="finance">Finanças</button>
@@ -400,17 +462,30 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 
     <div class="page" data-page="roster" hidden>
       <section class="panel">
-        <h2>Elenco e treino</h2>
+        <h2>Escalação</h2>
+        <p class="hint">Em cada partida jogam 3 titulares, um de cada elemento. Para pôr um reserva em quadra, escale-o no lugar do titular do mesmo elemento.</p>
+        <div class="lineup" id="lineupBox"></div>
+      </section>
+      <section class="panel" id="benderCard"></section>
+      <section class="panel">
+        <h2>Elenco</h2>
+        <p class="hint" id="rosterHint"></p>
+        <div class="tbl-wrap"><table class="tbl pick" id="rosterTbl"></table></div>
+      </section>
+    </div>
+
+    <div class="page" data-page="train" hidden>
+      <section class="panel">
+        <h2>Treino da semana</h2>
         <div class="train-bar">
           <div class="seg" role="group" aria-label="Tipo de treino" id="trainSeg">
             <button type="button" data-m="team">Treino em equipe</button><button type="button" data-m="ind">Treino individual</button>
           </div>
           <label class="f inline" for="teamPlan" id="teamPlanWrap">Foco da equipe <select id="teamPlan"></select></label>
         </div>
-        <p class="hint" id="rosterHint"></p>
-        <div id="renewBox"></div>
+        <p class="hint" id="trainHint"></p>
+        <div class="tbl-wrap"><table class="tbl" id="trainTbl"></table></div>
         <div id="eventsBox"></div>
-        <div class="tbl-wrap"><table class="tbl" id="rosterTbl"></table></div>
       </section>
     </div>
 
@@ -418,11 +493,13 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <section class="panel">
         <h2>Mercado</h2>
         <p class="hint" id="marketHint"></p>
+        <div class="budget" id="budgetBox"></div>
         <div id="offersBox"></div>
       </section>
       <section class="panel" id="faPanel">
         <h2>Agentes livres</h2>
         <p class="hint">Contratar custa luvas (2 rodadas de salário, mais caras para benders populares). O salário entra na folha a partir da 1ª rodada.</p>
+        <div class="train-bar"><label class="f inline chk"><input type="checkbox" data-budget> Só quem cabe no orçamento</label></div>
         <div class="tbl-wrap" id="marketWrap"><table class="tbl" id="marketTbl"></table></div>
       </section>
       <section class="panel" id="othersPanel">
@@ -431,6 +508,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <div class="train-bar">
           <label class="f inline" for="othersDiv">Divisão <select id="othersDiv"><option value="all">Todas</option><option value="0">Primeira</option><option value="1">Segunda</option><option value="2">Terceira</option></select></label>
           <label class="f inline chk" for="othersAvail"><input type="checkbox" id="othersAvail" checked> Só os que estão à venda</label>
+          <label class="f inline chk"><input type="checkbox" data-budget> Só quem cabe no orçamento</label>
         </div>
         <div class="tbl-wrap"><table class="tbl" id="othersTbl"></table></div>
       </section>
@@ -442,6 +520,12 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 
     <div class="page" data-page="finance" hidden>
       <section class="panel" id="financePanel"></section>
+      <section class="panel">
+        <h2>Folha salarial</h2>
+        <p class="hint" id="payHint"></p>
+        <div id="renewBox"></div>
+        <div class="tbl-wrap"><table class="tbl" id="payTbl"></table></div>
+      </section>
     </div>
 
     <div class="page" data-page="table" hidden>
@@ -484,7 +568,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
             <dt>Nota</dt><dd>Média dos atributos, pesando mais os que mais decidem partidas (Poder e Firmeza).</dd>
             <dt>Salário e contrato</dt><dd>Pago a cada rodada, fixado no contrato: mesmo que o bender melhore, o salário só muda na renovação. Contratos duram de 1 a 3 temporadas (agentes livres jovens assinam por 3, os demais por 2). Quando o contrato termina, você renova na pré-temporada pelo salário que ele pede (benders populares pedem mais) ou ele vai embora de graça.</dd>
             <dt>Idade</dt><dd>Jovens evoluem mais rápido no treino (até 20 anos ×1,5; até 23 ×1,25) e amadurecem sozinhos a cada temporada até os 24. A partir dos 30, perdem Agilidade e Poder (e um pouco de Firmeza e Precisão), compensando um pouco com Leitura e Disciplina. A partir dos 33 podem se aposentar; aos 37 todos se aposentam.</dd>
-            <dt>POT · Potencial</dt><dd>A nota máxima que o bender pode alcançar. Perto dele, o treino quase não rende. Jovens têm potencial bem acima da nota atual; veteranos já estão no limite. Potencial alto aumenta o valor de mercado.</dd>
+            <dt>Limite de evolução</dt><dd>Cada bender tem um limite até onde pode evoluir, que você não vê. Jovens costumam ter muito espaço para crescer; veteranos já estão perto do limite. Quando o treino passa a render quase nada, é sinal de que ele chegou lá.</dd>
             <dt>POP · Popularidade do bender</dt><dd>De 0 a 100. Sobe quando o bender joga, vence, empurra rivais, derruba alguém na água e faz eventos; cai 1 por semana na reserva. Explosivos ganham popularidade mais rápido. Aumenta a renda dos eventos, o valor de mercado e as luvas.</dd>
             <dt>Popularidade do time</dt><dd>De 0 a 100. Sobe com vitórias, nocautes, playoffs, título e acesso, e um pouco com os eventos dos seus benders; cai com derrotas e rebaixamento. Times populares recebem propostas de patrocínio maiores, mas com metas mais difíceis, e enchem a arquibancada. Em compensação, a torcida cobra mais: perder estressa mais os benders.</dd>
             <dt>Reputação do técnico</dt><dd>De 0 a 100, é a sua. No começo de cada temporada a diretoria espera uma posição conforme a força do elenco (o ranking de notas da divisão). No fim, a reputação sobe ou cai 2,5 pontos por posição acima ou abaixo do esperado, com bônus por playoffs (+3), título (+12 na Primeira, +8 na Segunda, +6 na Terceira) e acesso (+8), e perda por rebaixamento (−10). Nas divisões de baixo os ganhos valem menos e têm teto (Segunda: 60%, até 70; Terceira: 45%, até 45). Com mais reputação, times maiores fazem propostas para você no fim da temporada.</dd>
@@ -562,6 +646,9 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <button class="btn lg" id="skipBtn" type="button">Pular para o resultado</button>
       <button class="btn" id="soundBtn" type="button" aria-pressed="false">Som: desligado</button>
       <button class="btn" id="infoBtn" type="button" aria-expanded="false">Regras</button>
+      <button class="btn" id="guideBtn" type="button">Guia</button>
+      <button class="btn lg" id="scoutBtn" type="button">Rival</button>
+      <button class="btn" id="breakBtn" type="button" hidden>Resumo do round</button>
       <div class="seg sbx" role="group" aria-label="Plataforma" id="arenaSeg">
         <button type="button" data-a="round" aria-pressed="true">Arena redonda</button><button type="button" data-a="square">Arena quadrada</button>
       </div>
@@ -570,19 +657,26 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <button class="btn sbx" id="homeBtn" type="button">Voltar ao início</button>
     </div>
 
+    <section class="hud-info hud-wide" id="scoutPanel" hidden>
+      <div class="hud-info-head"><h2>Rival</h2><button class="btn sm" id="scoutClose" type="button">Fechar</button></div>
+      <div id="scoutBody"></div>
+    </section>
+
+    <section class="hud-info hud-wide" id="breakPanel" hidden>
+      <div class="hud-info-head"><h2 id="breakTitle">Resumo do round</h2><span class="btnrow"><button class="btn sm" id="breakGuide" type="button">Guia</button><button class="btn sm" id="breakClose" type="button">Ver a arena</button><button class="btn sm primary" id="breakStart" type="button">Começar round</button></span></div>
+      <div id="breakBody"></div>
+    </section>
+
     <section class="hud-info" id="infoPanel" hidden>
-      <div class="hud-info-head"><h2>Regras desta versão</h2><button class="btn sm" id="infoClose" type="button">Fechar</button></div>
+      <div class="hud-info-head"><h2>Regras da partida</h2><button class="btn sm" id="infoClose" type="button">Fechar</button></div>
+      <p class="hint">Atributos, táticas, formações e instruções estão no <b>Guia</b>.</p>
       <ul class="rules">
         <li><b>3 contra 3</b>: água, terra e fogo. Cada lado da arena tem 3 zonas e todos começam na Zona 1.</li>
         <li>Quem é empurrado para trás <b>não pode voltar</b> para a zona anterior. Se o time inteiro recua, o rival <b>avança uma zona</b>.</li>
         <li>Caiu pela borda do fundo, <b>caiu na água</b> e está fora do round. Derrubar os três é <b>nocaute</b> e encerra a partida.</li>
         <li>Rounds de <b>3 minutos</b>, melhor de 3. Vence o round quem avançou mais. Se a linha estiver no centro, conta quem tem jogadores mais à frente. Empate total vira <b>duelo 1 contra 1</b> numa plataforma no centro.</li>
-        <li><b>Táticas</b>: postura, escolha de alvo, formação e instruções individuais só mudam no intervalo antes de cada round. Durante o combate ficam travadas.</li>
-        <li><b>Formação</b>: Aberta espalha o time. Compacta junta no centro, mas um golpe respinga em quem está colado. Escalonada põe um bender firme na linha (a terra, se jogar) e os outros um pouco atrás, mais difíceis de acertar.</li>
-        <li><b>Instruções</b>: Pressionar (colado na linha, ataca mais rápido, mais faltas), Manter distância (prefere alvos longe e esquiva mais), Mais agressivo/cauteloso, Proteger (esquiva mais; a terra intercepta ataques em companheiros) e Marcar um rival. Uma ordem contra o temperamento pode ser ignorada naquele round.</li>
         <li><b>Alcance</b>: o fogo fica mais forte quanto mais longe acerta, a terra é mais forte de perto e a água não muda. Por isso o fogo joga mais recuado e a terra encosta na linha.</li>
-        <li><b>Faltas</b>: pisar além da linha ou acertar acima dos ombros manda o infrator uma zona para trás.</li>
-        <li><b>Atributos</b>: POD empurra mais, PRE mira melhor, AGI corre e esquiva, FIR aguenta golpes (a terra pode bloquear), DIS evita faltas, LEI decide e reage melhor. O Temperamento puxa a postura para o jeito do jogador.</li>
+        <li><b>Faltas</b>: pisar além da linha ou acertar acima dos ombros manda o infrator uma zona para trás. Se ele já está na Zona 3, recua o aliado mais à frente. Se o time inteiro está na Zona 3, o infrator fica <b>20 segundos fora</b> (a suspensão termina junto com o round).</li>
       </ul>
       <div class="legend">
         <span><i class="icon water"></i>Água</span>
@@ -598,6 +692,15 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       </div>
     </section>
   </div>
+  </div>
+
+  <div class="modal-back" id="guideModal" hidden>
+    <section class="modal guide-modal" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+      <div class="gm-head"><h2 id="guideTitle">Guia do jogo</h2><button class="btn sm" id="guideClose" type="button">Fechar</button></div>
+      <p class="gm-note">Estas informações ficam sempre na aba <b>Guia</b> da central. Na partida, o botão <b>Guia</b> abre esta mesma janela.</p>
+      <div id="guideBody"></div>
+      <div class="btnrow modal-actions"><button class="btn primary lgb" type="button" data-guideok>Entendi</button></div>
+    </section>
   </div>
 </div>
 
@@ -710,7 +813,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     addLog(`${defs[0].name} contra ${defs[1].name}. Os benders se posicionam na Zona 1.`, null, true);
     $('seed').textContent = `Semente ${seed}`;
     $('rematchBtn').classList.remove('glow');
-    readyRound = 0;
+    readyRound = 0; recs = {}; breakShown = 0; $('breakPanel').hidden = true; $('scoutPanel').hidden = true;
     buildBoard(); buildRosters(); updateBoard(); updateRosters();
   }
 
@@ -753,6 +856,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   function float(x, y, text, color) { floats.push({ x, y, text, color, life: 1.2, max: 1.2 }); }
 
   function handle(ev) {
+    if ((ev.type === 'push' || ev.type === 'water') && recs[match.round] && ev.pid !== undefined) { const R = recs[match.round]; R.pushed[ev.pid] = (R.pushed[ev.pid] || 0) + (ev.type === 'water' ? 0 : 1); if (ev.type === 'water') R.fell[ev.pid] = 1; }
     const sp = ev.x !== undefined ? W2S(ev.x, ev.y) : null;
     switch (ev.type) {
       case 'hit': {
@@ -779,6 +883,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         addLog(ev.text, ev.team, true); sfx.advance(); break;
       case 'foul':
         float(sp[0], sp[1] - 26, 'FALTA', '#ffd34d'); addLog(ev.text, ev.team); sfx.whistle(); break;
+      case 'back': addLog(ev.text, ev.team); break;
       case 'block':
         burst(sp[0], sp[1], '#b48a52', 8, 120, 3, 'sq');
         if (match.clock - lastBlockLog > 8) { addLog(ev.text, ev.team); lastBlockLog = match.clock; }
@@ -844,7 +949,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         ents.push({ d: depthOf(bx, by), f: () => { ctx.globalAlpha = 0.35; drawShape(p.elem, bx, by, 0, 0.8, ELC[p.elem], match.teams[p.team].color); ctx.globalAlpha = 1; } });
       } else if (!p.alive) {
         if (!inDuel()) ents.push({ d: depthOf(p.x, p.y) - 400, f: () => drawFallen(p, t) });
-      } else ents.push({ d: depthOf(p.x, p.y), f: () => drawPlayer(p) });
+      } else if (p.susp > 0) ents.push({ d: depthOf(p.x, p.y), f: () => { ctx.globalAlpha = 0.35; drawPlayer(p); ctx.globalAlpha = 1; } });
+      else ents.push({ d: depthOf(p.x, p.y), f: () => drawPlayer(p) });
     }
     const alive = new Set();
     for (const pr of match.projs) { alive.add(pr.id); ents.push({ d: depthOf(pr.x, pr.y) + 0.5, f: () => drawProj(pr) }); }
@@ -1294,6 +1400,90 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     }
   }
   // ---------- placar e elencos ----------
+  // ---------- resumo do round (mapa de calor, gráficos, estatísticas) ----------
+  let recs = {}, breakShown = 0, curRival = null;
+  const HX = 30, HY = 10;
+  function sampleRound() {
+    if (match.mode !== 'play') return;
+    let R = recs[match.round];
+    if (!R) {
+      R = recs[match.round] = { start: {}, heat: [new Array(HX * HY).fill(0), new Array(HX * HY).fill(0)], terr: [], lastT: -1, pushed: {}, fell: {} };
+      for (const p of allPlayers(match)) R.start[p.id] = { ...p.stats };
+    }
+    if (match.clock - R.lastT < 0.25) return;
+    R.lastT = match.clock;
+    for (const p of allPlayers(match)) {
+      if (!p.alive || !p.active) continue;
+      const cx = Math.max(0, Math.min(HX - 1, Math.floor(p.x / AL * HX))), cy = Math.max(0, Math.min(HY - 1, Math.floor(p.y / AW * HY)));
+      R.heat[p.team][cy * HX + cx]++;
+    }
+    R.terr.push([ROUND_TIME - match.time, (match.teams[0].limit - AL / 2) / ZW]);
+  }
+  function heatSvg(R, ti) {
+    const cells = R.heat[ti], max = Math.max(1, ...cells), col = match.teams[ti].color, cw = AL / HX, ch = AW / HY;
+    let g = `<rect x="0" y="0" width="${AL}" height="${AW}" fill="#1d2138" rx="6"/>`;
+    cells.forEach((c, i) => { if (c) g += `<rect x="${(i % HX) * cw}" y="${Math.floor(i / HX) * ch}" width="${cw}" height="${ch}" fill="${col}" fill-opacity="${(0.12 + 0.8 * c / max).toFixed(2)}"/>`; });
+    for (let z = 1; z < 6; z++) g += `<line x1="${z * ZW}" y1="0" x2="${z * ZW}" y2="${AW}" stroke="${z === 3 ? '#e2b04a' : 'rgba(239,232,216,.25)'}" stroke-width="${z === 3 ? 3 : 1.5}"${z === 3 ? '' : ' stroke-dasharray="8 8"'}/>`;
+    [3, 2, 1, 1, 2, 3].forEach((n, z) => { g += `<text x="${z * ZW + ZW / 2}" y="${AW - 14}" fill="rgba(239,232,216,.35)" font-size="34" font-weight="800" text-anchor="middle">${n}</text>`; });
+    return `<svg viewBox="0 0 ${AL} ${AW}" role="img" aria-label="Mapa de calor de ${esc(match.teams[ti].name)}">${g}</svg>`;
+  }
+  function terrSvg(R, me) {
+    const W = 300, H = 110, mid = H / 2, k = 15, sgn = me === 0 ? 1 : -1;
+    const pts = R.terr.map(([t, d]) => [t / ROUND_TIME * W, mid - d * sgn * k]);
+    if (!pts.length) return '';
+    const line = pts.map((p) => p.map((v) => v.toFixed(1)).join(',')).join(' ');
+    const area = `0,${mid} ${line} ${pts[pts.length - 1][0].toFixed(1)},${mid}`;
+    const meC = match.teams[me].color, opC = match.teams[1 - me].color;
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Território ao longo do round">
+      <defs><clipPath id="clipUp"><rect x="0" y="0" width="${W}" height="${mid}"/></clipPath><clipPath id="clipDn"><rect x="0" y="${mid}" width="${W}" height="${mid}"/></clipPath></defs>
+      ${[-3, -2, -1, 1, 2, 3].map((z) => `<line x1="0" x2="${W}" y1="${mid - z * k}" y2="${mid - z * k}" stroke="rgba(239,232,216,.07)"/>`).join('')}
+      <polygon points="${area}" fill="${meC}" fill-opacity=".35" clip-path="url(#clipUp)"/>
+      <polygon points="${area}" fill="${opC}" fill-opacity=".35" clip-path="url(#clipDn)"/>
+      <line x1="0" x2="${W}" y1="${mid}" y2="${mid}" stroke="rgba(239,232,216,.35)"/>
+      <polyline points="${line}" fill="none" stroke="#efe8d8" stroke-width="1.5"/>
+      <text x="4" y="12" fill="#9d9bb6" font-size="9">seu time à frente</text><text x="4" y="${H - 4}" fill="#9d9bb6" font-size="9">rival à frente</text>
+      <text x="${W - 4}" y="${H - 4}" fill="#9d9bb6" font-size="9" text-anchor="end">3:00 de round</text></svg>`;
+  }
+  function renderBreak() {
+    const r = match.round - 1, R = recs[r]; if (!R) return false;
+    const me = mode === 'league' ? Math.max(0, match.teams.findIndex((t) => !t.auto)) : 0, op = 1 - me;
+    const d = (p) => { const a = p.stats, b = R.start[p.id] || {}; const o = {}; for (const k of Object.keys(a)) o[k] = (a[k] || 0) - (b[k] || 0); o.pushedTaken = R.pushed[p.id] || 0; o.fell = R.fell[p.id] || 0; return o; };
+    const rows = match.teams.map((t) => t.players.map((p) => ({ p, s: d(p) })));
+    const sum = (ti, k) => rows[ti].reduce((a, x) => a + (x.s[k] || 0), 0);
+    const acc = (ti) => { const sh = sum(ti, 'shots'); return sh ? Math.round(sum(ti, 'hits') / sh * 100) : 0; };
+    const metrics = [['Acertos', (ti) => sum(ti, 'hits')], ['Precisão %', acc], ['Empurrões', (ti) => sum(ti, 'pushes')], ['Derrubadas na água', (ti) => sum(ti, 'falls')], ['Esquivas', (ti) => sum(ti, 'dodges')], ['Bloqueios', (ti) => sum(ti, 'blocks')], ['Faltas', (ti) => sum(ti, 'fouls')]];
+    const T = match.teams, mc = T[me].color, oc = T[op].color;
+    const cmp = metrics.map(([lab, f]) => { const a = f(me), b = f(op), mx = Math.max(1, a, b);
+      return `<div class="l">${a}<i style="width:${a / mx * 100}%;background:${mc}"></i></div><div class="lab">${lab}</div><div class="r"><i style="width:${b / mx * 100}%;background:${oc}"></i>${b}</div>`; }).join('');
+    // leituras do round para orientar as instruções
+    const reads = [];
+    const mostPushed = rows[me].slice().sort((a, b) => b.s.pushedTaken - a.s.pushedTaken)[0];
+    if (mostPushed && mostPushed.s.pushedTaken >= 2) reads.push(`<b>${esc(mostPushed.p.name)}</b> foi empurrado ${mostPushed.s.pushedTaken} vezes. Proteger ou Mais cauteloso ajudam a segurar a linha; na Escalonada, quem fica na frente aguenta mais.`);
+    const threat = rows[op].slice().sort((a, b) => (b.s.pushes + b.s.falls * 2) - (a.s.pushes + a.s.falls * 2))[0];
+    if (threat && threat.s.pushes + threat.s.falls >= 2) reads.push(`<b>${esc(threat.p.name)}</b> (rival) empurrou ${threat.s.pushes} vez${threat.s.pushes === 1 ? '' : 'es'}. Dá para mandar alguém Marcar ${esc(threat.p.name)} ou escolher alvo "Foco no mais perigoso".`);
+    const foul = rows[me].slice().sort((a, b) => b.s.fouls - a.s.fouls)[0];
+    if (foul && foul.s.fouls >= 2) reads.push(`<b>${esc(foul.p.name)}</b> cometeu ${foul.s.fouls} faltas. Pressionar e postura Agressiva aumentam as faltas; Disciplina baixa também.`);
+    const cold = rows[me].filter((x) => x.s.shots >= 8).sort((a, b) => a.s.hits / a.s.shots - b.s.hits / b.s.shots)[0];
+    if (cold && cold.s.hits / cold.s.shots < 0.3) reads.push(`<b>${esc(cold.p.name)}</b> acertou só ${Math.round(cold.s.hits / cold.s.shots * 100)}% dos ataques. ${cold.p.elem === 'fire' ? 'O fogo rende mais de longe: Manter distância pode ajudar.' : cold.p.elem === 'earth' ? 'A terra rende mais de perto: Pressionar pode ajudar.' : 'Mirar quem está mais vulnerável costuma render mais.'}`);
+    const dis = rows[me].filter((x) => x.p.obey === false);
+    if (dis.length) reads.push(`${dis.map((x) => `<b>${esc(x.p.name)}</b>`).join(' e ')} ignorou a instrução neste round. O risco aparece ao lado de cada instrução.`);
+    const prow = (ti) => rows[ti].map(({ p, s }) => `<tr><td><span class="dot" style="background:${T[ti].color}"></span>${icon(p.elem)} ${esc(p.name)}</td><td class="num">${s.hits}<span class="hint"> (${s.shots ? Math.round(s.hits / s.shots * 100) : 0}%)</span></td>
+      <td class="num">${s.pushes}</td><td class="num">${s.falls}</td><td class="num">${s.pushedTaken}${s.fell ? ' <span class="hint">· caiu</span>' : ''}</td><td class="num">${s.dodges}</td><td class="num">${s.fouls}</td></tr>`).join('');
+    const w = T[me].roundWins, lw = T[op].roundWins, last = match.roundLog && match.roundLog[match.roundLog.length - 1];
+    $('breakTitle').textContent = `Resumo do round ${r}`; $('breakStart').textContent = `Começar round ${match.round}`;
+    $('breakBody').innerHTML = `<p class="hint">Placar em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. Ajuste as táticas no painel do seu time (dá para fechar este resumo em "Ver a arena" e reabrir em "Resumo do round").</p>
+      <div class="brk-grid">
+        <div class="brk-card"><h3>Onde ${esc(T[me].name)} jogou</h3>${heatSvg(R, me)}</div>
+        <div class="brk-card"><h3>Onde ${esc(T[op].name)} jogou</h3>${heatSvg(R, op)}</div>
+        <div class="brk-card"><h3>Território ao longo do round</h3>${terrSvg(R, me)}</div>
+        <div class="brk-card"><h3>Comparação do round</h3><div class="cmp">${cmp}</div></div>
+      </div>
+      ${reads.length ? `<div class="brk-card"><h3>Leituras do round</h3><ul class="reads">${reads.slice(0, 4).map((x) => `<li>${x}</li>`).join('')}</ul></div>` : ''}
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Bender</th><th class="num">Acertos</th><th class="num">Empurrões</th><th class="num">Derrubou</th><th class="num">Foi empurrado</th><th class="num">Esquivas</th><th class="num">Faltas</th></tr></thead>
+        <tbody>${prow(me)}${prow(op)}</tbody></table></div>
+      <p class="hint">No mapa de calor, quanto mais forte a cor, mais tempo o time passou naquela parte da arena. A linha dourada é o centro; os números são as zonas de cada lado.</p>`;
+    return true;
+  }
   function buildBoard() {
     ['A', 'B'].forEach((k, i) => {
       const t = match.teams[i];
@@ -1315,13 +1505,22 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     $('terr').textContent = diff === 0 ? 'Linha no centro' : `${m.teams[diff > 0 ? 0 : 1].name} +${Math.abs(diff)} zona${Math.abs(diff) > 1 ? 's' : ''}`;
   }
 
+  // painéis dos times minimizáveis (lembrado neste navegador)
+  let hudMin = [false, false];
+  try { hudMin = JSON.parse(localStorage.getItem('sbm-hud-min')) || hudMin; } catch (e) {}
+  $('hud').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-min]'); if (!b) return;
+    const i = +b.dataset.min; hudMin[i] = !hudMin[i];
+    try { localStorage.setItem('sbm-hud-min', JSON.stringify(hudMin)); } catch (er) {}
+    const card = $(i === 0 ? 'sideA' : 'sideB'); card.classList.toggle('min', hudMin[i]); b.textContent = hudMin[i] ? '+' : '–';
+  });
   const STAT_LABELS = [['pow', 'POD'], ['pre', 'PRE'], ['agi', 'AGI'], ['fir', 'FIR'], ['dis', 'DIS'], ['lei', 'LEI']];
   function buildRosters() {
     match.teams.forEach((t, ti) => {
       const card = $(ti === 0 ? 'sideA' : 'sideB');
-      card.innerHTML = ''; card.style.setProperty('--tc', t.color);
+      card.innerHTML = ''; card.style.setProperty('--tc', t.color); card.classList.toggle('min', !!hudMin[ti]);
       if (t.auto) { // adversário: nada de tática nem instruções, só os benders e os números
-        card.innerHTML = `<div class="tc-name">${t.name}</div>` + t.players.map((p) => `<div class="pl">
+        card.innerHTML = `<div class="hud-th"><div class="tc-name">${t.name}</div><button class="hud-min" type="button" data-min="${ti}" title="Minimizar ou expandir o painel" aria-label="Minimizar ou expandir o painel">${hudMin[ti] ? '+' : '–'}</button></div>` + t.players.map((p) => `<div class="pl">
           <i class="icon ${p.elem}"></i>
           <div class="pname">${p.name}<small>${ELN[p.elem]}</small></div>
           <span class="chip" id="chip${p.id}">Zona 1</span>
@@ -1336,7 +1535,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       const foes = match.teams[1 - ti].players;
       const insOpts = (p) => Object.entries(INSTR).map(([k, v]) => `<option value="${k}"${k === p.instr ? ' selected' : ''}>${v}</option>`).join('') +
         foes.map((o) => `<option value="mark:${o.id}"${p.instr === 'mark:' + o.id ? ' selected' : ''}>Marcar ${o.name}</option>`).join('');
-      card.innerHTML = `<div class="tc-name">${t.name}</div>
+      card.innerHTML = `<div class="hud-th"><div class="tc-name">${t.name}</div><button class="hud-min" type="button" data-min="${ti}" title="Minimizar ou expandir o painel" aria-label="Minimizar ou expandir o painel">${hudMin[ti] ? '+' : '–'}</button></div>
         <p class="lock" id="lock${ti}"></p>
         <div class="tactics">
           <label class="f" for="post${ti}">Postura<select id="post${ti}">${postOpts}</select></label>
@@ -1372,6 +1571,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       if (inTb && !p.active) { txt = 'Assistindo'; cls += ' idle'; }
       else if (inTb) { txt = 'No duelo'; cls += ' adv'; }
       else if (!p.alive) { txt = 'Na água'; cls += ' out'; }
+      else if (p.susp > 0) { txt = `Suspenso ${Math.ceil(p.susp)}s`; cls += ' out'; }
       else {
         const z = p.limitD / ZW;
         if (z >= 4) { txt = `Zona ${z - 3} rival`; cls += ' adv'; }
@@ -1389,6 +1589,9 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   function syncTacticsLock() {
     const open = atBreak(), over = match.mode === 'over';
     $('hud').classList.toggle('break', open);
+    $('breakBtn').hidden = !(open && recs[match.round - 1]);
+    if (open && match.round > 1 && breakShown < match.round && recs[match.round - 1]) { breakShown = match.round; if (renderBreak()) $('breakPanel').hidden = false; }
+    if (!open && !$('breakPanel').hidden) $('breakPanel').hidden = true;
     $('playBtn').textContent = open ? `Começar round ${match.round}` : paused ? 'Continuar' : 'Pausar';
     $('playBtn').hidden = mode === 'league' && over;
     $('finishBtn').hidden = !(mode === 'league' && over);
@@ -1429,6 +1632,18 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   });
   const toggleInfo = (show) => { $('infoPanel').hidden = !show; $('infoBtn').setAttribute('aria-expanded', show ? 'true' : 'false'); };
   $('infoBtn').addEventListener('click', () => toggleInfo($('infoPanel').hidden));
+  $('guideBtn').addEventListener('click', openGuide);
+  $('breakBtn').addEventListener('click', () => { if ($('breakPanel').hidden) { if (renderBreak()) $('breakPanel').hidden = false; } else $('breakPanel').hidden = true; });
+  $('breakClose').addEventListener('click', () => { $('breakPanel').hidden = true; });
+  $('breakStart').addEventListener('click', () => { $('breakPanel').hidden = true; $('playBtn').click(); });
+  $('breakGuide').addEventListener('click', openGuide);
+  $('scoutBtn').addEventListener('click', () => {
+    if (!$('scoutPanel').hidden) { $('scoutPanel').hidden = true; return; }
+    if (!curRival || !L) return;
+    $('scoutBody').innerHTML = scoutHtml(curRival, L.teams[L.user]);
+    $('scoutPanel').hidden = false;
+  });
+  $('scoutClose').addEventListener('click', () => { $('scoutPanel').hidden = true; });
   $('infoClose').addEventListener('click', () => toggleInfo(false));
   $('speedSeg').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
@@ -1576,7 +1791,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <div class="meta"><span>Nota <b>${teamOVR(t)}</b></span><span>Caixa <b>${yen(t.cash)}</b></span><span>Popularidade <b>${r0(t.fame)}</b></span>
         <span>Estilo <b>${STYLES[t.style].toLowerCase()}</b></span><span>Arena <b>${t.arena === 'round' ? 'redonda' : 'quadrada'}</b></span></div>
       <p class="hint">A diretoria espera algo perto do <b>${exp}º lugar</b> (${BOARD_GOAL(t.div, exp).toLowerCase()}).</p>
-      <ul>${t.roster.slice().sort((a, b) => ovr(b.st) - ovr(a.st)).map((p) => `<li>${icon(p.elem)}<span>${esc(p.name)} <small>${p.age} anos</small></span><small>POT ${p.pot}</small><b>${ovr(p.st)}</b></li>`).join('')}</ul>`;
+      <ul>${t.roster.slice().sort((a, b) => ovr(b.st) - ovr(a.st)).map((p) => `<li>${icon(p.elem)}<span>${esc(p.name)} <small>${p.age} anos</small></span><small></small><b>${ovr(p.st)}</b></li>`).join('')}</ul>`;
     $('startBtn').textContent = `Assumir ${t.name}`;
     $('pickModal').hidden = false;
     $('startBtn').focus();
@@ -1591,9 +1806,26 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   $('startBtn').addEventListener('click', () => {
     if (selTeam === null) return;
     $('pickModal').hidden = true;
-    L = pendingL; L.gameMode = gameMode; setUser(L, selTeam); mode = 'league'; save(); hubPage = 'home'; renderHub();
+    L = pendingL; L.gameMode = gameMode; setUser(L, selTeam); mode = 'league'; save(); hubPage = 'home'; renderHub(); firstGuide();
   });
-  $('continueBtn').addEventListener('click', () => { const s = loadSave(); if (s) { L = s; mode = 'league'; renderHub(); } });
+  $('continueBtn').addEventListener('click', () => { const s = loadSave(); if (s) { L = s; mode = 'league'; renderHub(); firstGuide(); } });
+  // guia em janela: conteúdo da aba Guia (sem o quadro de dicas)
+  function openGuide() {
+    const panels = [...document.querySelectorAll('#viewHub .page[data-page="guide"] > .panel')].slice(1);
+    $('guideBody').innerHTML = panels.map((p) => `<section class="panel">${p.innerHTML}</section>`).join('');
+    $('guideModal').hidden = false; $('guideModal').scrollTop = 0;
+    if (inMatchView && !paused && !atBreak()) { paused = true; guidePaused = true; syncTacticsLock(); }
+  }
+  let guidePaused = false;
+  function closeGuide() {
+    $('guideModal').hidden = true;
+    if (L) { L.tips = L.tips || {}; if (!L.tips.guide) { L.tips.guide = 1; save(); } }
+    if (guidePaused) { guidePaused = false; paused = false; syncTacticsLock(); }
+  }
+  function firstGuide() { if (L && !(L.tips && L.tips.guide)) openGuide(); }
+  $('guideClose').addEventListener('click', closeGuide);
+  $('guideModal').addEventListener('click', (e) => { if (e.target === $('guideModal') || e.target.closest('[data-guideok]')) closeGuide(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('guideModal').hidden) closeGuide(); });
   $('sandboxBtn').addEventListener('click', () => { mode = 'sandbox'; showView('viewMatch'); newMatch(true); });
   $('homeBtn').addEventListener('click', () => { mode = 'league'; renderStart(); });
   $('restartBtn').addEventListener('click', () => {
@@ -1641,8 +1873,9 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   }
 
   // ---- ordenação das tabelas: clicar no cabeçalho ordena; clicar de novo inverte ----
-  const sortState = { roster: { key: 'elem', dir: 1 }, market: { key: 'ovr', dir: -1 }, others: { key: 'ovr', dir: -1 }, table: { key: 'pos', dir: 1 } };
+  const sortState = { roster: { key: 'elem', dir: 1 }, market: { key: 'ovr', dir: -1 }, others: { key: 'ovr', dir: -1 }, table: { key: 'pos', dir: 1 }, pay: { key: 'salary', dir: -1 } };
   const othersFilter = { div: 'all', avail: true };
+  let budgetOnly = false;
   const TEXT_KEYS = new Set(['name', 'elem', 'pos', 'team']);
   function sth(tbl, key, label, cls = '', title = '') {
     const s = sortState[tbl], on = s.key === key;
@@ -1663,6 +1896,68 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     tie: (a, b) => ovr(b.st) - ovr(a.st),
   }, ...ATTRS.map(([k]) => ({ [k]: (p) => p.st[k] })));
   const attrHeads = (tbl) => ATTRS.map((a) => sth(tbl, a[0], a[1], 'num', a[2])).join('');
+
+
+  // ---- ficha do bender: radar de competências e evolução na temporada ----
+  let selBender = null;
+  function radarSvg(series) {
+    // series: [{ label, color, st, dash }] com os 6 atributos de 0 a 100
+    const cx = 160, cy = 150, R = 110, n = ATTRS.length;
+    // escala de 30 a 100 (abaixo de 30 quase não existe), para as diferenças aparecerem
+    const pt = (i, v) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n, r = R * Math.max(0, Math.min(1, (v - 30) / 70)); return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; };
+    let g = '';
+    for (let k = 1; k <= 5; k++) g += `<polygon points="${ATTRS.map((_, i) => pt(i, 30 + k * 14).join(',')).join(' ')}" fill="none" stroke="rgba(239,232,216,${k === 5 ? 0.28 : 0.1})" stroke-width="1"/>`;
+    ATTRS.forEach((a, i) => {
+      const [x, y] = pt(i, 100), [lx, ly] = pt(i, 116);
+      g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(239,232,216,0.12)"/>`;
+      g += `<text x="${lx}" y="${ly}" fill="#9d9bb6" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="middle">${a[1]}</text>`;
+    });
+    for (const s of series) {
+      const pts = ATTRS.map(([k], i) => pt(i, s.st[k]).join(',')).join(' ');
+      g += `<polygon points="${pts}" fill="${s.color}" fill-opacity="${s.fill}" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"${s.dash ? ' stroke-dasharray="5 4"' : ''}/>`;
+    }
+    return `<svg viewBox="0 0 320 300" role="img" aria-label="Gráfico de competências">${g}</svg>`;
+  }
+  const dec1 = (v) => (Math.round(v * 10) / 10).toFixed(1).replace('.', ',');
+  function benderCardHtml(me, p) {
+    if (!p) return '<p class="hint">Nenhum bender no elenco.</p>';
+    // na pré-temporada o histórico ainda é o da temporada passada: só mostra os valores atuais
+    const hist = (L.phase !== 'preseason' && p.hist && p.hist.length ? p.hist : []), first = hist[0], now = {};
+    for (const k of TRAINABLE) now[k] = p.st[k];
+    const st = me.starters[p.elem] === p.id;
+    const series = first && hist.length > 1 ? [{ label: 'Início da temporada', color: '#4a8fe0', fill: 0.12, st: first, dash: true }, { label: 'Agora', color: '#e2b04a', fill: 0.22, st: now }]
+      : [{ label: 'Agora', color: '#e2b04a', fill: 0.22, st: now }];
+    const delta = (k) => first ? Math.round((now[k] - first[k]) * 10) / 10 : 0;
+    const fmt = (v) => (v > 0 ? '+' : '') + String(v).replace('.', ',');
+    const weeks = hist.length > 1 ? hist : [];
+    return `<div class="bc-head">
+        <div><div class="bc-name" style="color:${ELC[p.elem]}">${icon(p.elem)} ${esc(p.name)}</div>
+          <div class="bc-meta" style="margin-top:6px"><span>${st ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</span><span>${ELN[p.elem]}</span><span><b>${p.age}</b> anos</span>
+            <span>Temperamento <b>${tmpLabel(p.st.tmp).toLowerCase()}</b> (${p.st.tmp})</span><span>Popularidade <b>${r0(p.st.pop)}</b></span></div></div>
+        <div class="kv"><b>${ovr(p.st)}</b><span>Nota</span></div>
+      </div>
+      <div class="bc-body">
+        <div class="radar">${radarSvg(series)}
+          <div class="radar-leg">${series.map((s) => `<span><i style="background:${s.color}"></i>${s.label}</span>`).join('')}</div></div>
+        <div>
+          <div class="attr-list">${ATTRS.map(([k, ab, nm]) => {
+            const d = delta(k), base = first ? first[k] : now[k];
+            return `<div class="attr-row"><span>${nm}</span><span class="v">${r0(now[k])}</span><span class="d ${d > 0 ? 'pos' : d < 0 ? 'neg' : 'hint'}">${first ? fmt(d) : ''}</span>
+              <span class="bar2" title="Azul: início da temporada · dourado: evolução"><i style="width:${Math.min(base, now[k])}%"></i>${d > 0 ? `<b style="left:${base}%;width:${d}%"></b>` : ''}</span></div>`;
+          }).join('')}</div>
+          <div class="bc-meta" style="margin-top:10px"><span>Energia ${energyBar(p.energy)}</span><span>Estresse ${stressBar(p.stress || 0)}</span></div>
+        </div>
+      </div>
+      ${weeks.length ? `<h3 class="sub">Evolução semana a semana</h3>
+        <div class="tbl-wrap"><table class="tbl matrix"><thead><tr><th>Atributo</th>${weeks.map((h) => `<th>${h.w === 0 ? 'Início' : 'S' + h.w}</th>`).join('')}<th>Ganho</th></tr></thead><tbody>
+        ${ATTRS.map(([k, , nm]) => `<tr><td>${nm}</td>${weeks.map((h, i) => {
+          const up = i > 0 && h[k] > weeks[i - 1][k] + 0.05, g = h[k] - weeks[0][k];
+          return `<td style="${g > 0.05 ? `background:rgba(226,176,74,${Math.min(0.45, 0.08 + g * 0.08)})` : ''}"${up ? ' title="Treinou nesta semana"' : ''}>${dec1(h[k])}${up ? '<span class="pos">▲</span>' : ''}</td>`;
+        }).join('')}<td class="${delta(k) > 0 ? 'pos' : 'hint'}">${fmt(delta(k))}</td></tr>`).join('')}
+        </tbody></table></div>
+        <p class="hint">Cada coluna é uma rodada; ▲ marca as semanas em que o atributo subiu com o treino. A cor mais forte mostra quanto ele já cresceu desde o início da temporada.</p>`
+      : `<p class="hint">${L.phase === 'preseason' ? 'A evolução semana a semana aparece quando a temporada começar.' : 'A evolução aparece depois da primeira rodada.'}</p>`}`;
+  }
 
   // ---- observação do rival ----
   function formBadges(idx) {
@@ -1745,7 +2040,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <ul class="checklist">
           <li class="${L.sponsors.length ? 'ok' : ''}">Patrocínios assinados: ${L.sponsors.length} de 2 <button class="btn sm" type="button" data-page="sponsors">Ver propostas</button></li>
           <li class="${ok ? 'ok' : ''}">Titulares definidos (um por elemento) <button class="btn sm" type="button" data-page="roster">Ver elenco</button></li>
-          ${expN ? `<li class="${blockers.length ? '' : 'ok'}">Contratos encerrados: ${expN}${blockers.length ? ` · <span class="neg">sem renovar, você ficaria sem bender de ${blockers.map((e) => ELN[e]).join(' e ')}</span>` : ' (sem renovar, eles saem ao começar a temporada)'} <button class="btn sm" type="button" data-page="roster">Ver contratos</button></li>` : ''}
+          ${expN ? `<li class="${blockers.length ? '' : 'ok'}">Contratos encerrados: ${expN}${blockers.length ? ` · <span class="neg">sem renovar, você ficaria sem bender de ${blockers.map((e) => ELN[e]).join(' e ')}</span>` : ' (sem renovar, eles saem ao começar a temporada)'} <button class="btn sm" type="button" data-page="finance">Ver contratos</button></li>` : ''}
           <li class="${W.offers.length ? '' : 'ok'}">Ofertas pelos seus benders: ${W.offers.length} <button class="btn sm" type="button" data-page="market">Abrir mercado</button></li>
         </ul>
         ${L.sponsors.length ? '' : '<p class="hint">Sem patrocínio, o time só recebe prêmios.</p>'}
@@ -1854,7 +2149,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         ${rep.gains.length ? `<div class="gains"><span>Treino:</span>${rep.gains.map((g) => `<span>${esc(g.name)} <b>+${String(g.d).replace('.', ',')} ${ATTRS.find((a) => a[0] === g.k)[1]}</b></span>`).join('')}</div>` : ''}`;
     }
 
-    // ---- elenco e treino ----
+    // ---- treino (aba própria) ----
     const team = L.trainMode === 'team';
     for (const b of $('trainSeg').children) b.setAttribute('aria-pressed', b.dataset.m === L.trainMode ? 'true' : 'false');
     $('teamPlanWrap').hidden = !team;
@@ -1877,36 +2172,61 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         const E = EVENTS[k], used = eventTaken(L, k, -1);
         return `<div class="ev"><b>${E.name}</b>
           <span>${E.base || E.perPop ? `${yen(E.base * D.mult)} + ${yen(E.perPop * D.mult)} por ponto de popularidade` : 'Não paga'}</span>
-          <span>Energia −${E.energy} · Popularidade +${E.pop}</span>
+          <span>Energia −${E.energy} · Popularidade +${String(Math.round(E.pop * PER_MATCH * 10) / 10).replace(".", ",")}</span>
           <span>${E.req ? `Precisa popularidade ${E.req}` : 'Qualquer bender'} · ${E.slots >= 99 ? 'vagas livres' : `${used} de ${E.slots} vaga${E.slots > 1 ? 's' : ''}`}</span></div>`;
       }).join('')}</div>`;
+    $('trainHint').textContent = team ? 'Treino em equipe: todo o elenco segue o mesmo foco nesta semana.' : 'Treino individual: escolha o plano de cada bender para esta semana. Treinar gasta energia e aumenta o estresse; descansar recupera os dois.';
+    const isSt = (p) => me.starters[p.elem] === p.id;
+    $('trainTbl').innerHTML = `<thead><tr><th>Status</th><th>Elemento</th><th>Bender</th><th class="num">Nota</th>${ATTRS.map((a) => `<th class="num" title="${a[2]}">${a[1]}</th>`).join('')}<th>Energia</th><th>Estresse</th><th>Plano da semana</th></tr></thead><tbody>` +
+      me.roster.slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || isSt(b) - isSt(a)).map((p) => `<tr>
+        <td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</td>
+        <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td>
+        ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
+        <td>${energyBar(p.energy)}</td><td>${stressBar(p.stress || 0)}</td>
+        <td><select data-plan="${p.id}" aria-label="Plano de ${esc(p.name)}"${team ? ' disabled' : ''}>${planOpts(p)}</select></td></tr>`).join('') + '</tbody>';
+
+    // ---- elenco: escalação, ficha do bender e tabela ----
+    $('lineupBox').innerHTML = ELEMS.map((e) => {
+      const stp = me.roster.find((p) => p.id === me.starters[e]), res = me.roster.filter((p) => p.elem === e && p !== stp);
+      return `<div class="slot"><div class="slot-h">${icon(e)} ${ELN[e]}</div>
+        ${stp ? `<div class="slot-st"><span><span class="badge-st">Titular</span> <b>${esc(stp.name)}</b></span><span class="ovn">${ovr(stp.st)}</span></div>
+          <div class="bc-meta"><span>Energia <b>${r0(stp.energy)}</b></span><span>Estresse <b>${r0(stp.stress || 0)}</b></span></div>` : '<p class="hint">Sem titular</p>'}
+        ${res.length ? res.map((q) => `<div class="slot-res"><span><span class="badge-res">Reserva</span> ${esc(q.name)} · <b>${ovr(q.st)}</b> <span class="hint">energia ${r0(q.energy)}</span></span>
+          <button class="btn sm" type="button" data-starter="${q.id}">Escalar no lugar de ${esc(stp ? stp.name : '')}</button></div>`).join('') : '<p class="hint">Nenhum reserva deste elemento.</p>'}</div>`;
+    }).join('');
+    if (!me.roster.some((p) => p.id === selBender)) selBender = (starters(me)[0] || me.roster[0] || {}).id;
     const roster = sortRows(me.roster, 'roster', Object.assign({}, benderGetters, {
-      starter: (p) => (me.starters[p.elem] === p.id ? 0 : 1), energy: (p) => p.energy, stress: (p) => p.stress || 0, value: (p) => valueOf(L, p) }));
+      starter: (p) => (isSt(p) ? 0 : 1), energy: (p) => p.energy, stress: (p) => p.stress || 0, value: (p) => valueOf(L, p) }));
     const exp = me.roster.filter((p) => p.expiring);
     $('renewBox').innerHTML = pre && exp.length ? `<h3 class="sub">Contratos encerrados</h3>
       <p class="hint">Renove agora pelo salário que eles pedem, ou eles vão embora de graça quando a temporada começar.</p>
-      <ul class="offers">${exp.map((p) => `<li><span>${icon(p.elem)} <b>${esc(p.name)}</b> · ${p.age} anos · nota ${ovr(p.st)} · potencial ${p.pot} · salário atual ${yen(wageOf(p))} → pede <b>${yen(askWage(p))}</b></span>
+      <ul class="offers">${exp.map((p) => `<li><span>${icon(p.elem)} <b>${esc(p.name)}</b> · ${p.age} anos · nota ${ovr(p.st)} · salário atual ${yen(wageOf(p))} → pede <b>${yen(askWage(p))}</b></span>
         <span class="btnrow">${[1, 2, 3].map((y) => `<button class="btn sm" type="button" data-renew="${p.id}:${y}">Renovar ${y} temp.</button>`).join('')}</span></li>`).join('')}</ul>` : '';
-    $('rosterHint').textContent = `${me.roster.length} de 5 vagas, um titular por elemento. ${team ? 'Treino em equipe: todo o elenco segue o mesmo foco.' : 'Treino individual: escolha o plano de cada bender.'} Treinar gasta energia, descansar recupera.`;
-    $('rosterTbl').innerHTML = `<thead><tr>${sth('roster', 'starter', 'Status')}${sth('roster', 'elem', 'Elemento')}${sth('roster', 'name', 'Bender')}${sth('roster', 'ovr', 'Nota', 'num')}${sth('roster', 'age', 'Idade', 'num')}${sth('roster', 'pot', 'POT', 'num', 'Potencial: a nota máxima que ele pode alcançar')}${attrHeads('roster')}${sth('roster', 'pop', 'POP', 'num', 'Popularidade')}${sth('roster', 'tmp', 'Temperamento')}${sth('roster', 'energy', 'Energia')}${sth('roster', 'stress', 'Estresse')}${sth('roster', 'salary', 'Salário', 'num')}${sth('roster', 'contract', 'Contrato')}${sth('roster', 'value', 'Valor', 'num', 'Valor de mercado')}<th>Plano da semana</th>${pre ? '<th></th><th></th>' : ''}</tr></thead><tbody>` +
+    $('rosterHint').textContent = `${me.roster.length} de 5 vagas. Clique num bender para ver a ficha completa e a evolução dos atributos na temporada.`;
+    $('rosterTbl').innerHTML = `<thead><tr>${sth('roster', 'starter', 'Status')}${sth('roster', 'elem', 'Elemento')}${sth('roster', 'name', 'Bender')}${sth('roster', 'ovr', 'Nota', 'num')}${sth('roster', 'age', 'Idade', 'num')}${attrHeads('roster')}${sth('roster', 'pop', 'POP', 'num', 'Popularidade')}${sth('roster', 'tmp', 'Temperamento')}${sth('roster', 'energy', 'Energia')}${sth('roster', 'stress', 'Estresse')}${pre ? '<th></th><th></th>' : ''}</tr></thead><tbody>` +
       roster.map((p) => {
-        const st = me.starters[p.elem] === p.id;
-        return `<tr>
-          <td><button class="tag-s${st ? ' on' : ''}" type="button" data-starter="${p.id}">${st ? 'Titular' : 'Reserva'}</button></td>
-          <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td><td class="num pot">${p.pot}</td>
+        const st = isSt(p), cur = me.roster.find((q) => q.id === me.starters[p.elem]);
+        return `<tr data-pick="${p.id}" class="${p.id === selBender ? 'sel' : ''}">
+          <td>${st ? '<span class="badge-st">Titular</span>' : `<button class="btn sm" type="button" data-starter="${p.id}" title="Escalar no lugar de ${esc(cur ? cur.name : '')}">Escalar</button>`}</td>
+          <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
           ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
           <td class="num pop">${r0(p.st.pop)}</td>
           <td>${tmpLabel(p.st.tmp)} <span style="color:var(--muted)">${p.st.tmp}</span></td>
           <td>${energyBar(p.energy)}</td>
           <td>${stressBar(p.stress || 0)}</td>
-          <td class="num">${yen(wageOf(p))}</td>
-          <td>${contractCell(p)}</td>
-          <td class="num">${yen(valueOf(L, p))}</td>
-          <td><select data-plan="${p.id}" aria-label="Plano de ${esc(p.name)}"${team ? ' disabled' : ''}>${planOpts(p)}</select></td>
           ${pre ? (() => { const q = sellQuote(L, p.id); return `<td><button class="btn sm" type="button" data-sell="${p.id}"${q && q.ok ? '' : ` disabled title="${esc(q ? q.why : '')}"`}>Vender${q && q.price ? ' · ' + yen(q.price) : ''}</button></td>`; })() : ''}
           ${pre ? `<td><button class="btn sm" type="button" data-release="${p.id}"${canRelease(L, p.id) ? '' : ' disabled title="Precisa haver outro bender deste elemento no elenco"'}>Dispensar</button></td>` : ''}
         </tr>`;
       }).join('') + '</tbody>';
+    $('benderCard').innerHTML = benderCardHtml(me, me.roster.find((p) => p.id === selBender));
+    // ---- finanças: folha salarial ----
+    const payRows = sortRows(me.roster, 'pay', Object.assign({}, benderGetters, { starter: (p) => (isSt(p) ? 0 : 1), value: (p) => valueOf(L, p) }));
+    $('payHint').textContent = `Folha de ${yen(payroll(me))} por rodada, ${yen(payroll(me) * WEEKS)} na temporada (${WEEKS} rodadas). O salário é fixo até o fim do contrato.`;
+    $('payTbl').innerHTML = `<thead><tr>${sth('pay', 'starter', 'Status')}${sth('pay', 'elem', 'Elemento')}${sth('pay', 'name', 'Bender')}${sth('pay', 'ovr', 'Nota', 'num')}${sth('pay', 'age', 'Idade', 'num')}${sth('pay', 'pop', 'POP', 'num', 'Popularidade')}${sth('pay', 'salary', 'Salário', 'num')}${sth('pay', 'contract', 'Contrato')}${sth('pay', 'value', 'Valor', 'num', 'Valor de mercado')}</tr></thead><tbody>` +
+      payRows.map((p) => `<tr><td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</td>
+        <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
+        <td class="num pop">${r0(p.st.pop)}</td><td class="num">${yen(wageOf(p))}</td><td>${contractCell(p)}</td><td class="num">${yen(valueOf(L, p))}</td></tr>`).join('') +
+      `<tr><td colspan="6" class="hint">Total por rodada</td><td class="num"><b>${yen(payroll(me))}</b></td><td></td><td class="num">${yen(me.roster.reduce((a, p) => a + valueOf(L, p), 0))}</td></tr></tbody>`;
 
     // ---- mercado (só na pré-temporada) ----
     const full = me.roster.length >= MAX_ROSTER;
@@ -1921,32 +2241,44 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <span class="btnrow"><button class="btn sm primary" type="button" data-accept="${o.id}"${only ? ' disabled title="Único bender deste elemento"' : ''}>Aceitar</button><button class="btn sm" type="button" data-decline="${o.id}">Recusar</button></span></li>`;
     }).join('')}</ul>` : '<p class="hint">Nenhuma oferta nesta etapa.</p>');
     if (pre) {
-      const fa = sortRows(L.freeAgents, 'market', benderGetters);
-      $('marketTbl').innerHTML = `<thead><tr>${sth('market', 'elem', 'Elemento')}${sth('market', 'name', 'Bender')}${sth('market', 'ovr', 'Nota', 'num')}${sth('market', 'age', 'Idade', 'num')}${sth('market', 'pot', 'POT', 'num', 'Potencial')}${attrHeads('market')}${sth('market', 'pop', 'POP', 'num', 'Popularidade')}${sth('market', 'tmp', 'Temperamento')}${sth('market', 'salary', 'Salário', 'num')}<th></th></tr></thead><tbody>` +
+      // orçamento: o caixa paga o preço e ainda sobra para o salário dele na temporada inteira
+      const income = L.sponsors.reduce((a, sp) => a + sp.base, 0), pay = payroll(me);
+      const fitOf = (price, wage) => { const after = me.cash - price, season = wage * WEEKS; return { after, season, ok: after >= season, cost: price + season }; };
+      $('budgetBox').innerHTML = `<span>Caixa <b>${yen(me.cash)}</b></span><span>Folha <b>${yen(pay)}</b> por rodada</span><span>Patrocínios <b>${yen(income)}</b> por rodada</span>
+        <span>Saldo fixo <b class="${income - pay < 0 ? 'neg' : 'pos'}">${yen(income - pay)}</b> por rodada (sem prêmios, metas e eventos)</span>
+        <span>Cabe no orçamento = o caixa paga o preço e ainda cobre o salário dele nas ${WEEKS} rodadas da temporada</span>`;
+      document.querySelectorAll('[data-budget]').forEach((c) => { c.checked = budgetOnly; });
+      let faList = L.freeAgents;
+      if (budgetOnly) faList = faList.filter((p) => fitOf(signingFee(p), salary(p)).ok);
+      const fa = sortRows(faList, 'market', benderGetters);
+      $('marketTbl').innerHTML = `<thead><tr>${sth('market', 'elem', 'Elemento')}${sth('market', 'name', 'Bender')}${sth('market', 'ovr', 'Nota', 'num')}${sth('market', 'age', 'Idade', 'num')}${attrHeads('market')}${sth('market', 'pop', 'POP', 'num', 'Popularidade')}${sth('market', 'tmp', 'Temperamento')}${sth('market', 'salary', 'Salário', 'num')}<th class="num" title="Luvas + salário nas rodadas da temporada">Custo na temporada</th><th class="num">Caixa depois</th><th>Orçamento</th><th></th></tr></thead><tbody>` +
         fa.map((p) => {
           const fee = signingFee(p), emerg = me.cash < fee && seasonBlockers(L).includes(p.elem), can = !full && (me.cash >= fee || emerg);
-          return `<tr><td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td><td class="num pot">${p.pot}</td>
+          return `<tr><td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
             ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
             <td class="num pop">${r0(p.st.pop)}</td>
             <td>${tmpLabel(p.st.tmp)} <span style="color:var(--muted)">${p.st.tmp}</span></td>
             <td class="num">${yen(salary(p))}</td>
+            ${(() => { const f = fitOf(fee, salary(p)); return `<td class="num">${yen(f.cost)}</td><td class="num ${f.after < 0 ? 'neg' : ''}">${yen(f.after)}</td><td><span class="fit ${f.ok ? 'ok' : 'no'}">${f.ok ? 'Cabe' : 'Não cabe'}</span></td>`; })()}
             <td><button class="btn sm" type="button" data-sign="${p.id}"${can ? '' : ' disabled'}${emerg ? ' title="Contratação de emergência: falta este elemento no elenco; o caixa fica no vermelho"' : ''}>${emerg ? 'Emergência' : 'Contratar'} · ${yen(fee)}</button></td></tr>`;
         }).join('') + '</tbody>';
       // benders dos outros times
       $('othersDiv').value = othersFilter.div; $('othersAvail').checked = othersFilter.avail;
       let pool = L.teams.filter((t) => t.idx !== L.user && (othersFilter.div === 'all' || t.div === +othersFilter.div)).flatMap((t) => t.roster.map((p) => ({ p, t, c: canBuy(L, p.id) })));
       if (othersFilter.avail) pool = pool.filter((x) => x.c.ok || x.c.why === 'Caixa insuficiente' || x.c.why === 'Elenco cheio');
+      if (budgetOnly) pool = pool.filter((x) => fitOf(valueOf(L, x.p), wageOf(x.p)).ok);
       const rows = sortRows(pool, 'others', Object.assign({}, ...Object.entries(benderGetters).map(([k, g]) => ({ [k]: (x) => g(x.p) })),
         { team: (x) => x.t.name, value: (x) => valueOf(L, x.p), tie: (a, b) => ovr(b.p.st) - ovr(a.p.st) }));
-      $('othersTbl').innerHTML = `<thead><tr>${sth('others', 'team', 'Time')}${sth('others', 'elem', 'Elemento')}${sth('others', 'name', 'Bender')}${sth('others', 'ovr', 'Nota', 'num')}${sth('others', 'age', 'Idade', 'num')}${sth('others', 'pot', 'POT', 'num', 'Potencial')}${attrHeads('others')}${sth('others', 'pop', 'POP', 'num', 'Popularidade')}${sth('others', 'tmp', 'Temperamento')}${sth('others', 'salary', 'Salário', 'num')}${sth('others', 'contract', 'Contrato')}${sth('others', 'value', 'Valor', 'num', 'Valor de mercado')}<th></th></tr></thead><tbody>` +
+      $('othersTbl').innerHTML = `<thead><tr>${sth('others', 'team', 'Time')}${sth('others', 'elem', 'Elemento')}${sth('others', 'name', 'Bender')}${sth('others', 'ovr', 'Nota', 'num')}${sth('others', 'age', 'Idade', 'num')}${attrHeads('others')}${sth('others', 'pop', 'POP', 'num', 'Popularidade')}${sth('others', 'tmp', 'Temperamento')}${sth('others', 'salary', 'Salário', 'num')}${sth('others', 'contract', 'Contrato')}${sth('others', 'value', 'Valor', 'num', 'Valor de mercado')}<th class="num">Caixa depois</th><th>Orçamento</th><th></th></tr></thead><tbody>` +
         (rows.length ? rows.map(({ p, t, c }) => `<tr><td><span class="dot" style="background:${t.color}"></span>${esc(t.short)}</td>
-          <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}${t.starters[p.elem] === p.id ? ' <small class="hint">titular</small>' : ''}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td><td class="num pot">${p.pot}</td>
+          <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}${t.starters[p.elem] === p.id ? ' <small class="hint">titular</small>' : ''}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
           ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
           <td class="num pop">${r0(p.st.pop)}</td>
           <td>${tmpLabel(p.st.tmp)} <span style="color:var(--muted)">${p.st.tmp}</span></td>
           <td class="num">${yen(wageOf(p))}</td><td>${contractCell(p)}</td><td class="num">${yen(valueOf(L, p))}</td>
+          ${(() => { const f = fitOf(valueOf(L, p), wageOf(p)); return `<td class="num ${f.after < 0 ? 'neg' : ''}">${yen(f.after)}</td><td><span class="fit ${f.ok ? 'ok' : 'no'}">${f.ok ? 'Cabe' : 'Não cabe'}</span></td>`; })()}
           <td><button class="btn sm" type="button" data-buy="${p.id}"${c.ok ? '' : ` disabled title="${esc(c.why)}"`}>${c.ok ? 'Comprar' : esc(c.why || 'Indisponível')}</button></td></tr>`).join('')
-          : `<tr><td colspan="16" class="hint">Nenhum bender disponível com esses filtros.</td></tr>`) + '</tbody>';
+          : `<tr><td colspan="18" class="hint">Nenhum bender disponível com esses filtros.</td></tr>`) + '</tbody>';
     }
 
     // ---- classificações (a do seu time primeiro) ----
@@ -1991,11 +2323,14 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <li><b>Partida:</b> jogue ou pule para o resultado. Entre os rounds você ajusta a tática.</li>
       <li><b>Fim da temporada:</b> playoffs, acesso e rebaixamento, propostas de outros times e a janela de transferências.</li></ol>
       <p>A diretoria acompanha tudo: a barra de confiança aqui na Central mostra como está a sua situação.</p>`],
-    roster: ['Elenco e treino', `<ul>
-      <li>Só os <b>titulares</b> jogam; os reservas recuperam energia e podem fazer eventos.</li>
+    roster: ['Elenco', `<ul>
+      <li>Só os <b>titulares</b> jogam, um de cada elemento. Na <b>Escalação</b>, use "Escalar no lugar de…" para pôr um reserva em quadra.</li>
+      <li>Clique num bender da tabela para ver a <b>ficha</b>: atributos, o gráfico de competências e a evolução de cada atributo ao longo da temporada.</li>
+      <li>Os reservas não jogam, mas recuperam mais energia e podem fazer eventos.</li></ul>`],
+    train: ['Treino', `<ul>
       <li><b>Treinar</b> evolui um atributo, mas gasta energia e aumenta o estresse. <b>Descansar</b> recupera os dois.</li>
       <li>Cansado treina e joga pior; estressado decide pior e pode desobedecer. Alterne treino e descanso.</li>
-      <li>Jovens evoluem mais rápido. Perto do <b>potencial (POT)</b>, o treino quase não rende.</li>
+      <li>Jovens evoluem mais rápido. Com o tempo, cada bender chega ao seu limite e o treino passa a render pouco.</li>
       <li><b>Treino em equipe</b> aplica o mesmo plano para todos; <b>individual</b> deixa escolher bender a bender.</li></ul>`],
     market: ['Mercado', `<ul>
       <li>Na <b>pré-temporada</b> abrem os agentes livres e a <b>janela de transferências</b>, que anda em etapas.</li>
@@ -2009,7 +2344,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <li>Metas em aberto deixam os benders um pouco mais estressados.</li></ul>`],
     finance: ['Finanças', `<ul>
       <li>Os patrocínios não pagam a folha inteira: <b>prêmios, metas e eventos</b> fecham a conta.</li>
-      <li>Caixa no vermelho reduz a confiança da diretoria.</li></ul>`],
+      <li>Caixa no vermelho reduz a confiança da diretoria.</li>
+      <li>A <b>folha salarial</b> mostra salário, contrato e valor de cada bender. Contratos encerrados são renovados aqui, na pré-temporada.</li></ul>`],
     table: ['Classificação', `<ul>
       <li>Cada divisão tem 8 times e 14 rodadas, em turno e returno: cada confronto acontece uma vez em cada casa. Os 4 primeiros vão às semifinais.</li>
       <li>Entre duas divisões, sobem o campeão de baixo e o melhor dos outros; caem os 2 últimos de cima.</li></ul>`],
@@ -2048,10 +2384,12 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     if (e.target.id === 'teamPlan') { L.teamPlan = e.target.value; save(); renderHub(); return; }
     if (e.target.id === 'othersDiv') { othersFilter.div = e.target.value; renderHub(); return; }
     if (e.target.id === 'othersAvail') { othersFilter.avail = e.target.checked; renderHub(); return; }
+    if (e.target.dataset.budget !== undefined) { budgetOnly = e.target.checked; renderHub(); return; }
     const id = e.target.dataset.plan; if (!id) return;
     const p = L.teams[L.user].roster.find((q) => q.id === +id); if (p) { p.plan = e.target.value; save(); renderHub(); } // atualiza vagas dos eventos
   });
   $('viewHub').addEventListener('click', (e) => {
+    { const row = e.target.closest('[data-pick]'); if (row && L && !e.target.closest('button, select, a')) { selBender = +row.dataset.pick; renderHub(); return; } }
     const t = e.target.closest('button'); if (!t || !L) return;
     const me = L.teams[L.user];
     if (t.dataset.page) { showPage(t.dataset.page); window.scrollTo(0, 0); return; }
@@ -2085,6 +2423,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   function playLeagueMatch() {
     mode = 'league';
     const { H, defs: d } = leagueDefs();
+    { const f = userFixture(L); curRival = L.teams[f.h === L.user ? f.a : f.h]; }
     showView('viewMatch');
     setupMatch(d, H.arena, aiCoach);
     paused = false;
@@ -2105,7 +2444,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     if (!paused && !atBreak()) {
       acc += dt * speed;
       let n = 0;
-      while (acc >= DT && n < 800) { step(match); acc -= DT; n++; }
+      while (acc >= DT && n < 800) { step(match); sampleRound(); acc -= DT; n++; }
       if (n >= 800) acc = 0;
       for (const ev of match.events) handle(ev);
       match.events.length = 0;

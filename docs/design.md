@@ -64,6 +64,12 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
 - Cada time tem **até 5 benders** e precisa ter **pelo menos 1 de cada elemento** (água, terra, fogo). ✅
 - Em cada partida jogam **3 titulares, um por elemento**. O jogador escolhe os titulares. ✅
 - O elenco só muda durante a **janela de transferências**. ✅
+- **Aba Elenco** (v0.11) ✅
+  - **Escalação:** um quadro por elemento com o titular (nota, energia, estresse) e os reservas daquele elemento, cada um com o botão "Escalar no lugar de [titular]". Na tabela, o titular tem a etiqueta Titular e o reserva tem o botão Escalar.
+  - **Ficha do bender:** clique em qualquer linha da tabela. Mostra idade, temperamento e popularidade, o **gráfico de competências** (radar dos 6 atributos, de 30 a 100, comparando o início da temporada com agora), a lista de atributos com o ganho na temporada e a **evolução semana a semana** (uma coluna por rodada; ▲ nas semanas em que o atributo subiu; cor mais forte conforme o crescimento acumulado).
+  - O histórico é guardado só para os benders do seu time, a partir do início da temporada. Na pré-temporada, a ficha mostra só os valores atuais.
+- **Aba Finanças · Folha salarial** (v0.11.1): salário, contrato e valor de mercado de cada bender (com Nota, Idade e Popularidade), o total da folha por rodada e na temporada, e a renovação dos contratos encerrados. Essas colunas saíram do Elenco. ✅
+- **Aba Treino** (v0.11): tipo de treino (equipe ou individual), plano de cada bender e eventos da semana, separado do elenco. ✅
 
 ---
 
@@ -148,7 +154,8 @@ Os patrocinadores são marcas inventadas do universo (lojas, fábricas e serviç
 - **A cada etapa:** os times da IA negociam, cerca de 30% dos agentes livres saem e entram novos, e chegam até **3 ofertas** pelos benders do técnico.
 - O técnico pode:
   - **Contratar agentes livres**, pagando as luvas.
-  - **Comprar benders de outros times** (de qualquer divisão), pagando o **valor de mercado**. O vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 3 no elenco.
+  - **Orçamento no mercado** (v0.11): o topo do mercado mostra caixa, folha e patrocínios por rodada e o saldo fixo. Cada bender mostra o caixa depois da compra e se **cabe no orçamento** (o caixa paga o preço e ainda cobre o salário dele nas 14 rodadas); os agentes livres também mostram o custo na temporada (luvas + salário). O filtro "Só quem cabe no orçamento" vale para as duas listas. ✅
+- **Comprar benders de outros times** (de qualquer divisão), pagando o **valor de mercado**. O vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 3 no elenco.
   - **Vender** um bender direto, recebendo **80% do valor de mercado**, para o time com vaga e caixa que mais ganharia com ele.
   - **Aceitar ou recusar ofertas da IA.** As ofertas vão de 95% a 130% do valor (a maioria acima), e aparecem quando o bender seria titular no time interessado (chance alta) ou um bom reserva (chance baixa).
   - **Dispensar** um bender: ele vira agente livre, sem custo nem receita.
@@ -218,7 +225,8 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
   - **A partir dos 30:** declínio de cerca de 0,9 ponto por ano acima de 29 na Agilidade (com acaso), um pouco menos em Poder, metade na Firmeza e 30% na Precisão; ganham +0,5 em Leitura e Disciplina.
   - **Aposentadoria:** a partir dos 33 anos, com chance de 25% (+25% por ano a mais); aos 37, todos param. Os nomes dos aposentados voltam a ficar disponíveis.
 
-**Potencial (POT)**
+**Potencial (oculto)**
+- **O técnico não vê o potencial** (v0.11): ele existe e continua regendo o treino, o amadurecimento, o valor de mercado e as apostas da IA, mas não aparece em nenhuma tela. O Guia explica apenas que cada bender tem um limite de evolução, percebido quando o treino passa a render pouco.
 - A nota máxima que o bender pode alcançar. Na geração: até 20 anos, nota + 8 a 20; até 23, + 4 a 13; até 26, + 1 a 6; acima, + 0 a 2.
 - O potencial **nunca sobe**. Ao alcançar o potencial, o treino rende só 15%; com 2 pontos acima dele, o treino para de render. Após o declínio, o potencial cai junto com a nota.
 
@@ -375,7 +383,10 @@ Os atributos vão de 35 a 99. ✅
 - Quem cai pela borda do fundo cai na água e está fora do round. Derrubar os três é **nocaute** e encerra a partida na hora.
 - Rounds de 3 minutos, melhor de 3.
 - Vence o round quem avançou mais. Se a linha estiver no centro, vence quem tem os jogadores mais à frente. Empate total vira **duelo 1 contra 1** numa plataforma circular no centro.
-- **Faltas** (pisar além da linha, golpe acima dos ombros) mandam o infrator uma zona para trás.
+- **Faltas** (pisar além da linha, golpe acima dos ombros) mandam o infrator uma zona para trás. ✅
+  - **Infrator já na Zona 3** (v0.11.2): quem recua é o **aliado mais à frente** (o vivo, em quadra, com a zona mais avançada).
+  - **Time inteiro na Zona 3** (todos os que estão em quadra): o infrator é **suspenso por 20 segundos**. Ele fica fora da ação (não ataca, não se move e não pode ser atingido; aparece apagado na arena e com "Suspenso" no painel) e volta sozinho quando cumpre o tempo. A suspensão termina junto com o round. Um suspenso não conta como caído para o nocaute.
+  - Antes, uma falta na Zona 3 virava só uma advertência sem efeito. Em 200 partidas simuladas, a suspensão aconteceu 38 vezes (1 a cada ~5 partidas).
 
 **Elementos**
 | Elemento | Estilo |
@@ -444,17 +455,26 @@ Ataques de times opostos que se chocam no ar se anulam.
 
 ✅
 
-**Observação do rival** (na Central, junto da próxima partida)
+**Observação do rival** (na Central, junto da próxima partida, e na partida pelo botão **Rival**)
 - Últimos 5 resultados do rival na temporada.
 - Tendência do técnico rival, conforme o estilo: postura e formação iniciais, instruções típicas e o que faz quando está perdendo (as mesmas regras que o técnico da IA segue).
 - Energia e estresse médios dos titulares do rival e do seu time.
 - Titulares do rival com nota, Poder, Firmeza, Agilidade, temperamento, energia e estresse; marcados o **mais perigoso** (maior Poder) e a **estrela** (maior nota).
+
+**Resumo do round** (no intervalo da partida, v0.11) ✅
+- Abre sozinho no intervalo antes do round 2 e do round 3; o botão **Resumo do round** reabre, "Ver a arena" fecha e "Começar round" segue o jogo. Tem atalho para o **Guia**.
+- **Mapa de calor** de cada time: onde os benders passaram o round (grade de 30 × 10 sobre a arena, amostrada a cada 0,25 s), com as zonas e a linha do centro.
+- **Território ao longo do round:** gráfico da linha de frente (em zonas) do ponto de vista do seu time.
+- **Comparação do round:** acertos, precisão, empurrões, derrubadas na água, esquivas, bloqueios e faltas, seu time contra o rival.
+- **Leituras do round:** até 4 observações tiradas dos números (bender mais empurrado, rival que mais empurrou, faltas, precisão baixa, desobediência), cada uma com uma sugestão de instrução.
+- **Tabela** de cada bender no round: acertos (precisão), empurrões, derrubadas, vezes que foi empurrado, esquivas e faltas.
 
 **Relatório da sua partida** (nos resultados da rodada, tanto jogando quanto em "Simular rápido")
 - **Destaque** da partida: pontuação = empurrões × 5 + quedas causadas × 10 + acertos × 0,03 + bloqueios × 0,02 + esquivas × 0,01 − faltas × 2 (acertos, bloqueios e esquivas são muito numerosos e pesam pouco).
 - **Round a round:** quem venceu e como, e a tática dos dois times naquele round (postura, formação, escolha de alvo e instruções individuais).
 - **Estatísticas** de cada bender dos dois times: acertos, precisão, empurrões, quedas causadas, esquivas, bloqueios, faltas, desobediências e estado de estresse.
 - **Alertas:** muitas faltas do seu time (3 ou mais), desobediências e benders que jogaram estressados (50 ou mais).
+- **Guia em janela** (v0.11): na primeira vez que o técnico entra no jogo, o conteúdo da aba Guia abre numa janela, com o aviso de que ele fica sempre na aba Guia. O botão Guia da partida abre a mesma janela. ✅
 - **Guia (aba da central):** atributos, estados do bender e uma seção **Táticas da partida** que explica cada postura, escolha de alvo, formação e instrução individual, além da desobediência. ✅
 - **Histórico de temporadas:** ver 6b. 💡 (gráficos de evolução de atributos e caixa)
 
@@ -479,6 +499,9 @@ Ataques de times opostos que se chocam no ar se anulam.
   - **Canto inferior esquerdo:** narração como um chat (a mensagem mais nova embaixo; se o técnico rolar para cima para ler, a rolagem não pula).
   - **Canto inferior direito:** controles (começar/pausar, velocidade, pular para o resultado, som, Regras). As regras, a legenda e o laboratório (partida avulsa) abrem num painel por cima.
   - Na partida avulsa, os dois times são do técnico, então os dois painéis têm os controles.
+  - Cada painel de time tem um botão para **minimizar** (fica só o nome) e expandir; a escolha é lembrada neste navegador. Ajuda em telas menores. (v0.11)
+  - O painel **Regras** mostra só as regras da partida (zonas, quedas, rounds, alcance, faltas) e a legenda; atributos, táticas e instruções ficam no Guia. (v0.11.1)
+  - Botões **Guia** (abre o guia em janela e pausa a partida) e **Rival** (observação do rival, só na liga). (v0.11)
 - **Tipografia:** títulos e destaques em Big Shoulders Display; textos em Work Sans. (Uma fonte pixel art própria foi testada na v0.9 e deixada de lado por enquanto.)
 - **Futuro:** pixel art, com o Teamfight Manager 2 como referência visual. Os sprites só precisam olhar para um lado (o outro é espelhado). 💡
 
@@ -530,6 +553,9 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.11.2 / Doc, 04/11/2026**: faltas na Zona 3 recuam o aliado mais à frente; com o time inteiro na Zona 3, o infrator fica 20 segundos fora.
+- **v0.11.1 / Doc, 04/11/2026**: Regras da partida sem repetir o Guia; salário, contrato e valor vão para Finanças (folha salarial); seletores do treino com a mesma largura.
+- **v0.11 / Doc, 04/11/2026**: abas Elenco e Treino separadas; ficha do bender com gráfico de competências e evolução semana a semana; escalação mais clara; potencial oculto; guia em janela; rival e resumo do round (mapa de calor, gráficos, leituras) na partida; painéis minimizáveis; orçamento no mercado.
 - **v0.10 / Doc, 03/11/2026**: turno e returno (14 rodadas); treino, popularidade, fama e confiança valem metade por partida; metas de patrocínio ajustadas; recuperação natural de estresse −4 por semana.
 - **Doc, 03/11/2026**: Guia ganha a seção Táticas da partida.
 - **v0.9 / Doc, 03/11/2026**: nome do jogo passa a ser Sport Bend Manager; botão da janela de transferências no cabeçalho, ao lado de Recomeçar (tipografia pixel art testada e revertida).

@@ -1,5 +1,6 @@
 // ================= SIMULAÇÃO (independente da tela) =================
 const ZW = 100, AL = 600, AW = 300, PR = 12, ROUND_TIME = 180, DT = 1 / 60;
+const SUSPENSION = 20; // segundos fora por falta com o time todo na Zona 3
 const TB_R = 78, TB_TIME = 45;
 
 const ELEM = {
@@ -138,7 +139,7 @@ function resetRound(m) {
   for (const t of m.teams) {
     t.limit = AL / 2;
     t.players.forEach((p, i) => {
-      p.alive = true; p.active = true; p.fallT = 0;
+      p.alive = true; p.active = true; p.fallT = 0; p.susp = 0; // suspensão acaba com o round
       p.limitD = AL / 2; p.backEdge = AL / 2 - ZW;
       p.laneF = (i + 1) / 4;
       p.x = px(t.idx, AL / 2 - 22); p.y = laneToY(m.arena, p.laneF, p.x); p.laneY = p.y;
@@ -303,6 +304,11 @@ function vulnerability(o) {
 
 function updatePlayer(m, p) {
   if (!p.alive) { p.fallT += DT; return; }
+  if (p.susp > 0) { // suspenso: fora da ação até cumprir o tempo
+    p.susp -= DT;
+    if (p.susp <= 0) { p.susp = 0; p.active = true; emit(m, 'back', { pid: p.id, team: p.team, x: p.x, y: p.y, text: `${p.name} cumpriu a suspensão e volta ao jogo.` }); }
+    return;
+  }
   if (!p.active) return;
   const team = m.teams[p.team];
   const inTb = m.mode === 'tb';
@@ -525,14 +531,25 @@ function hit(m, pr, o) {
 function foul(m, p, kind, victim) {
   p.stats.fouls++;
   const why = kind === 'linha' ? 'passou da linha da zona' : `acertou ${victim ? victim.name : 'o rival'} acima dos ombros`;
+  const recua = (q) => {
+    q.limitD -= ZW; q.backEdge = Math.min(q.backEdge, q.limitD - ZW);
+    if (dOf(q) > q.limitD - 1) q.x = px(q.team, q.limitD - 12);
+  };
   if (p.limitD > ZW) {
-    p.limitD -= ZW; p.backEdge = Math.min(p.backEdge, p.limitD - ZW);
-    const d = dOf(p);
-    if (d > p.limitD - 1) p.x = px(p.team, p.limitD - 12);
+    recua(p);
     emit(m, 'foul', { pid: p.id, team: p.team, x: p.x, y: p.y, text: `Falta! ${p.name} ${why}. Recua uma zona.` });
-  } else {
-    emit(m, 'foul', { pid: p.id, team: p.team, x: p.x, y: p.y, text: `Falta! ${p.name} ${why}. Advertência.` });
+    return;
   }
+  // o infrator já está na Zona 3: quem paga é o aliado mais à frente
+  const ally = m.teams[p.team].players.filter((q) => q !== p && q.alive && q.active && q.limitD > ZW).sort((a, b) => b.limitD - a.limitD)[0];
+  if (ally) {
+    recua(ally);
+    emit(m, 'foul', { pid: p.id, team: p.team, x: p.x, y: p.y, text: `Falta! ${p.name} ${why}. Como está na Zona 3, ${ally.name}, mais à frente, recua uma zona.` });
+    return;
+  }
+  // o time inteiro na Zona 3: o infrator fica 20 segundos fora
+  p.susp = SUSPENSION; p.active = false; p.stats.susp = (p.stats.susp || 0) + 1;
+  emit(m, 'foul', { pid: p.id, team: p.team, x: p.x, y: p.y, text: `Falta! ${p.name} ${why}. Com o time todo na Zona 3, fica ${SUSPENSION} segundos fora.` });
 }
 
 function checkAdvance(m) {

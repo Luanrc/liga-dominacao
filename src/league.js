@@ -441,6 +441,15 @@ const STYLE_TENDENCY = {
   def: { posture: 'def', formation: 'open', instr: 'a terra protege os companheiros e o fogo mantém distância' },
 };
 
+// histórico de atributos dos benders do técnico ao longo da temporada (para o gráfico de evolução)
+function snapHistory(L, reset) {
+  for (const p of userTeam(L).roster) {
+    if (reset || !p.hist) p.hist = [];
+    const snap = { w: reset ? 0 : p.hist.length ? p.hist[p.hist.length - 1].w + 1 : 0 };
+    for (const k of TRAINABLE) snap[k] = Math.round(p.st[k] * 10) / 10;
+    p.hist.push(snap);
+  }
+}
 function startSeason(L) {
   const me = L.teams[L.user];
   if (L.phase !== 'preseason' || seasonBlockers(L).length) return false;
@@ -454,6 +463,7 @@ function startSeason(L) {
   // última rodada de negócios da IA antes de fechar a janela
   aiWindowMoves(L, rngOf(L));
   for (const t of L.teams) if (t.idx !== L.user) autoStarters(t);
+  snapHistory(L, true);
   L.window.offers = [];
   L.coach.expect = expectedPos(L, L.user);
   L.coach.conf = Math.max(40, Math.min(70, Math.round(CONF.start + (L.coach.rep - 30) * 0.3)));
@@ -503,6 +513,7 @@ function finishWeek(L, userMatch) {
     } else t.cash += aiIncome(t);
   }
   const gains = applyTraining(L, played, money, result);
+  snapHistory(L, false);
   L.events = makeEvents(L, rngOf(L));
   L.results.push(res);
   const confBefore = L.coach.conf;
