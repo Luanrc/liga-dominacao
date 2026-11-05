@@ -629,6 +629,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.20.5 / Doc, 05/11/2026**: lesão em partida com alerta como o da falta (texto LESÃO, apito e anel vermelho no bender) e um selo de lesão (círculo vermelho com cruz) ao lado do nome do bender machucado até ele ser substituído.
 - **v0.20.4 / Doc, 05/11/2026**: a Observação do rival sai do quadro Próxima partida e ganha um quadro próprio logo abaixo, com o nome do rival (na cor dele) no título.
 - **v0.20.3 / Doc, 05/11/2026**: "Simular rápido" e "Recomeçar" juntos à direita do botão principal.
 - **v0.20.2 / Doc, 05/11/2026**: "Simular rápido" e "Recomeçar" com menos destaque (sem fundo nem borda, texto apagado).

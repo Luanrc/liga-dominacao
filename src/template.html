@@ -507,7 +507,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.20.4 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.20.5 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -1093,7 +1093,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       case 'foul':
         float(sp[0], sp[1] - 26, 'FALTA', '#ffd34d'); addLog(ev.text, ev.team); sfx.whistle(); break;
       case 'back': addLog(ev.text, ev.team); break;
-      case 'injury': float(sp[0], sp[1] - 30, 'LESÃO', '#ff6b7a'); addLog(ev.text, ev.team, true); break;
+      // lesão: alerta como o da falta (texto + apito) e um anel vermelho no bender; o selo fica sobre ele até ser trocado
+      case 'injury': float(sp[0], sp[1] - 30, 'LESÃO', '#ff6b7a'); ring(sp[0], sp[1] - 10, '#ff6b7a', 6, 70, 0.7); addLog(ev.text, ev.team, true); sfx.whistle(); break;
       case 'sub': addLog(ev.text, ev.team, true); break;
       case 'readplan': if (!match.teams[ev.team].auto && match.teams.some((t) => t.auto)) addLog('Seus três benders estão com a mesma instrução: o time fica previsível neste round.', ev.team, true); break;
       case 'block':
@@ -1401,6 +1402,13 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     ctx.font = '600 12px "Work Sans", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillText(p.name, nx + 1, ny + 1);
     ctx.fillStyle = '#efe8d8'; ctx.fillText(p.name, nx, ny);
+    if (p.injured) {
+      // selo de lesão: círculo vermelho com cruz branca, à esquerda do nome
+      const bx = nx - ctx.measureText(p.name).width / 2 - 11, by = ny - 7;
+      ctx.fillStyle = '#c8414f'; ctx.strokeStyle = 'rgba(0,0,0,.55)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(bx, by, 7, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#fff'; ctx.fillRect(bx - 1.6, by - 4.5, 3.2, 9); ctx.fillRect(bx - 4.5, by - 1.6, 9, 3.2);
+    }
   }
 
   // queda: o bender sai pela borda do fundo, despenca com gravidade e só então espirra água
