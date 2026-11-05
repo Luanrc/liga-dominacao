@@ -507,7 +507,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.20.3 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.20.4 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -567,6 +567,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 
     <div class="page" data-page="home">
       <section class="panel" id="nextPanel"></section>
+      <section class="panel" id="scoutHubPanel" hidden></section>
       <section class="panel" id="reportPanel" hidden></section>
     </div>
 
@@ -2643,11 +2644,11 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     const f = formOf(L, idx);
     return f.length ? f.map((x) => `<span class="badge ${x === 'V' ? 'w' : 'l'}">${x}</span>`).join(' ') : '<span class="hint">sem jogos ainda</span>';
   }
-  function scoutHtml(rival, me) {
+  function scoutHtml(rival, me, noTitle) {
     const T = STYLE_TENDENCY[rival.style], st = starters(rival), mine = starters(me);
     const danger = st.reduce((b, p) => (p.st.pow > b.st.pow ? p : b), st[0]), star = st.reduce((b, p) => (ovr(p.st) > ovr(b.st) ? p : b), st[0]);
     const avg = (a, k) => r0(a.reduce((x, p) => x + (p[k] || 0), 0) / a.length);
-    return `<h3 class="sub">Observação do rival</h3>
+    return `${noTitle ? '' : '<h3 class="sub">Observação do rival</h3>'}
       <div class="scout">
         <div><span class="hint">Últimos jogos</span><div>${formBadges(rival.idx)}</div></div>
         <div><span class="hint">Técnico (estilo ${STYLES[rival.style].toLowerCase()})</span>
@@ -2699,6 +2700,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 
     // ---- próxima etapa ----
     const np = $('nextPanel'), f = userFixture(L);
+    $('scoutHubPanel').hidden = true; // só aparece quando há próxima partida
     const fired = L.coach.fired;
     if (fired && fired.when === 'mid') {
       np.innerHTML = `<h2>Você foi demitido</h2>
@@ -2760,7 +2762,10 @@ details summary { cursor: pointer; margin-bottom: 6px; }
           <div class="r"><div class="sn" style="color:${A.color}">${esc(A.name)}</div><div class="facts">Nota ${teamOVR(A)} · ${A.rec.w}V ${A.rec.l}D</div></div>
         </div>
         ${L.day === 'sun' && L.weekLog ? weekLogHtml(L.weekLog) : ''}
-        ${scoutHtml(rival, me)}`;
+`;
+      // observação do rival num quadro próprio, com o nome do rival no título
+      $('scoutHubPanel').hidden = false;
+      $('scoutHubPanel').innerHTML = `<h2>Observação do rival · <span style="color:${rival.color}">${esc(rival.name)}</span></h2>${scoutHtml(rival, me, true)}`;
       // os botões da partida ficam no cabeçalho, visíveis em todas as páginas da central
       // segunda: o técnico decide e avança a semana; domingo: dia de jogo
       const sunday = L.day === 'sun';
