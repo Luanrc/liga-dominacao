@@ -629,6 +629,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.17.6 / Doc, 04/11/2026**: na instrução Marcar, cada rival aparece com o símbolo do elemento (● água, ■ terra, ▲ fogo) na cor do elemento.
 - **v0.17.5 / Doc, 04/11/2026**: nomes da próxima partida mais perto do ×.
 - **v0.17.4 / Doc, 04/11/2026**: nomes dos times centralizados no quadro da próxima partida.
 - **v0.17.3 / Doc, 04/11/2026**: a partida continua com a aba em segundo plano (um relógio de reserva avança a simulação pelo tempo real e para no intervalo e na escolha do duelista, como em primeiro plano).

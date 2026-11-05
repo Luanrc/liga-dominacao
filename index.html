@@ -493,7 +493,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.17.5 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.17.6 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -3624,6 +3624,11 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   }
   // selo curto da instrução sobre o bender (o nome completo está na lista ao lado)
   const INS_GLYPH = { press: '↑', distance: '↓', aggr: '+', caut: '−', protect: '◆', mark: '◎' };
+  // opção "Marcar": símbolo do elemento antes do nome (● água, ■ terra, ▲ fogo), na cor do elemento
+  const ELEM_GLYPH = { water: '●', earth: '■', fire: '▲' }, ELEM_TXT = { water: '#4aa3ff', earth: '#7ec35a', fire: '#ff7a3c' };
+  function markOpt(p, o) {
+    return `<option value="mark:${o.id}" style="color:${ELEM_TXT[o.elem]}"${p.instr === 'mark:' + o.id ? ' selected' : ''}>${ELEM_GLYPH[o.elem]} Marcar ${esc(o.name)}</option>`;
+  }
   function placeTokens(animate) {
     const t = match.teams[prepTeam], pitch = $('prepPitch'), here = new Set(t.players.map((p) => String(p.id)));
     // quem saiu de quadra desce e some
@@ -3673,7 +3678,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     $('prepFm').innerHTML = Object.entries(FORMATION).map(([k, v]) => `<button type="button" data-fm="${k}" aria-pressed="${k === t.formation}">${FM_ICON[k]}${v}</button>`).join('');
     const foes = match.teams[1 - ti].players;
     const insOpts = (p) => Object.entries(INSTR).map(([k, v]) => `<option value="${k}"${k === p.instr ? ' selected' : ''}>${v}</option>`).join('') +
-      `<optgroup label="Marcar">${foes.map((o) => `<option value="mark:${o.id}"${p.instr === 'mark:' + o.id ? ' selected' : ''}>Marcar ${esc(o.name)}</option>`).join('')}</optgroup>`;
+      `<optgroup label="Marcar">${foes.map((o) => markOpt(p, o)).join('')}</optgroup>`;
     const canSub = canSubstitute(match);
     $('prepRows').innerHTML = t.players.map((p) => `<tr data-mref="${p.ref ?? ''}" data-drop="row:${p.id}"${canSub ? ` data-drag="sub:${p.id}"` : ''}>
       <td>${icon(p.elem)} <b>${esc(p.name)}</b> <span class="hint">${ELN[p.elem]}</span>${p.injured ? '<span class="inj-tag" title="Joga com Poder, Agilidade e Firmeza reduzidos até ser substituído">Lesionado</span>' : ''}</td>
@@ -3822,7 +3827,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       const fmOpts = Object.entries(FORMATION).map(([k, v]) => `<option value="${k}"${k === t.formation ? ' selected' : ''}>${v}</option>`).join('');
       const foes = match.teams[1 - ti].players;
       const insOpts = (p) => Object.entries(INSTR).map(([k, v]) => `<option value="${k}"${k === p.instr ? ' selected' : ''}>${v}</option>`).join('') +
-        foes.map((o) => `<option value="mark:${o.id}"${p.instr === 'mark:' + o.id ? ' selected' : ''}>Marcar ${o.name}</option>`).join('');
+        foes.map((o) => markOpt(p, o)).join('');
       card.innerHTML = `<div class="hud-th"><div class="tc-name">${t.name}</div><button class="hud-min" type="button" data-min="${ti}" title="Minimizar ou expandir o painel" aria-label="Minimizar ou expandir o painel">${hudMin[ti] ? '+' : '–'}</button></div>
         <p class="lock" id="lock${ti}"></p>
         <div class="tactics">
