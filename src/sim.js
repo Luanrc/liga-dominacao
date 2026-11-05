@@ -77,7 +77,7 @@ const FORMATION = {
 };
 // Instruções individuais, dadas no intervalo e válidas para o round
 const INSTR = {
-  none:     'Sem instrução',
+  none:     'Padrão',
   press:    'Pressionar',
   distance: 'Manter distância',
   aggr:     'Mais agressivo',

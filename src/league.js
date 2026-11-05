@@ -81,7 +81,8 @@ const EVENTS = {
   praca:      { name: 'Exibição na praça',              req: 0,  slots: 2,  base: 200, perPop: 6, energy: 8,  pop: 2, always: true, phys: true },
   radio:      { name: 'Comercial de rádio',             req: 40, slots: 1,  base: 600, perPop: 20, energy: 6,  pop: 3 },
   autografos: { name: 'Sessão de autógrafos',           req: 25, slots: 2,  base: 300, perPop: 14, energy: 8,  pop: 2 },
-  beneficente:{ name: 'Evento beneficente',             req: 0,  slots: 2,  base: 0,   perPop: 0,  energy: 10, pop: 6 },
+  // beneficente não paga, mas é o que mais dá popularidade ao bender e (v0.19) dá fama ao time: metade de uma vitória
+  beneficente:{ name: 'Evento beneficente',             req: 0,  slots: 2,  base: 0,   perPop: 0,  energy: 10, pop: 6, fame: 0.75 },
   festival:   { name: 'Festival da Cidade República',   req: 50, slots: 3,  base: 500, perPop: 18, energy: 14, pop: 4, phys: true },
   jornal:     { name: 'Entrevista ao jornal',           req: 30, slots: 1,  base: 200, perPop: 8,  energy: 3,  pop: 3 },
   escola:     { name: 'Aula numa escola de dominação',  req: 0,  slots: 1,  base: 400, perPop: 4,  energy: 10, pop: 3, phys: true },
@@ -626,7 +627,7 @@ function runWeekDays(L) {
           if (E && L.events.includes(ev) && p.st.pop >= E.req && taken[ev] < E.slots && !(E.phys && isInjured(p))) {
             taken[ev]++;
             const inc = eventIncome(L, p, ev);
-            t.cash += inc; p.energy = Math.max(0, p.energy - E.energy); addPop(p, E.pop * PER_MATCH); addStress(p, DAY_STRESS.event); addFame(t, FAME.event * PER_MATCH);
+            t.cash += inc; p.energy = Math.max(0, p.energy - E.energy); addPop(p, E.pop * PER_MATCH); addStress(p, DAY_STRESS.event); addFame(t, (E.fame ?? FAME.event) * PER_MATCH);
             log.events.push({ name: p.name, event: E.name, amount: inc, day: d });
             continue;
           }

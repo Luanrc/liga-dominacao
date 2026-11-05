@@ -293,7 +293,21 @@ body[data-mode="league"] .sbx, body[data-mode="sandbox"] .lg { display: none !im
 .gm-note { margin: 0; padding: 8px 12px; border: 1px solid rgba(226,176,74,.4); border-radius: 6px; background: rgba(226,176,74,.08); font-size: 13px; }
 #guideBody { display: flex; flex-direction: column; gap: 14px; }
 #guideBody .panel { padding: 0; border: 0; background: none; }
-#guideModal { z-index: 80; } #benderModal { z-index: 85; } #introModal { z-index: 90; }
+#guideModal { z-index: 80; } #benderModal { z-index: 85; } #introModal { z-index: 90; } #confirmModal { z-index: 95; } #weekModal { z-index: 82; }
+.week-modal { width: min(1120px, 100%); }
+.wk-fin { margin-top: 8px; } .wk-fin .fin { max-width: 640px; }
+.wk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 10px; }
+.wk-card { background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; }
+.wk-card.on { opacity: 1; transform: none; }
+.wk-card h3 { margin: 0 0 2px; font: 700 15px var(--body); display: flex; align-items: center; gap: 6px; }
+.wk-card .wk-plan { font-size: 12px; color: var(--muted); margin-bottom: 8px; min-height: 16px; }
+.wk-row { display: grid; grid-template-columns: 92px minmax(0, 1fr) 96px; align-items: center; gap: 8px; margin: 6px 0; font-size: 12px; }
+.wk-row .lab { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
+.wk-bar { position: relative; height: 10px; border-radius: 99px; background: rgba(239,232,216,.08); overflow: hidden; }
+.wk-bar .base { position: absolute; inset: 0 auto 0 0; background: rgba(239,232,216,.32); border-radius: 99px; transition: width 1.1s cubic-bezier(.2,.8,.2,1); }
+.wk-bar .chg { position: absolute; top: 0; bottom: 0; border-radius: 99px; transition: left 1.1s cubic-bezier(.2,.8,.2,1), width 1.1s cubic-bezier(.2,.8,.2,1); min-width: 0; }
+.wk-bar .chg.up { background: #6fd08c; box-shadow: 0 0 8px rgba(111,208,140,.7); } .wk-bar .chg.down { background: #ff6b7a; box-shadow: 0 0 8px rgba(255,107,122,.6); }
+.wk-row .val { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; } .wk-row .val b.pos { color: #6fd08c; } .wk-row .val b.neg { color: #ff6b7a; } .confirm-modal { width: min(460px, 100%); } .confirm-modal p { line-height: 1.5; margin: 6px 0 4px; }
 .intro-modal { width: min(1040px, 100%); }
 .intro-modal h2 { font-size: 30px; } @media (max-width: 600px) { .intro-modal h2 { font-size: 22px; } }
 .intro-body { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 20px; align-items: start; }
@@ -318,7 +332,8 @@ body[data-mode="league"] .sbx, body[data-mode="sandbox"] .lg { display: none !im
 .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .vs { display: grid; grid-template-columns: minmax(0, 360px) auto minmax(0, 360px); justify-content: center; align-items: center; gap: 28px; }
 .vs .sn { font-family: var(--display); font-weight: 800; font-size: clamp(18px, 2.6vw, 28px); text-transform: uppercase; line-height: 1.05; }
-.vs .x { font-family: var(--display); font-weight: 800; color: var(--muted); font-size: 18px; }
+.vs .x .arena-tag { display: block; font: 500 11px var(--body); color: var(--muted); text-transform: none; letter-spacing: 0; margin-top: 2px; white-space: nowrap; }
+.vs .x { text-align: center;  font-family: var(--display); font-weight: 800; color: var(--muted); font-size: 18px; }
 .vs > div { text-align: center; } .vs .r { text-align: center; }
 .facts { font-size: 12px; color: var(--muted); margin-top: 4px; }
 .btnrow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
@@ -493,7 +508,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.17.6 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.20.1 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -621,6 +636,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     </div>
 
     <div class="page" data-page="sponsors" hidden>
+      <section class="panel" id="boardPanel"></section>
       <section class="panel" id="sponsorPanel"></section>
     </div>
 
@@ -722,14 +738,14 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         </dl>
         <h3 class="sub">Instruções individuais</h3>
         <dl class="gloss">
-          <dt>Sem instrução</dt><dd>O bender segue a tática do time.</dd>
+          <dt>Padrão</dt><dd>O bender segue a tática do time.</dd>
           <dt>Pressionar</dt><dd>Joga colado na linha, prefere alvos perto e ataca um pouco mais rápido. Em troca, esquiva menos (fica exposto) e comete bem mais faltas de linha. Combina com a terra, mais forte de perto.</dd>
           <dt>Manter distância</dt><dd>Prefere alvos longe, se movimenta mais e esquiva mais, mas ataca um pouco mais devagar. Combina com o fogo, mais forte de longe.</dd>
           <dt>Mais agressivo</dt><dd>Puxa a postura daquele bender para a agressiva, sem mudar a do time.</dd>
           <dt>Mais cauteloso</dt><dd>Puxa a postura daquele bender para a defensiva, sem mudar a do time.</dd>
           <dt>Proteger</dt><dd>Esquiva mais, mas ataca um pouco mais devagar. Na terra, também tenta erguer um disco para interceptar ataques que vão num companheiro próximo.</dd>
           <dt>Marcar um rival</dt><dd>Ataca sempre o rival escolhido, ignorando a escolha de alvo do time.</dd>
-          <dt>Mesma instrução para todos</dt><dd>Dar a mesma instrução a todos os benders em quadra deixa o time <b>previsível</b>: naquele round o rival antecipa os movimentos (o time esquiva bem menos e ataca um pouco mais devagar). Misture as instruções, ou deixe alguém sem instrução.</dd>
+          <dt>Mesma instrução para todos</dt><dd>Dar a mesma instrução a todos os benders em quadra deixa o time <b>previsível</b>: naquele round o rival antecipa os movimentos (o time esquiva bem menos e ataca um pouco mais devagar). Misture as instruções, ou deixe alguém no Padrão.</dd>
         </dl>
         </div>
       </section>
@@ -849,6 +865,12 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   </div>
   </div>
 
+  <div class="modal-back" id="confirmModal" hidden>
+    <section class="modal confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+      <h2 id="confirmTitle"></h2><p id="confirmText"></p>
+      <div class="btnrow modal-actions"><button class="btn" type="button" id="confirmNo">Cancelar</button><button class="btn primary" type="button" id="confirmYes">Confirmar</button></div>
+    </section>
+  </div>
   <div class="modal-back" id="introModal" hidden>
     <section class="modal intro-modal" role="dialog" aria-modal="true" aria-labelledby="introTitle">
       <h2 id="introTitle">Sabe como funciona a Dobra Esportiva?</h2>
@@ -862,6 +884,14 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         </div>
       </div>
       <div class="btnrow modal-actions"><button class="btn primary lgb" type="button" id="introOk">Vamos lá</button></div>
+    </section>
+  </div>
+  <div class="modal-back" id="weekModal" hidden>
+    <section class="modal week-modal" role="dialog" aria-modal="true" aria-labelledby="weekTitle">
+      <div class="gm-head"><h2 id="weekTitle">Como foi a semana</h2><button class="btn sm xbtn" id="weekClose" type="button" aria-label="Fechar">✕</button></div>
+      <p class="hint" id="weekSub"></p>
+      <div class="wk-grid" id="weekBody"></div>
+      <div class="btnrow modal-actions"><button class="btn primary" type="button" id="weekOk">Ir para o domingo</button></div>
     </section>
   </div>
   <div class="modal-back" id="benderModal" hidden>
@@ -960,7 +990,7 @@ const FORMATION = {
 };
 // Instruções individuais, dadas no intervalo e válidas para o round
 const INSTR = {
-  none:     'Sem instrução',
+  none:     'Padrão',
   press:    'Pressionar',
   distance: 'Manter distância',
   aggr:     'Mais agressivo',
@@ -1753,7 +1783,8 @@ const EVENTS = {
   praca:      { name: 'Exibição na praça',              req: 0,  slots: 2,  base: 200, perPop: 6, energy: 8,  pop: 2, always: true, phys: true },
   radio:      { name: 'Comercial de rádio',             req: 40, slots: 1,  base: 600, perPop: 20, energy: 6,  pop: 3 },
   autografos: { name: 'Sessão de autógrafos',           req: 25, slots: 2,  base: 300, perPop: 14, energy: 8,  pop: 2 },
-  beneficente:{ name: 'Evento beneficente',             req: 0,  slots: 2,  base: 0,   perPop: 0,  energy: 10, pop: 6 },
+  // beneficente não paga, mas é o que mais dá popularidade ao bender e (v0.19) dá fama ao time: metade de uma vitória
+  beneficente:{ name: 'Evento beneficente',             req: 0,  slots: 2,  base: 0,   perPop: 0,  energy: 10, pop: 6, fame: 0.75 },
   festival:   { name: 'Festival da Cidade República',   req: 50, slots: 3,  base: 500, perPop: 18, energy: 14, pop: 4, phys: true },
   jornal:     { name: 'Entrevista ao jornal',           req: 30, slots: 1,  base: 200, perPop: 8,  energy: 3,  pop: 3 },
   escola:     { name: 'Aula numa escola de dominação',  req: 0,  slots: 1,  base: 400, perPop: 4,  energy: 10, pop: 3, phys: true },
@@ -2298,7 +2329,7 @@ function runWeekDays(L) {
           if (E && L.events.includes(ev) && p.st.pop >= E.req && taken[ev] < E.slots && !(E.phys && isInjured(p))) {
             taken[ev]++;
             const inc = eventIncome(L, p, ev);
-            t.cash += inc; p.energy = Math.max(0, p.energy - E.energy); addPop(p, E.pop * PER_MATCH); addStress(p, DAY_STRESS.event); addFame(t, FAME.event * PER_MATCH);
+            t.cash += inc; p.energy = Math.max(0, p.energy - E.energy); addPop(p, E.pop * PER_MATCH); addStress(p, DAY_STRESS.event); addFame(t, (E.fame ?? FAME.event) * PER_MATCH);
             log.events.push({ name: p.name, event: E.name, amount: inc, day: d });
             continue;
           }
@@ -3561,8 +3592,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       <text x="4" y="12" fill="#9d9bb6" font-size="9">seu time à frente</text><text x="4" y="${H - 4}" fill="#9d9bb6" font-size="9">rival à frente</text>
       <text x="${W - 4}" y="${H - 4}" fill="#9d9bb6" font-size="9" text-anchor="end">3:00 de round</text></svg>`;
   }
-  function renderBreak() {
-    const r = match.round - 1, R = recs[r]; if (!R) return false;
+  function renderBreak(final) {
+    const r = final ? match.round : match.round - 1, R = recs[r]; if (!R) return false;
     const me = mode === 'league' ? Math.max(0, match.teams.findIndex((t) => !t.auto)) : 0, op = 1 - me;
     const d = (p) => { const a = p.stats, b = R.start[p.id] || {}; const o = {}; for (const k of Object.keys(a)) o[k] = (a[k] || 0) - (b[k] || 0); o.pushedTaken = R.pushed[p.id] || 0; o.fell = R.fell[p.id] || 0; return o; };
     const rows = match.teams.map((t) => t.players.map((p) => ({ p, s: d(p) })));
@@ -3577,7 +3608,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const mostPushed = rows[me].slice().sort((a, b) => b.s.pushedTaken - a.s.pushedTaken)[0];
     if (mostPushed && mostPushed.s.pushedTaken >= 2) reads.push(`<b>${esc(mostPushed.p.name)}</b> foi empurrado ${mostPushed.s.pushedTaken} vezes. Proteger ou Mais cauteloso ajudam a segurar a linha; na Escalonada, quem fica na frente aguenta mais.`);
     const threat = rows[op].slice().sort((a, b) => (b.s.pushes + b.s.falls * 2) - (a.s.pushes + a.s.falls * 2))[0];
-    if (threat && threat.s.pushes + threat.s.falls >= 2) reads.push(`<b>${esc(threat.p.name)}</b> (rival) empurrou ${threat.s.pushes} vez${threat.s.pushes === 1 ? '' : 'es'}. Dá para mandar alguém Marcar ${esc(threat.p.name)} ou escolher alvo "Foco no mais perigoso".`);
+    if (threat && threat.s.pushes + threat.s.falls >= 2) reads.push(`<b>${esc(threat.p.name)}</b> (rival) ${[threat.s.pushes ? `empurrou ${threat.s.pushes} vez${threat.s.pushes === 1 ? '' : 'es'}` : '', threat.s.falls ? `derrubou ${threat.s.falls} na água` : ''].filter(Boolean).join(' e ')}. Dá para mandar alguém Marcar ${esc(threat.p.name)} ou escolher alvo "Foco no mais perigoso".`);
     const foul = rows[me].slice().sort((a, b) => b.s.fouls - a.s.fouls)[0];
     if (foul && foul.s.fouls >= 2) reads.push(`<b>${esc(foul.p.name)}</b> cometeu ${foul.s.fouls} faltas. Pressionar e postura Agressiva aumentam as faltas; Disciplina baixa também.`);
     const cold = rows[me].filter((x) => x.s.shots >= 8).sort((a, b) => a.s.hits / a.s.shots - b.s.hits / b.s.shots)[0];
@@ -3588,8 +3619,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const prow = (ti) => rows[ti].map(({ p, s }) => `<tr><td><span class="dot" style="background:${T[ti].color}"></span>${icon(p.elem)} ${esc(p.name)}</td><td class="num">${s.hits}<span class="hint"> (${s.shots ? Math.round(s.hits / s.shots * 100) : 0}%)</span></td>
       <td class="num">${s.pushes}</td><td class="num">${s.falls}</td><td class="num">${s.pushedTaken}${s.fell ? ' <span class="hint">· caiu</span>' : ''}</td><td class="num">${s.dodges}</td><td class="num">${s.fouls}</td></tr>`).join('');
     const w = T[me].roundWins, lw = T[op].roundWins, last = match.roundLog && match.roundLog[match.roundLog.length - 1];
-    $('breakTitle').textContent = `Resumo do round ${r}`;
-    $('breakBody').innerHTML = `<p class="hint">Placar em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. Feche este resumo no ✕ para ajustar a tática na Preparação; dá para reabri-lo em "Resumo do round".</p>
+    $('breakTitle').textContent = final ? `Resumo do round ${r} · fim de partida` : `Resumo do round ${r}`;
+    $('breakBody').innerHTML = `<p class="hint">${final ? `Placar final em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. ${esc(T[match.winner].name)} vence${match.winReason === 'ko' ? ' por nocaute' : ''}.` : `Placar em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. Feche este resumo no ✕ para ajustar a tática na Preparação; dá para reabri-lo em "Resumo do round".`}</p>
       <div class="brk-grid">
         <div class="brk-card"><h3>Onde ${esc(T[me].name)} jogou</h3>${heatSvg(R, me)}</div>
         <div class="brk-card"><h3>Onde ${esc(T[op].name)} jogou</h3>${heatSvg(R, op)}</div>
@@ -3884,9 +3915,11 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     $('hud').classList.toggle('break', open);
     syncPrep(open);
     if (match.mode === 'tbPick' && match.chooser) renderDuelPick(); else if (!$('duelPanel').hidden) $('duelPanel').hidden = true;
-    $('breakBtn').hidden = !(open && recs[match.round - 1]);
+    $('breakBtn').hidden = !((open && recs[match.round - 1]) || (over && recs[match.round]));
     if (open && match.round > 1 && breakShown < match.round && recs[match.round - 1]) { breakShown = match.round; if (renderBreak()) $('breakPanel').hidden = false; }
-    if (!open && !$('breakPanel').hidden) $('breakPanel').hidden = true;
+    // fim de partida: abre o resumo do último round jogado (nocaute ou não)
+    if (over && breakShown !== 'over' && recs[match.round]) { breakShown = 'over'; if (renderBreak(true)) $('breakPanel').hidden = false; }
+    if (!open && !over && !$('breakPanel').hidden) $('breakPanel').hidden = true;
     $('playBtn').textContent = open ? `Começar round ${match.round}` : paused ? 'Continuar' : 'Pausar';
     $('playBtn').hidden = mode === 'league' && over;
     $('finishBtn').hidden = !(mode === 'league' && over);
@@ -3930,7 +3963,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   const toggleInfo = (show) => { $('infoPanel').hidden = !show; $('infoBtn').setAttribute('aria-expanded', show ? 'true' : 'false'); };
   $('infoBtn').addEventListener('click', () => toggleInfo($('infoPanel').hidden));
   $('guideBtn').addEventListener('click', openGuide);
-  $('breakBtn').addEventListener('click', () => { if ($('breakPanel').hidden) { if (renderBreak()) $('breakPanel').hidden = false; } else $('breakPanel').hidden = true; });
+  $('breakBtn').addEventListener('click', () => { if ($('breakPanel').hidden) { if (renderBreak(match.mode === 'over')) $('breakPanel').hidden = false; } else $('breakPanel').hidden = true; });
   $('breakClose').addEventListener('click', () => { $('breakPanel').hidden = true; });
   $('breakGuide').addEventListener('click', openGuide);
   $('scoutBtn').addEventListener('click', () => {
@@ -3956,25 +3989,27 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const b = $('finishBtn');
     b.disabled = true; b.textContent = 'Simulando a rodada…';
     setTimeout(() => {
+      const me = L.teams[L.user], snap = weekSnap(me), fame0 = me.fame;
       finishWeek(L, match); save(); hubPage = 'home';
       b.disabled = false; b.textContent = 'Concluir rodada';
-      renderHub();
+      renderHub(); openWeekModal(snap, fame0, true);
     }, 30);
   });
   // avança a partida até o fim sem animação (os intervalos usam a tática atual)
-  $('skipBtn').addEventListener('click', () => {
+  $('skipBtn').addEventListener('click', () => confirmAct('Pular para o fim da partida?', 'A partida será simulada até o fim sem animação, usando a tática atual nos intervalos e escolhendo o duelista automaticamente. Não dá para voltar.', 'Pular para o fim', skipToEnd));
+  function skipToEnd() {
     const snd = soundOn; soundOn = false;
     match.chooser = false; $('duelPanel').hidden = true; // ao pular, o duelista é escolhido automaticamente
     let n = 0;
     while (match.mode !== 'over' && n++ < 200000) {
       if (atBreak()) readyRound = match.round;
-      step(match);
+      step(match); sampleRound(); // mantém o mapa de calor e o território para o resumo do fim de partida
       for (const ev of match.events) if (/^(push|water|advance|foul|start|tiebreak|roundEnd|over)$/.test(ev.type)) handle(ev);
       match.events.length = 0;
     }
     soundOn = snd; particles = []; floats = []; flashBanner = null; falls.clear();
     paused = false; syncTacticsLock(); updateBoard(); updateRosters();
-  });
+  }
   $('rematchBtn').addEventListener('click', () => { newMatch(false); paused = false; $('playBtn').textContent = 'Pausar'; });
   $('newBtn').addEventListener('click', () => { newMatch(true); paused = false; $('playBtn').textContent = 'Pausar'; });
   $('soundBtn').addEventListener('click', () => {
@@ -4127,6 +4162,19 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     if (L) { L.tips = L.tips || {}; if (!L.tips.guide) { L.tips.guide = 1; save(); } }
     if (guidePaused) { guidePaused = false; paused = false; syncTacticsLock(); }
   }
+  // ---------- confirmação de decisões definitivas ----------
+  const CONFIRM_ON = true;
+  let confirmFn = null;
+  function confirmAct(title, text, okLabel, fn) {
+    if (!CONFIRM_ON) { fn(); return; }
+    $('confirmTitle').textContent = title; $('confirmText').innerHTML = text; $('confirmYes').textContent = okLabel || 'Confirmar';
+    confirmFn = fn; $('confirmModal').hidden = false; $('confirmYes').focus();
+  }
+  const closeConfirm = () => { $('confirmModal').hidden = true; confirmFn = null; };
+  $('confirmNo').addEventListener('click', closeConfirm);
+  $('confirmModal').addEventListener('click', (e) => { if (e.target.id === 'confirmModal') closeConfirm(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('confirmModal').hidden) closeConfirm(); });
+  $('confirmYes').addEventListener('click', () => { const f = confirmFn; closeConfirm(); if (f) f(); });
   // ---------- abertura: só na primeira vez que o jogo abre, antes de tudo ----------
   const INTRO_ON = true;
   let introRaf = 0;
@@ -4185,12 +4233,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('guideModal').hidden) closeGuide(); });
   $('sandboxBtn').addEventListener('click', () => { mode = 'sandbox'; showView('viewMatch'); newMatch(true); });
   $('homeBtn').addEventListener('click', () => { mode = 'league'; renderStart(); });
-  $('restartBtn').addEventListener('click', () => {
-    const b = $('restartBtn');
-    if (b.dataset.confirm !== '1') { b.dataset.confirm = '1'; b.textContent = 'Clique de novo para apagar a temporada'; setTimeout(() => { b.dataset.confirm = ''; b.textContent = 'Recomeçar'; }, 3500); return; }
-    b.dataset.confirm = ''; b.textContent = 'Recomeçar';
-    clearSave(); L = null; renderStart();
-  });
+  $('restartBtn').addEventListener('click', () => confirmAct('Recomeçar o jogo?', 'Todo o progresso salvo (temporadas, elenco, caixa e reputação) será apagado e você volta para a escolha de time.', 'Apagar e recomeçar', () => { clearSave(); L = null; renderStart(); }));
 
   function phaseLabel() {
     const dia = ['season', 'semis', 'final'].includes(L.phase) ? (L.day === 'sun' ? ' · domingo (dia de jogo)' : ' · segunda-feira') : '';
@@ -4404,6 +4447,78 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   }
   onDrag('lres', (k, d) => { const r = lineupPair(k, d); return r === null ? null : !!r; }, (k, d) => { const r = lineupPair(k, d); if (r) { L.teams[L.user].starters[r.inn.elem] = r.inn.id; selBender = r.inn.id; save(); renderHub(); } });
   onDrag('lst', (k, d) => { const r = lineupPair(k, d); return r === null ? null : !!r; }, (k, d) => { const r = lineupPair(k, d); if (r) { L.teams[L.user].starters[r.inn.elem] = r.inn.id; selBender = r.inn.id; save(); renderHub(); } });
+  const anyBender = (id) => L.freeAgents.find((q) => q.id === id) || L.teams.flatMap((t) => t.roster).find((q) => q.id === id);
+  // ---------- janela da semana: gráfico animado do que mudou em cada bender ----------
+  // retrato do elenco (valores antes de uma etapa); weekDone diz se a semana já tinha acontecido (então só o domingo muda)
+  function weekSnap(me) {
+    const a = me.roster.map((p) => ({ id: p.id, st: { ...p.st }, energy: p.energy, stress: p.stress || 0, inj: p.inj || 0 }));
+    a.weekDone = L.day === 'sun'; a.find = Array.prototype.find; return a;
+  }
+  const WEEK_MODAL_ON = true;
+  function openWeekModal(snap, fame0, round) {
+    if (!WEEK_MODAL_ON) return;
+    const me = L.teams[L.user], fmt = (v) => String(Math.round(v * 10) / 10).replace('.', ',');
+    const rp = round ? L.lastReport : null, w = round ? { gains: snap.weekDone ? [] : rp.gains, events: snap.weekDone ? [] : rp.money.events || [], injuries: [], subs: [] } : (L.weekLog || { gains: [], events: [], injuries: [] });
+    const mr = rp && rp.results.find((x) => x.detail), played = new Set(mr ? mr.detail.players.flat().map((x) => x.ref) : []);
+    const evOf = (name) => w.events.find((e) => e.name === name);
+    const cards = me.roster.slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st)).map((p, i) => {
+      const o = snap.find((x) => x.id === p.id); if (!o) return '';
+      const g = w.gains.find((x) => x.id === p.id), ev = evOf(p.name);
+      const plan = [round && snap.weekDone ? '' : g ? `Quarta: treinou ${ATTRS.find((a) => a[0] === g.k)[2]}` : 'Quarta: descansou', ev ? `${DAY_NAME[ev.day]}: ${esc(ev.event)}${ev.amount ? ` (${yen(ev.amount)})` : ''}` : '',
+        round ? (played.has(p.id) ? 'Domingo: jogou' : 'Domingo: no banco') : ''].filter(Boolean).join(' · ');
+      // linhas: atributo treinado, popularidade (se mudou), energia e estresse; subir estresse é ruim
+      const rows = [];
+      if (g) rows.push([ATTRS.find((a) => a[0] === g.k)[2], o.st[g.k], p.st[g.k], false]);
+      if (Math.abs((p.st.pop || 0) - (o.st.pop || 0)) >= 0.05) rows.push(['Popularidade', o.st.pop, p.st.pop, false]);
+      rows.push(['Energia', o.energy, p.energy, false], ['Estresse', o.stress, p.stress || 0, true]);
+      const rowHtml = rows.map(([lab, a, b, inv]) => {
+        const d = b - a, good = inv ? d < 0 : d > 0, cls = Math.abs(d) < 0.05 ? '' : good ? 'up' : 'down';
+        return `<div class="wk-row"><span class="lab">${lab}</span><div class="wk-bar" data-a="${a}" data-b="${b}"><span class="base" style="width:${Math.min(100, a)}%"></span><span class="chg ${cls}" style="left:${Math.min(100, a)}%;width:0"></span></div>
+          <span class="val">${cls ? `${fmt(a)} <b class="${good ? 'pos' : 'neg'}">${d > 0 ? '↑' : '↓'}</b> ${fmt(b)} <b class="${good ? 'pos' : 'neg'}">${d > 0 ? '+' : ''}${fmt(d)}</b>` : fmt(b)}</span></div>`;
+      }).join('');
+      const newInj = (p.inj || 0) > 0 && !(o.inj > 0);
+      return `<div class="wk-card" style="transition-delay:${i * 70}ms"><h3>${icon(p.elem)} ${esc(p.name)} ${isStarter(L, p) ? '<span class="badge-st">Titular</span>' : ''}${newInj ? `<span class="inj-tag">Lesão ${p.inj} sem.</span>` : ''}</h3>
+        <div class="wk-plan">${plan}</div>${rowHtml}</div>`;
+    }).join('');
+    const df = Math.round((me.fame - fame0) * 10) / 10;
+    $('weekTitle').textContent = round ? 'Como foi a rodada' : 'Como foi a semana'; $('weekOk').textContent = round ? 'Continuar' : 'Ir para o domingo';
+    if (round) {
+      const res = mr ? (mr.winner === L.user ? 'Vitória' : 'Derrota') + ` por ${mr.score[mr.h === L.user ? 0 : 1]}–${mr.score[mr.h === L.user ? 1 : 0]}${mr.ko ? ' (nocaute)' : ''} contra ${esc(L.teams[mr.h === L.user ? mr.a : mr.h].name)}.` : '';
+      $('weekSub').innerHTML = `${res} ${snap.weekDone ? 'Domingo: jogo, salários e patrocínios.' : 'A semana toda: treino, eventos, jogo, salários e patrocínios.'}<div class="wk-fin">${reportFinHtml(rp)}</div>`;
+    } else
+    $('weekSub').innerHTML = `Segunda a sábado: treino de quarta, eventos e dias livres. ${df ? `Popularidade do time: ${fmt(fame0)} <b class="${df > 0 ? 'pos' : 'neg'}">${df > 0 ? '↑' : '↓'}</b> ${fmt(me.fame)} <b class="${df > 0 ? 'pos' : 'neg'}">${df > 0 ? '+' : ''}${fmt(df)}</b>.` : ''}${(w.subs || []).map((x) => ` ${esc(x.in)} assume o lugar de ${esc(x.out)} como titular.`).join('')}`;
+    $('weekBody').innerHTML = cards;
+    $('weekModal').hidden = false;
+    // anima: os cartões entram e as barras andam do valor antigo para o novo
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      $('weekBody').querySelectorAll('.wk-card').forEach((c) => c.classList.add('on'));
+      $('weekBody').querySelectorAll('.wk-bar').forEach((bar, k) => setTimeout(() => {
+        const a = Math.min(100, +bar.dataset.a), b = Math.min(100, +bar.dataset.b), chg = bar.querySelector('.chg'), base = bar.querySelector('.base');
+        if (b >= a) { chg.style.left = a + '%'; chg.style.width = Math.max(b - a, b > a ? 1.2 : 0) + '%'; }
+        else { base.style.width = b + '%'; chg.style.left = b + '%'; chg.style.width = (a - b) + '%'; }
+      }, 350 + Math.floor(k / 3) * 60));
+    }));
+  }
+  const closeWeek = () => { $('weekModal').hidden = true; };
+  $('weekClose').addEventListener('click', closeWeek); $('weekOk').addEventListener('click', closeWeek);
+  $('weekModal').addEventListener('click', (e) => { if (e.target.id === 'weekModal') closeWeek(); });
+  // finanças, caixa, popularidade, confiança e lesões da rodada (Central e janela da rodada)
+  // seta de direção: ↑ subiu (verde), ↓ caiu (vermelho), = igual
+  const dirArrow = (a, b) => (Math.abs(b - a) < 0.05 ? '<span class="hint">=</span>' : b > a ? '<b class="pos">↑</b>' : '<b class="neg">↓</b>');
+  function reportFinHtml(rep) {
+    const m = rep.money;
+    return `<dl class="fin">
+          <dt>Patrocínios</dt><dd>${signed(m.sponsors)}</dd>
+          <dt>Salários</dt><dd>${signed(-m.salaries)}</dd>
+          ${m.prizes && !m.bonuses.some((b) => b.prize) ? `<dt>Prêmio da vitória</dt><dd>${signed(m.prizes)}</dd>` : ''}
+          ${m.events && m.events.length ? `<dt>Eventos (${m.events.map((e) => `${esc(e.name)}: ${esc(e.event)}`).join(', ')})</dt><dd class="pos">${signed(m.events.reduce((a, e) => a + e.amount, 0))}</dd>` : ''}
+          ${m.bonuses.map((b) => `<dt>${esc(b.label)}</dt><dd class="pos">${signed(b.amount)}</dd>`).join('')}
+          <dt>Caixa</dt><dd>${yen(rep.cashBefore)} ${dirArrow(rep.cashBefore, rep.cashAfter)} <b>${yen(rep.cashAfter)}</b></dd>
+          ${rep.fameBefore !== undefined ? `<dt>Popularidade do time</dt><dd>${r0(rep.fameBefore)} ${dirArrow(rep.fameBefore, rep.fameAfter)} <b>${r0(rep.fameAfter)}</b></dd>` : ''}
+          ${rep.confBefore !== undefined && rep.confAfter !== undefined && rep.confBefore !== rep.confAfter ? `<dt>Confiança da diretoria</dt><dd>${r0(rep.confBefore)} ${dirArrow(rep.confBefore, rep.confAfter)} <b>${r0(rep.confAfter)}</b></dd>` : ''}
+        </dl>
+        ${rep.injuries && (rep.injuries.mine.length || (rep.injuries.subs || []).length) ? `<div class="gains"><span>Lesões:</span>${rep.injuries.mine.map((x) => x.healed ? `<span>${esc(x.name)} <b class="pos">recuperado</b></span>` : `<span>${esc(x.name)} <b class="neg">fora ${x.weeks} sem.</b> (${x.where})</span>`).join('')}${(rep.injuries.subs || []).map((x) => `<span>${esc(x.in)} assume o lugar de ${esc(x.out)}</span>`).join('')}</div>` : ''}`;
+  }
   function weekLogHtml(w) {
     const items = [];
     if (w.gains.length) items.push(`<b>Treino de quarta:</b> ${w.gains.map((g) => `${esc(g.name)} +${String(g.d).replace('.', ',')} ${ATTRS.find((a) => a[0] === g.k)[1]}`).join(' · ')}`);
@@ -4544,8 +4659,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
         ${W.news.length ? `<h3 class="sub">Notícias do mercado</h3><ul class="news">${W.news.slice(0, 10).map((n) => `<li><span class="hint">Etapa ${n.step}</span> ${esc(n.text)}</li>`).join('')}</ul>` : ''}`;
       $('headAction').innerHTML = last ? `<button class="btn primary" id="seasonBtn" type="button"${ok ? '' : ' disabled title="Resolva os itens da lista antes de começar"'}>Começar temporada</button>`
         : `<button class="btn primary" id="stepBtn" type="button">Encerrar etapa ${W.step} da janela</button>`;
-      if ($('seasonBtn')) $('seasonBtn').onclick = () => { if (startSeason(L)) { save(); renderHub(); } };
-      if ($('stepBtn')) $('stepBtn').onclick = () => { if (advanceWindow(L)) { save(); renderHub(); } };
+      if ($('seasonBtn')) $('seasonBtn').onclick = () => confirmAct('Começar a temporada?', 'A janela de transferências fecha: não dá mais para contratar, comprar, vender ou dispensar até a próxima pré-temporada.', 'Começar temporada', () => { if (startSeason(L)) { save(); renderHub(); } });
+      if ($('stepBtn')) $('stepBtn').onclick = () => confirmAct(`Encerrar a etapa ${W.step} da janela?`, 'As ofertas e os agentes livres desta etapa mudam, e os outros times fazem as contratações deles. Não dá para voltar a esta etapa.', 'Encerrar etapa', () => { if (advanceWindow(L)) { save(); renderHub(); } });
     } else if (L.phase === 'done') {
       const ch = L.divs.map((x) => L.teams[x.champion]), mv = L.movement;
       const mine = mv.up.includes(me.idx) ? `Seu time conseguiu o acesso à ${DIVS[me.div - 1].name}!` : mv.down.includes(me.idx) ? `Seu time foi rebaixado para a ${DIVS[me.div + 1].name}.` : '';
@@ -4565,18 +4680,15 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
         ${L.history && L.history.length ? `<h3 class="sub">Suas temporadas</h3><ul class="news">${L.history.map((h) => `<li>Temporada ${h.season}${h.team ? ` (${esc(h.team)})` : ''}: ${h.pos}º na ${DIVS[h.div].name}, ${h.w}V ${h.l}D${h.champ ? ' · campeão' : ''}${h.moved === 'up' ? ' · subiu' : h.moved === 'down' ? ' · caiu' : ''}${h.fired ? ' · demitido' : ''}</li>`).join('')}${(L.coach.firedLog || []).filter((x) => x.when === 'mid').map((x) => `<li>Temporada ${x.season}: demitido de ${esc(x.team)} na rodada ${x.week}</li>`).join('')}</ul>` : ''}
         <div class="btnrow"><button class="btn primary" id="newSeasonBtn" type="button"${fired && (L.coach.accepted === null || L.coach.accepted === undefined) ? ' disabled' : ''}>Avançar para a temporada ${L.season + 1}${L.coach.accepted !== null && L.coach.accepted !== undefined ? ` no comando de ${esc(L.teams[L.coach.accepted].name)}` : ''}</button>
         ${fired && (L.coach.accepted === null || L.coach.accepted === undefined) ? '<span class="hint">Escolha um time para continuar.</span>' : ''}</div>`;
-      $('newSeasonBtn').onclick = () => { if (newSeason(L)) { save(); hubPage = 'home'; renderHub(); } };
+      $('newSeasonBtn').onclick = () => confirmAct('Avançar para a próxima temporada?', 'A temporada atual se encerra: contratos que terminaram saem, os benders envelhecem e começa a nova pré-temporada.', 'Avançar', () => { if (newSeason(L)) { save(); hubPage = 'home'; renderHub(); } });
     } else if (f) {
       const H = L.teams[f.h], A = L.teams[f.a], rival = f.h === L.user ? A : H;
       np.innerHTML = `<h2>Próxima partida · ${f.stage}</h2>
         <div class="vs">
           <div><div class="sn" style="color:${H.color}">${esc(H.name)}</div><div class="facts">Nota ${teamOVR(H)} · ${H.rec.w}V ${H.rec.l}D</div></div>
-          <div class="x">×</div>
+          <div class="x">×<small class="arena-tag">Arena ${H.arena === 'round' ? 'redonda' : 'quadrada'}</small></div>
           <div class="r"><div class="sn" style="color:${A.color}">${esc(A.name)}</div><div class="facts">Nota ${teamOVR(A)} · ${A.rec.w}V ${A.rec.l}D</div></div>
         </div>
-        <p class="hint">Arena ${H.arena === 'round' ? 'redonda' : 'quadrada'} (casa de ${esc(H.name)}). ${L.day === 'sun' ? 'Domingo, dia de jogo: o treino e os eventos da semana já aconteceram.' : 'A partida é no domingo. Decida hoje (segunda) o treino de quarta e os eventos da semana: o cansaço deles já pesa neste jogo.'}${L.coach.expect ? ` Expectativa da diretoria: <b>${L.coach.expect}º lugar</b> (${BOARD_GOAL(me.div, L.coach.expect).toLowerCase()}).` : ''}</p>
-        ${L.coach.conf !== undefined && L.phase === 'season' ? `<div class="conf"><span class="hint">Confiança da diretoria</span> ${confBar(L.coach.conf)} <b>${confLabel(L.coach.conf)}</b>
-          ${L.coach.conf < 25 ? `<span class="neg">A diretoria está perdendo a paciência${L.week >= 3 ? ': se chegar a zero, você é demitido' : ''}.</span>` : ''}</div>` : ''}
         ${L.day === 'sun' && L.weekLog ? weekLogHtml(L.weekLog) : ''}
         ${scoutHtml(rival, me)}`;
       // os botões da partida ficam no cabeçalho, visíveis em todas as páginas da central
@@ -4584,8 +4696,12 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       const sunday = L.day === 'sun';
       $('headAction').innerHTML = `<button class="btn" id="quickBtn" type="button">Simular rápido</button> ${sunday ? '<button class="btn primary" id="playMatchBtn" type="button">Ir para a partida</button>' : '<button class="btn primary" id="toSundayBtn" type="button">Avançar para domingo</button>'}`;
       if (sunday) $('playMatchBtn').onclick = playLeagueMatch;
-      else $('toSundayBtn').onclick = () => { runWeekDays(L); save(); renderHub(); };
-      $('quickBtn').onclick = () => busy($('quickBtn'), () => { const m = quickUserMatch(); finishWeek(L, m); save(); hubPage = 'home'; renderHub(); });
+      else $('toSundayBtn').onclick = () => {
+        // retrato antes da semana, para mostrar o que o treino e os eventos mudaram em cada bender
+        const snap = weekSnap(me), fame0 = me.fame;
+        runWeekDays(L); save(); renderHub(); openWeekModal(snap, fame0);
+      };
+      $('quickBtn').onclick = () => confirmAct('Simular a partida sem jogar?', 'A semana e a partida acontecem de uma vez, com a tática salva e sem intervalos para você ajustar. O resultado vale para a liga.', 'Simular', () => busy($('quickBtn'), () => { const snap = weekSnap(me), fame0 = me.fame; const m = quickUserMatch(); finishWeek(L, m); save(); hubPage = 'home'; renderHub(); openWeekModal(snap, fame0, true); }));
     } else {
       np.innerHTML = `<h2>${phaseLabel()}</h2><p class="hint">Seu time não está nesta fase. Acompanhe os resultados.</p>
         <div class="btnrow"><button class="btn primary" id="simPhaseBtn" type="button">Simular ${({ semis: 'semifinais', final: 'final' })[L.phase] || 'rodada'}</button></div>`;
@@ -4618,6 +4734,11 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       </dl>
       ${me.cash < 0 ? '<p class="hint neg">Caixa negativo: contratações bloqueadas até voltar ao positivo.</p>' : ''}`;
 
+    // ---- diretoria (aba Patrocínios): expectativa e confiança ----
+    $('boardPanel').innerHTML = `<h2>Diretoria</h2>
+      ${L.coach.expect ? `<p>Expectativa para a temporada: <b>${L.coach.expect}º lugar</b> (${BOARD_GOAL(me.div, L.coach.expect).toLowerCase()}).</p>` : '<p class="hint">A diretoria define a expectativa no começo da temporada.</p>'}
+      ${L.coach.conf !== undefined && L.phase === 'season' ? `<div class="conf"><span class="hint">Confiança da diretoria</span> ${confBar(L.coach.conf)} <b>${confLabel(L.coach.conf)}</b>
+        ${L.coach.conf < 25 ? `<span class="neg">A diretoria está perdendo a paciência${L.week >= 3 ? ': se chegar a zero, você é demitido' : ''}.</span>` : ''}</div>` : ''}`;
     // ---- relatório da última rodada ----
     const rp = $('reportPanel'), rep = L.lastReport;
     rp.hidden = !rep;
@@ -4635,17 +4756,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
         <ul class="res">${mineDiv.map(line).join('')}</ul>
         ${(() => { const mr = rep.results.find((x) => x.detail); return mr ? matchReportHtml(mr) : ''; })()}
         ${L.divs.map((_, di) => di).filter((di) => di !== me.div).map((di) => { const o = other.filter((r) => r.div === di); return o.length ? `<details><summary class="hint">${DIVS[di].name}</summary><ul class="res">${o.map(line).join('')}</ul></details>` : ''; }).join('')}
-        <dl class="fin">
-          <dt>Patrocínios</dt><dd>${signed(m.sponsors)}</dd>
-          <dt>Salários</dt><dd>${signed(-m.salaries)}</dd>
-          ${m.prizes && !m.bonuses.some((b) => b.prize) ? `<dt>Prêmio da vitória</dt><dd>${signed(m.prizes)}</dd>` : ''}
-          ${m.events && m.events.length ? `<dt>Eventos (${m.events.map((e) => `${esc(e.name)}: ${esc(e.event)}`).join(', ')})</dt><dd class="pos">${signed(m.events.reduce((a, e) => a + e.amount, 0))}</dd>` : ''}
-          ${m.bonuses.map((b) => `<dt>${esc(b.label)}</dt><dd class="pos">${signed(b.amount)}</dd>`).join('')}
-          <dt>Caixa</dt><dd>${yen(rep.cashBefore)} → <b>${yen(rep.cashAfter)}</b></dd>
-          ${rep.fameBefore !== undefined ? `<dt>Popularidade do time</dt><dd>${r0(rep.fameBefore)} → <b>${r0(rep.fameAfter)}</b></dd>` : ''}
-          ${rep.confBefore !== undefined && rep.confAfter !== undefined && rep.confBefore !== rep.confAfter ? `<dt>Confiança da diretoria</dt><dd>${r0(rep.confBefore)} → <b>${r0(rep.confAfter)}</b></dd>` : ''}
-        </dl>
-        ${rep.injuries && (rep.injuries.mine.length || (rep.injuries.subs || []).length) ? `<div class="gains"><span>Lesões:</span>${rep.injuries.mine.map((x) => x.healed ? `<span>${esc(x.name)} <b class="pos">recuperado</b></span>` : `<span>${esc(x.name)} <b class="neg">fora ${x.weeks} sem.</b> (${x.where})</span>`).join('')}${(rep.injuries.subs || []).map((x) => `<span>${esc(x.in)} assume o lugar de ${esc(x.out)}</span>`).join('')}</div>` : ''}
+        ${reportFinHtml(rep)}
         ${rep.gains.length ? `<div class="gains"><span>Treino:</span>${rep.gains.map((g) => `<span>${esc(g.name)} <b>+${String(g.d).replace('.', ',')} ${ATTRS.find((a) => a[0] === g.k)[1]}</b></span>`).join('')}</div>` : ''}`;
     }
 
@@ -4664,7 +4775,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     for (const p of me.roster) if (isInjured(p)) { if (TRAINABLE.includes(p.plan)) p.plan = 'rest'; if (p.ev && EVENTS[p.ev] && EVENTS[p.ev].phys) p.ev = null; }
     const locked = L.day === 'sun', inWeek = ['season', 'semis', 'final'].includes(L.phase);
     // eventos: arraste o bender para o evento; quem não for arrastado para nenhum não faz evento (descansa nos dias livres)
-    const chip = (p) => `<span class="chip-b"${locked ? '' : ` data-drag="ev:${p.id}"`} title="${locked ? '' : 'Arraste para um evento'}">${icon(p.elem)} ${esc(p.name)} <small>${r0(p.energy)}⚡</small>${injTag(p)}${p.ev && !locked ? `<button class="x" type="button" data-unev="${p.id}" title="Tirar do evento" aria-label="Tirar ${esc(p.name)} do evento">×</button>` : ''}</span>`;
+    const chip = (p) => `<span class="chip-b"${locked ? '' : ` data-drag="ev:${p.id}"`} title="${locked ? '' : 'Arraste para um evento'}">${icon(p.elem)} ${esc(p.name)} <small title="Energia">${r0(p.energy)}⚡</small> <small title="Popularidade">${r0(p.st.pop)}★</small>${injTag(p)}${p.ev && !locked ? `<button class="x" type="button" data-unev="${p.id}" title="Tirar do evento" aria-label="Tirar ${esc(p.name)} do evento">×</button>` : ''}</span>`;
     const byElem = (a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st);
     // a faixa da semana é o quadro dos eventos: cada dia de evento recebe os benders arrastados
     { const fx = userFixture(L), rv = fx ? L.teams[fx.h === L.user ? fx.a : fx.h] : null;
@@ -4678,6 +4789,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
             `<span title="Energia gasta no dia">−${E.energy}⚡</span>`, `<span title="Vagas">${used}/${E.slots} vaga${E.slots > 1 ? 's' : ''}</span>`];
           if (E.req) tags.push(`<span title="Popularidade mínima">POP ${E.req}+</span>`);
           if (E.phys) tags.push('<span title="Lesionado não participa">físico</span>');
+          if (E.fame) tags.push('<span title="Também aumenta a popularidade do time">+ time</span>');
           return `<div class="wd ev-day${done ? ' done' : ''}" data-drop="event:${k}"><b>${DAY_NAME[d]}</b><strong>${E.name}</strong><div class="ev-tags">${tags.join('')}</div>
             <div class="ev-chips">${me.roster.filter((p) => p.ev === k).map(chip).join('')}</div></div>`;
         }
@@ -4905,17 +5017,17 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     if (t.dataset.unev) { const p = me.roster.find((q) => q.id === +t.dataset.unev); if (p) { p.ev = null; save(); renderHub(); } return; }
     if (t.dataset.m) { L.trainMode = t.dataset.m; save(); renderHub(); }
     else if (t.dataset.starter) { const p = me.roster.find((q) => q.id === +t.dataset.starter); if (p && !isInjured(p)) { me.starters[p.elem] = p.id; save(); renderHub(); } }
-    else if (t.dataset.release) { if (releasePlayer(L, +t.dataset.release)) { save(); renderHub(); } }
-    else if (t.dataset.sign) { if (signPlayer(L, +t.dataset.sign)) { save(); renderHub(); } }
-    else if (t.dataset.sponsor) { if (signSponsor(L, t.dataset.sponsor)) { save(); renderHub(); } }
-    else if (t.dataset.drop) { if (dropSponsor(L, t.dataset.drop)) { save(); renderHub(); } }
-    else if (t.dataset.takejob) { if (takeJob(L, +t.dataset.takejob)) { save(); hubPage = 'home'; renderHub(); window.scrollTo(0, 0); } }
-    else if (t.dataset.renew) { const [pid, y] = t.dataset.renew.split(':').map(Number); if (renewContract(L, pid, y)) { save(); renderHub(); } }
-    else if (t.dataset.coach) { if (chooseCoachOffer(L, +t.dataset.coach)) { save(); renderHub(); } }
-    else if (t.dataset.sell) { if (sellPlayer(L, +t.dataset.sell)) { save(); renderHub(); } }
-    else if (t.dataset.buy) { if (buyPlayer(L, +t.dataset.buy)) { save(); renderHub(); } }
-    else if (t.dataset.accept) { if (acceptOffer(L, t.dataset.accept)) { save(); renderHub(); } }
-    else if (t.dataset.decline) { if (declineOffer(L, t.dataset.decline)) { save(); renderHub(); } }
+    else if (t.dataset.release) { const p = anyBender(+t.dataset.release); confirmAct(`Dispensar ${p ? p.name : ''}?`, 'Ele sai do elenco e vira agente livre. Não dá para desfazer.', 'Dispensar', () => { if (releasePlayer(L, +t.dataset.release)) { save(); renderHub(); } }); }
+    else if (t.dataset.sign) { const p = anyBender(+t.dataset.sign); confirmAct(`Contratar ${p ? p.name : ''}?`, `As luvas (${p ? yen(signingFee(p)) : ''}) saem do caixa agora e o salário entra na folha.`, 'Contratar', () => { if (signPlayer(L, +t.dataset.sign)) { save(); renderHub(); } }); }
+    else if (t.dataset.sponsor) { confirmAct('Assinar este patrocínio?', 'O contrato fica valendo até o fim da temporada, com as metas dele.', 'Assinar', () => { if (signSponsor(L, t.dataset.sponsor)) { save(); renderHub(); } }); }
+    else if (t.dataset.drop) { confirmAct('Encerrar este patrocínio?', 'O patrocinador sai e você deixa de receber o valor e os bônus dele. Não dá para desfazer.', 'Encerrar', () => { if (dropSponsor(L, t.dataset.drop)) { save(); renderHub(); } }); }
+    else if (t.dataset.takejob) { const tm = L.teams[+t.dataset.takejob]; confirmAct(`Assumir ${tm ? tm.name : 'este time'}?`, 'Você passa a treinar este time a partir de agora.', 'Assumir', () => { if (takeJob(L, +t.dataset.takejob)) { save(); hubPage = 'home'; renderHub(); window.scrollTo(0, 0); } }); }
+    else if (t.dataset.renew) { const [pid, y] = t.dataset.renew.split(':').map(Number), p = anyBender(pid); confirmAct(`Renovar com ${p ? p.name : ''} por ${y} temporada${y > 1 ? 's' : ''}?`, 'O novo salário fica fixo até o fim do novo contrato.', 'Renovar', () => { if (renewContract(L, pid, y)) { save(); renderHub(); } }); }
+    else if (t.dataset.coach) { const tm = L.teams[+t.dataset.coach]; confirmAct(`Aceitar a proposta ${tm ? 'de ' + tm.name : ''}?`, 'Na próxima temporada você assume este time e deixa o atual.', 'Aceitar', () => { if (chooseCoachOffer(L, +t.dataset.coach)) { save(); renderHub(); } }); }
+    else if (t.dataset.sell) { const p = anyBender(+t.dataset.sell), q = sellQuote(L, +t.dataset.sell); confirmAct(`Vender ${p ? p.name : ''}?`, `Ele vai para outro time${q && q.price ? ` por ${yen(q.price)}` : ''}. Não dá para desfazer.`, 'Vender', () => { if (sellPlayer(L, +t.dataset.sell)) { save(); renderHub(); } }); }
+    else if (t.dataset.buy) { const p = anyBender(+t.dataset.buy); confirmAct(`Comprar ${p ? p.name : ''}?`, `O valor (${p ? yen(valueOf(L, p)) : ''}) sai do caixa agora e o salário entra na folha.`, 'Comprar', () => { if (buyPlayer(L, +t.dataset.buy)) { save(); renderHub(); } }); }
+    else if (t.dataset.accept) { confirmAct('Aceitar a oferta?', 'O bender é vendido para o outro time. Não dá para desfazer.', 'Aceitar', () => { if (acceptOffer(L, t.dataset.accept)) { save(); renderHub(); } }); }
+    else if (t.dataset.decline) { confirmAct('Recusar a oferta?', 'A oferta some e o time interessado não volta a fazê-la nesta etapa.', 'Recusar', () => { if (declineOffer(L, t.dataset.decline)) { save(); renderHub(); } }); }
   });
 
   // trava o botão enquanto simula (as outras partidas da rodada levam alguns instantes)
