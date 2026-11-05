@@ -203,6 +203,10 @@ canvas { display: block; }
 .btn.primary { background: var(--gold); color: var(--ink); border-color: var(--gold); }
 .btn.primary:hover { filter: brightness(1.08); }
 .btn.glow { box-shadow: 0 0 0 2px var(--gold); }
+/* botões secundários: sem fundo nem borda, texto apagado; ganham contorno só ao passar o mouse */
+.btn.quiet { background: transparent; border-color: transparent; color: var(--muted); font-weight: 500; font-size: 13px; }
+#headAction .btn.quiet { margin-left: 10px; } #restartBtn.quiet { margin-left: -4px; }
+.btn.quiet:hover { color: var(--text); border-color: var(--line); }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
 .seg button { font: 600 13px var(--body); color: var(--muted); background: var(--panel2); border: 0; padding: 8px 11px; cursor: pointer; font-variant-numeric: tabular-nums; }
 .seg button + button { border-left: 1px solid var(--line); }
@@ -508,7 +512,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.20.1 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.20.3 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -552,7 +556,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <div class="head-right">
         <div class="head-cash"><span>Caixa</span><b id="headCash">—</b></div>
         <span id="headAction"></span>
-        <button class="btn" id="restartBtn" type="button">Recomeçar</button>
+        <button class="btn quiet" id="restartBtn" type="button">Recomeçar</button>
       </div>
     </div>
     <nav class="hub-nav" id="hubNav" aria-label="Seções da central do time">
@@ -4694,7 +4698,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       // os botões da partida ficam no cabeçalho, visíveis em todas as páginas da central
       // segunda: o técnico decide e avança a semana; domingo: dia de jogo
       const sunday = L.day === 'sun';
-      $('headAction').innerHTML = `<button class="btn" id="quickBtn" type="button">Simular rápido</button> ${sunday ? '<button class="btn primary" id="playMatchBtn" type="button">Ir para a partida</button>' : '<button class="btn primary" id="toSundayBtn" type="button">Avançar para domingo</button>'}`;
+      // principal primeiro; os secundários ("Simular rápido" e "Recomeçar") ficam juntos à direita
+      $('headAction').innerHTML = `${sunday ? '<button class="btn primary" id="playMatchBtn" type="button">Ir para a partida</button>' : '<button class="btn primary" id="toSundayBtn" type="button">Avançar para domingo</button>'} <button class="btn quiet" id="quickBtn" type="button">Simular rápido</button>`;
       if (sunday) $('playMatchBtn').onclick = playLeagueMatch;
       else $('toSundayBtn').onclick = () => {
         // retrato antes da semana, para mostrar o que o treino e os eventos mudaram em cada bender
