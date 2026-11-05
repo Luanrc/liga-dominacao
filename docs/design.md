@@ -629,6 +629,8 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.17.3 / Doc, 04/11/2026**: a partida continua com a aba em segundo plano (um relógio de reserva avança a simulação pelo tempo real e para no intervalo e na escolha do duelista, como em primeiro plano).
+- **v0.17.2 / Doc, 04/11/2026**: o resumo do round fecha num ✕ (saem os botões "Ver a arena" e "Começar round" dele); a Preparação fica por trás.
 - **v0.17.1 / Doc, 04/11/2026**: a partida da abertura roda em velocidade normal (1x).
 - **v0.17 / Doc, 04/11/2026**: abertura "Sabe como funciona a Dobra Esportiva?" na primeira vez que o jogo abre, com uma partida ao vivo ao lado do texto.
 - **v0.16.9 / Doc, 04/11/2026**: na HUD de preparação, clicar num bender (boneco do campo, linha em quadra ou do banco) abre a ficha em janela.

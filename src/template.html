@@ -148,6 +148,7 @@ body.in-match { overflow: hidden; }
 .lineup2 .tbl tbody tr { cursor: pointer; } .lineup2 .tbl tbody tr.sel td { background: rgba(226,176,74,.12); } .lineup2 .tbl tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
 .lineup2 .tbl tr.bench-h td { cursor: default; }
 .tok.sel .shp { outline: 2px solid var(--gold); outline-offset: 4px; }
+.xbtn { min-width: 32px; font-size: 15px; line-height: 1; padding-left: 0; padding-right: 0; text-align: center; }
 .week-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin: 10px 0 14px; }
 .week-strip .wd { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; min-height: 64px; font-size: 12px; display: flex; flex-direction: column; gap: 3px; }
 .week-strip .wd b { font: 700 11px var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
@@ -487,7 +488,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.17.1 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.17.3 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewStart" hidden>
@@ -806,7 +807,7 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     </section>
 
     <section class="hud-info hud-wide" id="breakPanel" hidden>
-      <div class="hud-info-head"><h2 id="breakTitle">Resumo do round</h2><span class="btnrow"><button class="btn sm" id="breakGuide" type="button">Guia</button><button class="btn sm" id="breakClose" type="button">Ver a arena</button><button class="btn sm primary" id="breakStart" type="button">Começar round</button></span></div>
+      <div class="hud-info-head"><h2 id="breakTitle">Resumo do round</h2><span class="btnrow"><button class="btn sm" id="breakGuide" type="button">Guia</button><button class="btn sm xbtn" id="breakClose" type="button" aria-label="Fechar o resumo" title="Fechar o resumo">✕</button></span></div>
       <div id="breakBody"></div>
     </section>
 
@@ -1654,8 +1655,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     const prow = (ti) => rows[ti].map(({ p, s }) => `<tr><td><span class="dot" style="background:${T[ti].color}"></span>${icon(p.elem)} ${esc(p.name)}</td><td class="num">${s.hits}<span class="hint"> (${s.shots ? Math.round(s.hits / s.shots * 100) : 0}%)</span></td>
       <td class="num">${s.pushes}</td><td class="num">${s.falls}</td><td class="num">${s.pushedTaken}${s.fell ? ' <span class="hint">· caiu</span>' : ''}</td><td class="num">${s.dodges}</td><td class="num">${s.fouls}</td></tr>`).join('');
     const w = T[me].roundWins, lw = T[op].roundWins, last = match.roundLog && match.roundLog[match.roundLog.length - 1];
-    $('breakTitle').textContent = `Resumo do round ${r}`; $('breakStart').textContent = `Começar round ${match.round}`;
-    $('breakBody').innerHTML = `<p class="hint">Placar em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. Ajuste as táticas no painel do seu time (dá para fechar este resumo em "Ver a arena" e reabrir em "Resumo do round").</p>
+    $('breakTitle').textContent = `Resumo do round ${r}`;
+    $('breakBody').innerHTML = `<p class="hint">Placar em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. Feche este resumo no ✕ para ajustar a tática na Preparação; dá para reabri-lo em "Resumo do round".</p>
       <div class="brk-grid">
         <div class="brk-card"><h3>Onde ${esc(T[me].name)} jogou</h3>${heatSvg(R, me)}</div>
         <div class="brk-card"><h3>Onde ${esc(T[op].name)} jogou</h3>${heatSvg(R, op)}</div>
@@ -1993,7 +1994,6 @@ details summary { cursor: pointer; margin-bottom: 6px; }
   $('guideBtn').addEventListener('click', openGuide);
   $('breakBtn').addEventListener('click', () => { if ($('breakPanel').hidden) { if (renderBreak()) $('breakPanel').hidden = false; } else $('breakPanel').hidden = true; });
   $('breakClose').addEventListener('click', () => { $('breakPanel').hidden = true; });
-  $('breakStart').addEventListener('click', () => { $('breakPanel').hidden = true; $('playBtn').click(); });
   $('breakGuide').addEventListener('click', openGuide);
   $('scoutBtn').addEventListener('click', () => {
     if (!$('scoutPanel').hidden) { $('scoutPanel').hidden = true; return; }
@@ -3021,6 +3021,21 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     if (now - lastUi > 150) { updateBoard(); updateRosters(); syncTacticsLock(); lastUi = now; }
     requestAnimationFrame(frame);
   }
+  // em segundo plano o navegador para de desenhar (requestAnimationFrame), mas a partida continua:
+  // um relógio de reserva avança a simulação pelo tempo real e para nos mesmos pontos (intervalo, escolha do duelista)
+  function bgTick() {
+    if (!document.hidden) return;
+    const now = performance.now(), dt = Math.min(90, (now - last) / 1000); last = now;
+    if (!inMatchView || !match || paused || atBreak()) return;
+    acc += dt * speed;
+    let n = 0;
+    while (acc >= DT && n < 30000 && !atBreak() && match.mode !== 'over') { step(match); sampleRound(); acc -= DT; n++; }
+    if (atBreak() || match.mode === 'over') acc = 0;
+    for (const ev of match.events) handle(ev);
+    match.events.length = 0;
+  }
+  setInterval(bgTick, 250);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) last = performance.now(); });
   { const s = loadSave(); if (s) { L = s; renderHub(); } else renderStart(); }
   if (INTRO_ON && !introSeen()) showIntro();
   requestAnimationFrame(frame);
