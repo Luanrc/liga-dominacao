@@ -197,18 +197,19 @@ function doubleRoundRobin(ids) {
   const first = roundRobin(ids.length).map((wk) => wk.map(([a, b]) => [ids[a], ids[b]]));
   return first.concat(first.map((wk) => wk.map(([h, a]) => [a, h])));
 }
-function addDivisionTeams(L, r, di) {
+// list: [nome, sigla, índice da cor] dos times desta divisão (num jogo novo, sorteados entre os 24; sem lista, a lista fixa da divisão)
+function addDivisionTeams(L, r, di, list) {
   const D = DIVS[di], bases = D.bases.slice().sort(() => r() - 0.5), ids = [];
   // a Terceira tem elencos mais jovens: mais promessas
   const age = () => di === 2 && r() < 0.25 ? 17 + Math.floor(r() * 4) : undefined;
-  TEAM_LIST[di].forEach(([name, short], i) => {
+  (list || TEAM_LIST[di].map(([n, sh], i) => [n, sh, di * 8 + i])).forEach(([name, short, col], i) => {
     const base = bases[i], idx = L.teams.length;
     // 3 titulares, 1 reserva de cada elemento e de 0 a 3 benders a mais (mais fracos, muitas vezes jovens): elenco de 6 a 9
     const roster = ELEMS.map((e) => makePlayer(L, r, e, base, age()));
     for (const e of ELEMS) roster.push(makePlayer(L, r, e, base - 5 - Math.floor(r() * 4), age()));
     const extra = Math.floor(r() * 4);
     for (let k = 0; k < extra; k++) roster.push(makePlayer(L, r, ELEMS[Math.floor(r() * 3)], base - 9 - Math.floor(r() * 5), r() < 0.5 ? 17 + Math.floor(r() * 4) : age()));
-    L.teams.push({ idx, div: di, name, short, color: LEAGUE_COLORS[di * 8 + i], arena: r() < 0.5 ? 'round' : 'square', fame: initialFame(di, base, r),
+    L.teams.push({ idx, div: di, name, short, color: LEAGUE_COLORS[col], arena: r() < 0.5 ? 'round' : 'square', fame: initialFame(di, base, r),
       style: Object.keys(STYLES)[Math.floor(r() * 3)], targeting: ['free', 'focus', 'free'][Math.floor(r() * 3)], posture: 'bal',
       roster, starters: {}, cash: D.cash, rec: { w: 0, l: 0, rf: 0, ra: 0, ko: 0, homeL: 0 }, streak: 0, bestStreak: 0, wins: 0, kos: 0 });
     ids.push(idx);
@@ -220,8 +221,11 @@ function newLeague(seed) {
   const L = { v: 2, seed, rngState: seed, nextId: 1, usedNames: new Set(), season: 1, week: 0, phase: 'preseason', user: null,
     teams: [], divs: [], results: [], freeAgents: [], sponsorOffers: [], sponsors: [], trainMode: 'ind', teamPlan: 'rest',
     lastReport: null, movement: null, events: [] };
+  // os 24 times são sorteados entre as divisões a cada jogo novo (cada um com a sua cor)
+  const pool = TEAM_LIST.flatMap((lst, d) => lst.map(([n, sh], i) => [n, sh, d * 8 + i]));
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
   DIVS.forEach((D, di) => {
-    const ids = addDivisionTeams(L, r, di);
+    const ids = addDivisionTeams(L, r, di, pool.slice(di * 8, di * 8 + 8));
     L.divs.push({ teams: ids, schedule: doubleRoundRobin(ids), playoffs: null, champion: null });
   });
   for (const t of L.teams) autoStarters(t);
