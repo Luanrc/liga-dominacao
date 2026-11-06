@@ -883,7 +883,7 @@ function aiWindowMoves(L, r) {
     // completa o elenco com agente livre
     if (t.roster.length < MIN_ROSTER) {
       const fa = L.freeAgents.filter((p) => signingFee(p) <= Math.max(0, t.cash - 2000) || t.roster.length < MIN_ROSTER - 1).sort((a, b) => ovr(b.st) - ovr(a.st))[0];
-      if (fa) { L.freeAgents = L.freeAgents.filter((p) => p !== fa); t.cash -= signingFee(fa); hire(fa); t.roster.push(fa); autoStarters(t); news(L, `${t.name} contrata o agente livre ${fa.name}.`); }
+      if (fa) { L.freeAgents = L.freeAgents.filter((p) => p !== fa); t.cash -= signingFee(fa); hire(fa); t.roster.push(fa); autoStarters(t); news(L, `${t.name} contrata ${fa.name}, que estava sem contrato.`); }
       continue;
     }
     // de vez em quando a IA aposta numa promessa jovem
@@ -911,7 +911,7 @@ function aiWindowMoves(L, r) {
     }
     t.cash -= best.price;
     if (best.from) { best.from.cash += best.price; moveTo(L, best.p, best.from, t); news(L, `${t.name} compra ${best.p.name} de ${best.from.name} por ¥${best.price.toLocaleString('pt-BR')}.`); }
-    else { L.freeAgents = L.freeAgents.filter((p) => p !== best.p); hire(best.p); t.roster.push(best.p); autoStarters(t); news(L, `${t.name} contrata o agente livre ${best.p.name}.`); }
+    else { L.freeAgents = L.freeAgents.filter((p) => p !== best.p); hire(best.p); t.roster.push(best.p); autoStarters(t); news(L, `${t.name} contrata ${best.p.name}, que estava sem contrato.`); }
   }
 }
 function refreshFreeAgents(L, r) {
@@ -1059,7 +1059,7 @@ function ageAndContracts(L, r) {
           const worst = Math.min(...starters(t).map((q) => ovr(q.st)));
           const keep = elemCount(t, p.elem) < 2 || (p.age <= 30 && ovr(p.st) >= worst - 6) || (p.age <= 32 && ovr(p.st) >= worst);
           if (keep) { p.wage = salary(p); p.contract = 1 + Math.floor(r() * 3); }
-          else { t.roster = t.roster.filter((q) => q !== p); p.contract = 0; p.wage = 0; L.freeAgents.push(p); rep.news.push(`${t.name} não renova com ${p.name}, que vira agente livre.`); }
+          else { t.roster = t.roster.filter((q) => q !== p); p.contract = 0; p.wage = 0; L.freeAgents.push(p); rep.news.push(`${t.name} não renova com ${p.name}, que fica sem contrato.`); }
         }
       }
     }

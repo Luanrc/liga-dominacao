@@ -19,7 +19,7 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
 2. **Pré-temporada (v0.24): telas próprias, sem abas, em toda temporada** ✅
    - Um indicador no topo mostra os passos: Patrocínios › Mercado › Temporada.
    - **Patrocínios:** quadro da temporada (resultado da anterior, expectativa da diretoria, quem envelheceu ou se aposentou) e as propostas; escolhe até 2. "Seguir para o mercado" no cabeçalho (sem patrocínio, pede confirmação).
-   - **Mercado:** orçamento e ofertas recebidas no topo; abaixo, abas **Agentes livres | Água | Terra | Fogo** (v0.24.2) com a contagem de cada uma; as abas de elemento listam os benders de outros times daquele elemento, divididos em sub-abas por divisão (Primeira | Segunda | Terceira, com contagem; abre na divisão do seu time, v0.24.3), com os filtros "à venda" e orçamento. Notícias do mercado no fim. Coluna lateral: "Antes de começar" (✓ / ! / ✕ para patrocínios, elenco mínimo, contratos e ofertas) e **Seu elenco** (renovar contratos encerrados por 1, 2 ou 3 temporadas, vender e dispensar). A escalação não aparece na pré-temporada (v0.24.2): os titulares são escalados sozinhos ao começar a temporada e podem ser trocados no Elenco. "Voltar aos patrocínios" e "Começar temporada" no cabeçalho.
+   - **Mercado:** orçamento e ofertas recebidas no topo; abaixo, abas **Sem contrato | Água | Terra | Fogo** (v0.24.2) com a contagem de cada uma; as abas de elemento listam os benders de outros times daquele elemento, divididos em sub-abas por divisão (Primeira | Segunda | Terceira, com contagem; abre na divisão do seu time, v0.24.3), com os filtros "à venda" e orçamento. Notícias do mercado no fim. Coluna lateral: "Antes de começar" (✓ / ! / ✕ para patrocínios, elenco mínimo, contratos e ofertas) e **Seu elenco** (renovar contratos encerrados por 1, 2 ou 3 temporadas, vender e dispensar). A escalação não aparece na pré-temporada (v0.24.2): os titulares são escalados sozinhos ao começar a temporada e podem ser trocados no Elenco. "Voltar aos patrocínios" e "Começar temporada" no cabeçalho.
    - Durante a temporada, o cabeçalho mostra "Ir para a partida" e "Simular rápido".
    - **Abas na temporada:** Central, Elenco, Treino, Finanças, Classificação, Guia. O Mercado não aparece fora da pré-temporada. **Finanças** junta a antiga aba Patrocínios: Diretoria (expectativa e confiança), Patrocínios, Finanças e Folha salarial.
 3. **Semana da temporada** (repete a cada rodada)
@@ -67,9 +67,9 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
 
 - Cada time tem **de 6 a 9 benders** (v0.15; antes, até 5) e precisa ter **pelo menos 1 de cada elemento** (água, terra, fogo). ✅
   - Elenco inicial dos times: 3 titulares, 1 reserva de cada elemento (5 a 8 pontos de nota abaixo) e de 0 a 3 benders a mais, mais fracos e muitas vezes jovens. Média de 7,5 por time.
-  - A temporada só começa com pelo menos 6 benders (sem contar contratos encerrados). Se o caixa não pagar, o técnico ainda pode contratar agentes livres baratos (luva até ¥1.500) para chegar a 6.
+  - A temporada só começa com pelo menos 6 benders (sem contar contratos encerrados). Se o caixa não pagar, o técnico ainda pode contratar benders sem contrato baratos (luva até ¥1.500) para chegar a 6.
   - A IA completa o elenco até 6 e só vende ou dispensa acima de 6.
-  - Nomes: a lista tem 318 nomes (eram 128), o bastante para 24 elencos de até 9 mais os agentes livres.
+  - Nomes: a lista tem 318 nomes (eram 128), o bastante para 24 elencos de até 9 mais os benders sem contrato.
 - Cada partida começa com **3 titulares, um por elemento**. O jogador escolhe os titulares. ✅
 - **Banco e substituições** (v0.15): os reservas sadios ficam no banco da partida. No intervalo entre os rounds (na HUD de preparação), o técnico troca à vontade, sempre por alguém do mesmo elemento, para que os três elementos continuem em quadra. Quem entra herda a instrução de quem saiu, e quem marcava o bender que saiu passa a marcar quem entrou. Quem entra em quadra conta como quem jogou (energia, estresse, popularidade). A IA, e o técnico que pula para o resultado, trocam automaticamente quem se lesionou pelo melhor reserva sadio do elemento. ✅
 - **Lesão** (v0.15): atributo visível, "sem lesão" ou "lesionado por X semanas" (rodadas). ✅
@@ -110,7 +110,7 @@ Os valores de patrocínio e prêmios acima são os da **Primeira Divisão**. Na 
 | Gasto | Valor inicial |
 |---|---|
 | Salário de cada bender, pago a cada rodada (fixado no contrato, ver 6d) | 0,75 × ¥1.400 × ((nota − 30) ÷ 40)^1,5: nota 50 ≈ ¥370, nota 56 ≈ ¥550, nota 70 = ¥1.050, nota 80 ≈ ¥1.470 (v0.15: o fator 0,75 compensa o elenco maior) |
-| Contratar agente livre (luvas) | 2 rodadas de salário |
+| Contratar bender sem contrato (luvas) | 2 rodadas de salário |
 | Comprar bender de outro time | valor de mercado |
 
 (Valor de mercado e luvas também sobem com a popularidade do bender: ver 7b.)
@@ -168,17 +168,17 @@ Os patrocinadores são marcas inventadas do universo (lojas, fábricas e serviç
 ✅
 
 - Acontece **no início de cada temporada**, antes da 1ª rodada, em **1 etapa** (v0.24; antes eram 2).
-- **Na abertura:** os times da IA fazem as contratações e vendas deles, o mercado de agentes livres se renova e chegam até **3 ofertas** pelos benders do técnico. Assim o técnico já vê os elencos completos dos outros times.
+- **Na abertura:** os times da IA fazem as contratações e vendas deles, o mercado de benders sem contrato se renova e chegam até **3 ofertas** pelos benders do técnico. Assim o técnico já vê os elencos completos dos outros times.
 - **Ao começar a temporada:** a IA faz uma última rodada de ajustes (aparece nas notícias) e a janela fecha.
 - O técnico pode:
-  - **Contratar agentes livres**, pagando as luvas.
-  - **Orçamento no mercado** (v0.11): o topo do mercado mostra caixa, folha e patrocínios por rodada e o saldo fixo. Cada bender mostra o caixa depois da compra e se **cabe no orçamento** (o caixa paga o preço e ainda cobre o salário dele nas 14 rodadas); os agentes livres também mostram o custo na temporada (luvas + salário). O filtro "Só quem cabe no orçamento" vale para as duas listas. ✅
+  - **Contratar benders sem contrato**, pagando as luvas.
+  - **Orçamento no mercado** (v0.11): o topo do mercado mostra caixa, folha e patrocínios por rodada e o saldo fixo. Cada bender mostra o caixa depois da compra e se **cabe no orçamento** (o caixa paga o preço e ainda cobre o salário dele nas 14 rodadas); os benders sem contrato também mostram o custo na temporada (luvas + salário). O filtro "Só quem cabe no orçamento" vale para as duas listas. ✅
 - **Comprar benders de outros times** (de qualquer divisão), pagando o **valor de mercado**. O vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 3 no elenco.
   - **Vender** um bender direto, recebendo **80% do valor de mercado**, para o time com vaga e caixa que mais ganharia com ele.
   - **Aceitar ou recusar ofertas da IA.** As ofertas vão de 95% a 130% do valor (a maioria acima), e aparecem quando o bender seria titular no time interessado (chance alta) ou um bom reserva (chance baixa).
-  - **Dispensar** um bender: ele vira agente livre, sem custo nem receita.
+  - **Dispensar** um bender: ele vira bender sem contrato, sem custo nem receita.
 - Nunca é possível ficar sem bender de algum elemento.
-- **A IA negocia entre si:** completa o elenco com agentes livres quando tem menos de 6; procura reforço (agente livre ou bender de outro time da IA) para o elemento do titular mais fraco, quando acha alguém pelo menos 4 pontos de nota melhor que caiba no caixa (deixando ¥3.000 de folga); dispensa o reserva mais fraco para abrir vaga; e, **se estiver no vermelho**, vende ou dispensa o reserva mais caro.
+- **A IA negocia entre si:** completa o elenco com benders sem contrato quando tem menos de 6; procura reforço (bender sem contrato ou bender de outro time da IA) para o elemento do titular mais fraco, quando acha alguém pelo menos 4 pontos de nota melhor que caiba no caixa (deixando ¥3.000 de folga); dispensa o reserva mais fraco para abrir vaga; e, **se estiver no vermelho**, vende ou dispensa o reserva mais caro.
 - As **notícias do mercado** mostram todos os negócios da janela.
 - Fora da janela, o elenco fica travado.
 - Multa por quebra de contrato e renegociação no meio do contrato. 💡
@@ -229,7 +229,7 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 
 ## 6c-2. Contratação de emergência
 
-- Se faltar um elemento no elenco na pré-temporada e o caixa não pagar a luva, o técnico **ainda pode contratar um agente livre daquele elemento**; o caixa fica no vermelho. Assim o jogo nunca trava sem time completo.
+- Se faltar um elemento no elenco na pré-temporada e o caixa não pagar a luva, o técnico **ainda pode contratar um bender sem contrato daquele elemento**; o caixa fica no vermelho. Assim o jogo nunca trava sem time completo.
 
 ## 6d. Idade, potencial e contratos
 
@@ -252,13 +252,13 @@ Ao encerrar uma temporada, o técnico avança para a seguinte:
 
 **Contratos**
 - Cada bender tem contrato de **1 a 3 temporadas** com **salário fixo**: melhorar não aumenta o salário até a renovação.
-- Agente livre contratado: salário pedido hoje; **3 temporadas se tiver até 21 anos, 2 nos demais casos**. Comprado de outro time: mantém contrato e salário.
+- Bender sem contrato contratado: salário pedido hoje; **3 temporadas se tiver até 21 anos, 2 nos demais casos**. Comprado de outro time: mantém contrato e salário.
 - **Fim de contrato do técnico:** o bender aparece como "Encerrado" na pré-temporada. Pode ser renovado por 1, 2 ou 3 temporadas pelo salário que pede (salário de hoje × (1 + popularidade ÷ 250)). Sem renovação, **sai de graça** ao começar a temporada. Se a saída deixasse o time sem algum elemento, não dá para começar a temporada até resolver.
 - **IA:** renova quem é útil (até 30 anos e até 6 pontos abaixo do pior titular, ou até 32 anos e no nível do pior titular, ou o único do elemento); libera o resto para o mercado.
 
 **Mercado e IA**
 - O mercado sempre tem pelo menos **2 promessas** de 17 a 19 anos e 2 benders de cada elemento.
-- A IA às vezes aposta numa promessa (até 21 anos, potencial perto da nota do time) e repõe com agentes livres quem se aposentou ou saiu.
+- A IA às vezes aposta numa promessa (até 21 anos, potencial perto da nota do time) e repõe com benders sem contrato quem se aposentou ou saiu.
 
 **Equilíbrio de longo prazo** (9 temporadas simuladas): nota média dos times da Primeira Divisão estável entre 67 e 69; a Segunda sobe de ~57 para ~64 e se aproxima; idade média se estabiliza perto dos 28 anos; aposentadorias começam por volta da 4ª temporada.
 
@@ -654,11 +654,11 @@ Tela que abre antes de cada round (e entre os rounds) por cima da arena. É onde
 ## 12c. Equilíbrio com três divisões (03/11/2026)
 
 Simulação de carreiras de 8 temporadas começando na Terceira:
-- **Problema encontrado:** a renda da IA acompanhava a própria folha, então um time da Terceira sustentava elenco de Segunda; as divisões se aproximavam (Terceira de 47 para 59, Primeira caindo para 64). Também o mercado só tinha agentes livres do nível do time do jogador, e os times de cima repunham saídas com benders fracos.
+- **Problema encontrado:** a renda da IA acompanhava a própria folha, então um time da Terceira sustentava elenco de Segunda; as divisões se aproximavam (Terceira de 47 para 59, Primeira caindo para 64). Também o mercado só tinha benders sem contrato do nível do time do jogador, e os times de cima repunham saídas com benders fracos.
 - **Correções:**
   - a renda da IA tem **teto por divisão**, e a IA só contrata quem cabe nesse teto. Time no vermelho vende, e os bons benders sobem para quem pode pagar;
-  - o mercado tem sempre pelo menos 1 agente livre por elemento perto do nível de cada divisão;
-  - se faltar um agente livre à altura, a IA contrata um bender novo do nível da própria divisão.
+  - o mercado tem sempre pelo menos 1 bender sem contrato por elemento perto do nível de cada divisão;
+  - se faltar um bender sem contrato à altura, a IA contrata um bender novo do nível da própria divisão.
 - **Resultado:** notas médias estáveis em torno de **66 / 60 / 53–55**. A Terceira sobe um pouco nas primeiras temporadas (os jovens amadurecem) e depois para.
 - Um técnico passivo na Terceira fecha as contas com os 45%; com 35%, afundava no vermelho.
 
@@ -673,10 +673,11 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 ## Histórico
 
 - **v0.1**: simulação de batalha 3 contra 3, arenas redonda e quadrada, câmera a 15°.
-- **v0.2**: liga de 8 times, treino e energia, mercado de agentes livres aberto a cada rodada, atributos Leitura de jogo e Temperamento, tática travada durante o round.
-- **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
+- **v0.2**: liga de 8 times, treino e energia, mercado de benders sem contrato aberto a cada rodada, atributos Leitura de jogo e Temperamento, tática travada durante o round.
+- **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com benders sem contrato, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.25.7 / Doc, 05/11/2026**: "Agente livre" passa a se chamar "Sem contrato" em todo o jogo (aba do Mercado, selo da ficha, notícias, Guia, dicas e confirmação de dispensa).
 - **v0.25.6 / Doc, 05/11/2026**: menos texto no fim de temporada, no desempate e na janela da semana; corrige o título da janela da semana, que tinha sumido na v0.25.2 (identificador repetido com o título da aba Treino).
 - **v0.25.5 / Doc, 05/11/2026**: três dicas de primeira vez atualizadas para o fluxo novo (confiança no topo da tela, escalar arrastando, renovação no Mercado da pré-temporada).
 - **v0.25.4 / Doc, 05/11/2026**: Guia com as abas Atributos, O bender, Time e carreira e Táticas da partida; ícone do jogo ao lado de cada termo.
@@ -686,7 +687,7 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.25 / Doc, 05/11/2026**: início do "menos texto": Central e subtítulo do cabeçalho em etiquetas com ícone; observação do rival, relatório da partida e dinheiro da rodada em blocos curtos.
 - **v0.24.4 / Doc, 05/11/2026**: coluna de popularidade (POP) na tabela da aba Treino, depois dos atributos.
 - **v0.24.3 / Doc, 05/11/2026**: no Mercado, os benders de outros times ficam divididos também por divisão (sub-abas com contagem, abrindo na divisão do seu time); o seletor de divisão sai.
-- **v0.24.2 / Doc, 05/11/2026**: Mercado da pré-temporada com abas (Agentes livres, Água, Terra, Fogo); a escalação sai da coluna lateral e "Começar temporada" deixa de exigir titular definido (são escalados sozinhos).
+- **v0.24.2 / Doc, 05/11/2026**: Mercado da pré-temporada com abas (Sem contrato, Água, Terra, Fogo); a escalação sai da coluna lateral e "Começar temporada" deixa de exigir titular definido (são escalados sozinhos).
 - **v0.24.1 / Doc, 05/11/2026**: a abertura "Sabe como funciona a Dobra Esportiva?" (partida ao vivo e texto) passa a ser a tela de título, com os botões de novo jogo, continuar e partida avulsa logo abaixo; a janela separada sai.
 - **v0.24 / Doc, 05/11/2026**: tela de título (Novo jogo Livre/Carreira, Continuar, Partida avulsa); tela de times só com as grades; pré-temporada em telas próprias sem abas (Patrocínios → Mercado, com coluna lateral de escalação, contratos e pendências), em toda temporada; janela de transferências em 1 etapa (a IA contrata na abertura e ajusta ao começar a temporada); aba Mercado some na temporada; Patrocínios e Finanças viram a aba Finanças.
 - **v0.23 / Doc, 05/11/2026**: retorno neutro das instruções: quadro "Instruções no round" no resumo (ganho e custo típicos de cada instrução, só do próprio time) e avisos curtos na arena (rajada, disco, rebate). Pontos de atenção da matriz ficam registrados até virarem problema.

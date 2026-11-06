@@ -582,7 +582,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.25.6 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.25.7 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewTitle" hidden>
@@ -702,7 +702,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
       </section>
       <div class="seg mk-tabs" role="tablist" aria-label="Listas do mercado" id="mkTabs"></div>
       <section class="panel" id="faPanel">
-        <h2>Agentes livres <details class="help"><summary aria-label="Como funciona" title="Como funciona">?</summary><div>Contratar custa luvas (2 rodadas de salário, mais caras para benders populares). O salário entra na folha a partir da 1ª rodada. Clique num bender para ver a ficha com os atributos.</div></details></h2>
+        <h2>Sem contrato <details class="help"><summary aria-label="Como funciona" title="Como funciona">?</summary><div>Contratar custa luvas (2 rodadas de salário, mais caras para benders populares). O salário entra na folha a partir da 1ª rodada. Clique num bender para ver a ficha com os atributos.</div></details></h2>
         <div class="train-bar"><label class="f inline chk"><input type="checkbox" data-budget> Só quem cabe no orçamento</label></div>
         <div class="tbl-wrap" id="marketWrap"><table class="tbl" id="marketTbl"></table></div>
       </section>
@@ -784,7 +784,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
             <dt data-ic="cal">Idade</dt><dd>Jovens evoluem mais rápido no treino e ainda amadurecem sozinhos a cada temporada. Com a idade, os veteranos perdem Agilidade e Poder (e um pouco de Firmeza e Precisão), compensando um pouco com Leitura e Disciplina. Os mais velhos podem se aposentar no fim da temporada.</dd>
             <dt data-ic="ovr">Limite de evolução</dt><dd>Cada bender tem um limite até onde pode evoluir, que você não vê. Jovens costumam ter muito espaço para crescer; veteranos já estão perto do limite. Quando o treino passa a render quase nada, é sinal de que ele chegou lá.</dd>
             <dt data-ic="star">POP · Popularidade do bender</dt><dd>Sobe quando o bender joga, vence, empurra rivais, derruba alguém na água e faz eventos; cai um pouco a cada semana na reserva. Explosivos ganham popularidade mais rápido. Aumenta a renda dos eventos, o valor de mercado e as luvas.</dd>
-            <dt data-ic="cash">Salário e contrato</dt><dd>Pago a cada rodada, fixado no contrato: mesmo que o bender melhore, o salário só muda na renovação. Contratos duram algumas temporadas (agentes livres jovens assinam por mais tempo). Quando o contrato termina, você renova na pré-temporada pelo salário que ele pede (benders populares pedem mais) ou ele vai embora de graça.</dd>
+            <dt data-ic="cash">Salário e contrato</dt><dd>Pago a cada rodada, fixado no contrato: mesmo que o bender melhore, o salário só muda na renovação. Contratos duram algumas temporadas (benders jovens sem contrato assinam por mais tempo). Quando o contrato termina, você renova na pré-temporada pelo salário que ele pede (benders populares pedem mais) ou ele vai embora de graça.</dd>
           </dl>
       </section>
       <section class="panel" data-gpane="career" hidden>
@@ -2608,7 +2608,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
     const fa = L.freeAgents.find((q) => q.id === id), t = fa ? null : L.teams.find((x) => x.roster.some((q) => q.id === id));
     const p = fa || (t && t.roster.find((q) => q.id === id)); if (!p) return;
     const mine = t && t.idx === L.user;
-    const label = mine ? undefined : fa ? '<span class="badge-res">Agente livre</span>' : `<span class="badge-res"><span class="dot" style="background:${t.color}"></span>${esc(t.name)}${t.starters[p.elem] === p.id ? ' · titular' : ''}</span>`;
+    const label = mine ? undefined : fa ? '<span class="badge-res">Sem contrato</span>' : `<span class="badge-res"><span class="dot" style="background:${t.color}"></span>${esc(t.name)}${t.starters[p.elem] === p.id ? ' · titular' : ''}</span>`;
     selBender = id;
     $('benderModalBody').innerHTML = benderCardHtml(t || { starters: {} }, p, label);
     $('benderModal').hidden = false; $('benderModal').scrollTop = 0;
@@ -2912,7 +2912,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
         ${W.offers.length ? `<li>Ofertas pelos seus benders: ${W.offers.length}</li>` : ''}</ul>`;
       $('newsPanel').hidden = !W.news.length;
       $('newsPanel').innerHTML = W.news.length ? `<h2>Notícias do mercado</h2><ul class="news">${W.news.slice(0, 12).map((n) => `<li>${esc(n.text)}</li>`).join('')}</ul>` : '';
-      if ($('stepBtn')) $('stepBtn').onclick = () => confirmAct(`Encerrar a etapa ${W.step} da janela?`, 'As ofertas e os agentes livres desta etapa mudam, e os outros times fazem as contratações deles. Não dá para voltar a esta etapa.', 'Encerrar etapa', () => { if (advanceWindow(L)) { save(); renderHub(); } });
+      if ($('stepBtn')) $('stepBtn').onclick = () => confirmAct(`Encerrar a etapa ${W.step} da janela?`, 'As ofertas e os benders sem contrato desta etapa mudam, e os outros times fazem as contratações deles. Não dá para voltar a esta etapa.', 'Encerrar etapa', () => { if (advanceWindow(L)) { save(); renderHub(); } });
     } else if (L.phase === 'done') {
       const ch = L.divs.map((x) => L.teams[x.champion]), mv = L.movement;
       const mine = mv.up.includes(me.idx) ? `Seu time conseguiu o acesso à ${DIVS[me.div - 1].name}!` : mv.down.includes(me.idx) ? `Seu time foi rebaixado para a ${DIVS[me.div + 1].name}.` : '';
@@ -3122,7 +3122,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
     $('faPanel').hidden = !pre || mkTab !== 'fa'; $('othersPanel').hidden = !pre || mkTab === 'fa';
     if (pre) {
       const forSale = (e) => L.teams.filter((t) => t.idx !== L.user).reduce((a, t) => a + t.roster.filter((p) => { if (p.elem !== e) return false; const c = canBuy(L, p.id); return c.ok || c.why === 'Caixa insuficiente' || c.why === 'Elenco cheio'; }).length, 0);
-      $('mkTabs').innerHTML = [['fa', 'Agentes livres', L.freeAgents.length], ...ELEMS.map((e) => [e, `${icon(e)} ${ELN[e]}`, forSale(e)])].map(([k, n, c]) => `<button type="button" role="tab" data-mktab="${k}" aria-pressed="${mkTab === k}">${n} <small>${c}</small></button>`).join('');
+      $('mkTabs').innerHTML = [['fa', 'Sem contrato', L.freeAgents.length], ...ELEMS.map((e) => [e, `${icon(e)} ${ELN[e]}`, forSale(e)])].map(([k, n, c]) => `<button type="button" role="tab" data-mktab="${k}" aria-pressed="${mkTab === k}">${n} <small>${c}</small></button>`).join('');
       $('othersPanel').classList.toggle('by-elem', mkTab !== 'fa');
       $('othersTitle').innerHTML = (mkTab === 'fa' ? 'Benders de outros times' : `Benders de ${ELN[mkTab].toLowerCase()} de outros times`) + helpTip('Comprar custa o valor de mercado. O time vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 6 no elenco. Clique num bender para ver a ficha com os atributos.');
     }
@@ -3230,7 +3230,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
       <li>Jovens evoluem mais rápido. Com o tempo, cada bender chega ao seu limite e o treino passa a render pouco.</li>
       <li><b>Treino em equipe</b> aplica o mesmo plano para todos; <b>individual</b> deixa escolher bender a bender.</li></ul>`],
     market: ['Mercado', `<ul>
-      <li>Na <b>pré-temporada</b> abrem os agentes livres e a <b>janela de transferências</b>. Os outros times contratam antes de você chegar ao mercado.</li>
+      <li>Na <b>pré-temporada</b> abrem os benders sem contrato e a <b>janela de transferências</b>. Os outros times contratam antes de você chegar ao mercado.</li>
       <li>Outros times fazem ofertas pelos seus benders; você aceita ou recusa.</li>
       <li>Todo contrato tem salário fixo e dura algumas temporadas. Quem termina o contrato sai de graça se não for renovado.</li>
       <li>Se faltar um elemento no elenco e o caixa não der, a contratação de emergência deixa o caixa no vermelho.</li></ul>`],
@@ -3298,7 +3298,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
     if (t.dataset.unev) { const p = me.roster.find((q) => q.id === +t.dataset.unev); if (p) { p.ev = null; save(); renderHub(); } return; }
     if (t.dataset.m) { L.trainMode = t.dataset.m; save(); renderHub(); }
     else if (t.dataset.starter) { const p = me.roster.find((q) => q.id === +t.dataset.starter); if (p && !isInjured(p)) { me.starters[p.elem] = p.id; save(); renderHub(); } }
-    else if (t.dataset.release) { const p = anyBender(+t.dataset.release); confirmAct(`Dispensar ${p ? p.name : ''}?`, 'Ele sai do elenco e vira agente livre. Não dá para desfazer.', 'Dispensar', () => { if (releasePlayer(L, +t.dataset.release)) { save(); renderHub(); } }); }
+    else if (t.dataset.release) { const p = anyBender(+t.dataset.release); confirmAct(`Dispensar ${p ? p.name : ''}?`, 'Ele sai do elenco e fica sem contrato. Não dá para desfazer.', 'Dispensar', () => { if (releasePlayer(L, +t.dataset.release)) { save(); renderHub(); } }); }
     else if (t.dataset.sign) { const p = anyBender(+t.dataset.sign); confirmAct(`Contratar ${p ? p.name : ''}?`, `As luvas (${p ? yen(signingFee(p)) : ''}) saem do caixa agora e o salário entra na folha.`, 'Contratar', () => { if (signPlayer(L, +t.dataset.sign)) { save(); renderHub(); } }); }
     else if (t.dataset.sponsor) { confirmAct('Assinar este patrocínio?', 'O contrato fica valendo até o fim da temporada, com as metas dele.', 'Assinar', () => { if (signSponsor(L, t.dataset.sponsor)) { save(); renderHub(); } }); }
     else if (t.dataset.drop) { confirmAct('Encerrar este patrocínio?', 'O patrocinador sai e você deixa de receber o valor e os bônus dele. Não dá para desfazer.', 'Encerrar', () => { if (dropSponsor(L, t.dataset.drop)) { save(); renderHub(); } }); }
