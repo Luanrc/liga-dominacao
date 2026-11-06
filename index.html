@@ -582,7 +582,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.25.7 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.25.8 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewTitle" hidden>
@@ -4428,6 +4428,13 @@ if (typeof module !== 'undefined') module.exports = { recordHabit, scoutFor, HAB
   // número com ícone, sem moldura (painéis da partida e quadro de instruções)
   // Guia: o ícone de cada termo, o mesmo das telas
   document.querySelectorAll('.gloss dt[data-ic]').forEach((dt) => dt.insertAdjacentHTML('afterbegin', ic(dt.dataset.ic)));
+  // vender ou dispensar: só aparece "Dispensar" quando ninguém compra (vender sempre rende mais)
+  function sellOrRelease(p) {
+    const q = sellQuote(L, p.id);
+    if (q && q.ok) return `<button class="btn sm" type="button" data-sell="${p.id}">Vender · ${yen(q.price)}</button>`;
+    if (canRelease(L, p.id)) return `<button class="btn sm" type="button" data-release="${p.id}" title="${esc(q ? q.why : '')}: ninguém compra agora">Dispensar</button>`;
+    return `<button class="btn sm" type="button" disabled title="${esc(q ? q.why : 'Precisa haver outro bender deste elemento no elenco')}">Vender</button>`;
+  }
   // explicação sob demanda: um "?" ao lado do título que abre o texto
   const helpTip = (txt) => `<details class="help"><summary aria-label="Como funciona" title="Como funciona">?</summary><div>${txt}</div></details>`;
   const sti = (k, n, title) => `<span class="sti" title="${esc(title)}">${ic(k)}<b>${n}</b></span>`;
@@ -5060,9 +5067,8 @@ if (typeof module !== 'undefined') module.exports = { recordHabit, scoutFor, HAB
       ${exp.length ? `<h3 class="sub">Contratos encerrados${helpTip('Sem renovar, saem quando a temporada começar. 1T, 2T e 3T renovam por 1, 2 ou 3 temporadas pelo salário pedido.')}</h3>
         <ul class="mini-roster">${exp.map((p) => `<li><span>${icon(p.elem)} <b>${esc(p.name)}</b> · ${ovr(p.st)} · pede ${yen(askWage(p))}</span>
           <span class="btnrow">${[1, 2, 3].map((y) => `<button class="btn sm" type="button" data-renew="${p.id}:${y}" title="Renovar por ${y} temporada${y > 1 ? 's' : ''}">${y}T</button>`).join('')}</span></li>`).join('')}</ul>` : ''}
-      <ul class="mini-roster">${me.roster.filter((p) => !p.expiring).slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st)).map((p) => { const q = sellQuote(L, p.id);
-        return `<li><span data-mpick="${p.id}" style="cursor:pointer">${icon(p.elem)} ${esc(p.name)} · <b>${ovr(p.st)}</b> <span class="hint">· ${yen(wageOf(p))}</span></span>
-          <span class="btnrow"><button class="btn sm" type="button" data-sell="${p.id}"${q && q.ok ? '' : ` disabled title="${esc(q ? q.why : '')}"`}>Vender${q && q.price ? ' · ' + yen(q.price) : ''}</button><button class="btn sm" type="button" data-release="${p.id}"${canRelease(L, p.id) ? '' : ' disabled title="Precisa haver outro bender deste elemento no elenco"'}>Dispensar</button></span></li>`; }).join('')}</ul>`;
+      <ul class="mini-roster">${me.roster.filter((p) => !p.expiring).slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st)).map((p) => `<li><span data-mpick="${p.id}" style="cursor:pointer">${icon(p.elem)} ${esc(p.name)} · <b>${ovr(p.st)}</b> <span class="hint">· ${yen(wageOf(p))}</span></span>
+          <span class="btnrow">${sellOrRelease(p)}</span></li>`).join('')}</ul>`;
     $('rosterHint').innerHTML = lbl('people', `<b>${me.roster.length}</b>/${MAX_ROSTER} · mín. ${MIN_ROSTER}`, 'Vagas no elenco');
     $('lineupTitle').innerHTML = 'Escalação' + helpTip('Começam 3 titulares, um de cada elemento. Arraste um reserva para o campo (ou sobre o titular) para escalá-lo no lugar de quem é do mesmo elemento. Clique num bender para ver a ficha. Na partida, os reservas sadios ficam no banco e podem entrar entre os rounds.');
     $('rosterTbl').innerHTML = `<thead><tr>${sth('roster', 'starter', 'Status')}${sth('roster', 'elem', 'Elemento')}${sth('roster', 'name', 'Bender')}${sth('roster', 'ovr', 'Nota', 'num')}${sth('roster', 'age', 'Idade', 'num')}${attrHeads('roster')}${sth('roster', 'pop', 'POP', 'num', 'Popularidade')}${sth('roster', 'tmp', 'Temperamento')}${sth('roster', 'energy', 'Energia')}${sth('roster', 'stress', 'Estresse')}${sth('roster', 'inj', 'Lesão')}</tr></thead><tbody>` +
@@ -5082,13 +5088,12 @@ if (typeof module !== 'undefined') module.exports = { recordHabit, scoutFor, HAB
     // ---- finanças: folha salarial ----
     const payRows = sortRows(me.roster, 'pay', Object.assign({}, benderGetters, { starter: (p) => (isSt(p) ? 0 : 1), value: (p) => valueOf(L, p) }));
     $('payHint').innerHTML = lbl('cash', `<b>${yen(payroll(me))}</b> / rodada`, 'Folha por rodada') + lbl('', `<b>${yen(payroll(me) * WEEKS)}</b> na temporada`, `${WEEKS} rodadas`) + helpTip('O salário é fixo até o fim do contrato. Contratos encerrados são renovados na pré-temporada.');
-    $('payTbl').innerHTML = `<thead><tr>${sth('pay', 'starter', 'Status')}${sth('pay', 'elem', 'Elemento')}${sth('pay', 'name', 'Bender')}${sth('pay', 'ovr', 'Nota', 'num')}${sth('pay', 'age', 'Idade', 'num')}${sth('pay', 'pop', 'POP', 'num', 'Popularidade')}${sth('pay', 'salary', 'Salário', 'num')}${sth('pay', 'contract', 'Contrato')}${sth('pay', 'value', 'Valor', 'num', 'Valor de mercado')}${pre ? '<th></th><th></th>' : ''}</tr></thead><tbody>` +
+    $('payTbl').innerHTML = `<thead><tr>${sth('pay', 'starter', 'Status')}${sth('pay', 'elem', 'Elemento')}${sth('pay', 'name', 'Bender')}${sth('pay', 'ovr', 'Nota', 'num')}${sth('pay', 'age', 'Idade', 'num')}${sth('pay', 'pop', 'POP', 'num', 'Popularidade')}${sth('pay', 'salary', 'Salário', 'num')}${sth('pay', 'contract', 'Contrato')}${sth('pay', 'value', 'Valor', 'num', 'Valor de mercado')}${pre ? '<th></th>' : ''}</tr></thead><tbody>` +
       payRows.map((p) => `<tr data-mpick="${p.id}"><td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</td>
         <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
         <td class="num pop">${r0(p.st.pop)}</td><td class="num">${yen(wageOf(p))}</td><td>${contractCell(p)}</td><td class="num">${yen(valueOf(L, p))}</td>
-          ${pre ? (() => { const q = sellQuote(L, p.id); return `<td><button class="btn sm" type="button" data-sell="${p.id}"${q && q.ok ? '' : ` disabled title="${esc(q ? q.why : '')}"`}>Vender${q && q.price ? ' · ' + yen(q.price) : ''}</button></td>`; })() : ''}
-          ${pre ? `<td><button class="btn sm" type="button" data-release="${p.id}"${canRelease(L, p.id) ? '' : ' disabled title="Precisa haver outro bender deste elemento no elenco"'}>Dispensar</button></td>` : ''}</tr>`).join('') +
-      `<tr><td colspan="6" class="hint">Total por rodada</td><td class="num"><b>${yen(payroll(me))}</b></td><td></td><td class="num">${yen(me.roster.reduce((a, p) => a + valueOf(L, p), 0))}</td>${pre ? '<td></td><td></td>' : ''}</tr></tbody>`;
+          ${pre ? `<td>${sellOrRelease(p)}</td>` : ''}</tr>`).join('') +
+      `<tr><td colspan="6" class="hint">Total por rodada</td><td class="num"><b>${yen(payroll(me))}</b></td><td></td><td class="num">${yen(me.roster.reduce((a, p) => a + valueOf(L, p), 0))}</td>${pre ? '<td></td>' : ''}</tr></tbody>`;
 
     // ---- mercado (só na pré-temporada) ----
     const full = me.roster.length >= MAX_ROSTER;
