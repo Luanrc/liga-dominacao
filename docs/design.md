@@ -12,12 +12,16 @@ Os números marcados como *iniciais* são pontos de partida para balancear.
 
 ## 1. Fluxo do jogador
 
-1. **Escolhe o modo e a equipe** ✅
+0. **Tela de título (v0.24; junta-se à abertura na v0.24.1):** "Sabe como funciona a Dobra Esportiva?" com a partida ao vivo e o texto, e abaixo os botões: Novo jogo · Livre, Novo jogo · Carreira, Continuar (quando há jogo salvo) e Partida avulsa. A refinar. ✅
+1. **Escolhe a equipe** ✅ — a tela mostra só as grades de times (no modo Carreira, só a Terceira Divisão) e um botão Voltar; clicar num time abre a confirmação.
    - **Livre:** qualquer um dos 24 times das três divisões. Times com nota menor, e os das divisões de baixo, são um desafio maior.
    - **Carreira:** começa num time da **Terceira Divisão**, com pouca reputação (8). O objetivo é subir, se firmar e chegar ao título da Primeira. As regras são as mesmas do modo Livre; muda só o ponto de partida.
-2. **Pré-temporada**
-   - **Patrocínios:** escolhe até 2 entre as propostas. ✅
-   - **Janela de transferências:** contrata, compra e vende benders, em 2 etapas. O botão para encerrar a etapa (e depois "Começar temporada") fica no cabeçalho, ao lado de Recomeçar, visível em todas as páginas da central. Durante a temporada, o mesmo lugar mostra "Ir para a partida" e "Simular rápido". ✅
+2. **Pré-temporada (v0.24): telas próprias, sem abas, em toda temporada** ✅
+   - Um indicador no topo mostra os passos: Patrocínios › Mercado › Temporada.
+   - **Patrocínios:** quadro da temporada (resultado da anterior, expectativa da diretoria, quem envelheceu ou se aposentou) e as propostas; escolhe até 2. "Seguir para o mercado" no cabeçalho (sem patrocínio, pede confirmação).
+   - **Mercado:** orçamento e ofertas recebidas no topo; abaixo, abas **Agentes livres | Água | Terra | Fogo** (v0.24.2) com a contagem de cada uma; as abas de elemento listam os benders de outros times daquele elemento, divididos em sub-abas por divisão (Primeira | Segunda | Terceira, com contagem; abre na divisão do seu time, v0.24.3), com os filtros "à venda" e orçamento. Notícias do mercado no fim. Coluna lateral: "Antes de começar" (✓ / ! / ✕ para patrocínios, elenco mínimo, contratos e ofertas) e **Seu elenco** (renovar contratos encerrados por 1, 2 ou 3 temporadas, vender e dispensar). A escalação não aparece na pré-temporada (v0.24.2): os titulares são escalados sozinhos ao começar a temporada e podem ser trocados no Elenco. "Voltar aos patrocínios" e "Começar temporada" no cabeçalho.
+   - Durante a temporada, o cabeçalho mostra "Ir para a partida" e "Simular rápido".
+   - **Abas na temporada:** Central, Elenco, Treino, Finanças, Classificação, Guia. O Mercado não aparece fora da pré-temporada. **Finanças** junta a antiga aba Patrocínios: Diretoria (expectativa e confiança), Patrocínios, Finanças e Folha salarial.
 3. **Semana da temporada** (repete a cada rodada)
    - Escolhe o **tipo de treino** (Equipe ou Individual) e o foco de cada um, ou descanso. ✅
    - Joga a **partida**, ajustando a tática no intervalo entre rounds. ✅
@@ -163,8 +167,9 @@ Os patrocinadores são marcas inventadas do universo (lojas, fábricas e serviç
 
 ✅
 
-- Acontece **no início de cada temporada**, antes da 1ª rodada, em **2 etapas**. O técnico encerra a etapa 1 quando quiser; na etapa 2, "Começar temporada" fecha a janela.
-- **A cada etapa:** os times da IA negociam, cerca de 30% dos agentes livres saem e entram novos, e chegam até **3 ofertas** pelos benders do técnico.
+- Acontece **no início de cada temporada**, antes da 1ª rodada, em **1 etapa** (v0.24; antes eram 2).
+- **Na abertura:** os times da IA fazem as contratações e vendas deles, o mercado de agentes livres se renova e chegam até **3 ofertas** pelos benders do técnico. Assim o técnico já vê os elencos completos dos outros times.
+- **Ao começar a temporada:** a IA faz uma última rodada de ajustes (aparece nas notícias) e a janela fecha.
 - O técnico pode:
   - **Contratar agentes livres**, pagando as luvas.
   - **Orçamento no mercado** (v0.11): o topo do mercado mostra caixa, folha e patrocínios por rodada e o saldo fixo. Cada bender mostra o caixa depois da compra e se **cabe no orçamento** (o caixa paga o preço e ainda cobre o salário dele nas 14 rodadas); os agentes livres também mostram o custo na temporada (luvas + salário). O filtro "Só quem cabe no orçamento" vale para as duas listas. ✅
@@ -492,9 +497,52 @@ Ataques de times opostos que se chocam no ar se anulam.
   | Mais agressivo / Mais cauteloso | puxa a postura daquele bender para Agressiva ou Defensiva |
   | Proteger | +10% de esquiva; na terra, tenta interceptar com um disco os ataques que vão num companheiro próximo; custo: ataca 5% mais devagar (não recua mais) |
   | Marcar [rival] | ataca só aquele rival enquanto ele estiver em quadra |
+  - **Vantagens por elemento (v0.21):** cada elemento tem duas instruções com um bônus próprio, para nenhuma combinação parecer "a certa":
+    | Elemento | Instrução | Bônus |
+    |---|---|---|
+    | Terra | Pressionar | finca o pé: +6 de firmeza contra empurrões |
+    | Terra | Proteger | disco que intercepta ataques num companheiro próximo (já existia) |
+    | Fogo | Pressionar | rajada em 45% dos ataques (padrão 35%); a recarga fica só ×1,05 em vez do bônus de velocidade normal |
+    | Fogo | Manter distância | empurrão ×1,1 |
+    | Água | Manter distância | o ataque persegue o alvo ×1,8 |
+    | Água | Proteger | jato que rebate ataques leves (empurrão até 200) num companheiro a até 80: 18% + Precisão×0,2% |
+  - O Guia deixou de dizer "Combina com a terra/fogo" e passou a descrever o bônus de cada elemento, sem números.
+  - **Medido** (300 partidas, contra time Padrão): terra Pressionar 52%→54%, fogo Pressionar 64%→53%, fogo Distância 46%→48%, água Proteger 52%, água Distância 48%, água Pressionar 49%. A antiga "meta" (terra Proteger + fogo Distância) fica em 54%, e terra Pressionar + fogo Pressionar ou fogo Pressionar + terra Proteger vencem a meta 61%/60%.
+  - ~~Ponto em aberto (v0.21):~~ terra Pressionar + fogo Pressionar vencia 63% contra Padrão e nenhuma mistura passava de 50% contra ela. Resolvido na v0.22.
+  - **Manter distância pune quem pressiona (v0.22):** golpe de um bender em Manter distância num bender em Pressionar empurra ×1,15, e quem pressiona esquiva 3% a menos contra ele (v0.22 lançou com ×1,25 e −5%; suavizado na v0.22.1). Não aparece no Guia (o jogador descobre jogando). Medido (300 partidas) contra terra + fogo pressionando: terra Proteger + fogo e água Distância 44%→57%; água + fogo Distância 43%→51%; a antiga meta 39%→45%. A dupla pressionando contra Padrão continua 63% (Padrão não joga à distância). Com ×1,4 e −8% passava do ponto (72%).
+  - **Matriz de cenários (v0.22.1, 200 partidas, margem ±7):** cada vantagem contra Padrão com os dois times no mesmo cenário:
+    | Cenário | Terra press | Terra prot | Fogo press | Fogo dist | Água dist | Água prot |
+    |---|---|---|---|---|---|---|
+    | Compacta | 54 | 58 | 61 | 49 | 51 | 51 |
+    | Escalonada | 34 | 54 | 52 | 53 | 57 | 51 |
+    | Agressiva | 58 | 56 | 56 | 51 | 48 | 51 |
+    | Defensiva | 56 | 44 | 60 | 49 | 51 | 48 |
+    | Duelo de elementos | 44 | 49 | 44 | 56 | 47 | 52 |
+    | Foco no mais próximo | 57 | 63 | 49 | 52 | 52 | 54 |
+    - Terra + fogo pressionando contra Padrão: 59–66% em quase todos os cenários; 47% na Escalonada; 36% com Duelo de elementos. Três segurando (terra Proteger + fogo e água Distância) contra Padrão: 47–52% (59% com Foco no mais próximo). A antiga meta contra Padrão: 48–56% (62% com Foco no mais próximo). Nada que protege ficou dominante.
+    - Com ×1,25 a punição passava do ponto fora da Aberta: três segurando contra a dupla pressionando 71% na Escalonada e 75% com Foco no mais próximo (sem a regra: 59% e 50%). Com ×1,15 e −3%: Aberta 53%, Escalonada 61%, Foco no mais próximo 62%.
+    - **Pontos em aberto:** terra Pressionar na Escalonada fica fraca (34%; já era 39% antes das vantagens); terra Proteger com Foco no mais próximo fica forte (63%; essa escolha de alvo já era forte); fogo Pressionar oscila entre 52% e 61% conforme o cenário (reduzir a rajada para 40% não mostrou efeito claro dentro da margem).
+  - **Ciclo resultante:** pressionar vence quem protege (meta 39–45%); proteger/distância com os três elementos vence quem pressiona (57%); Padrão perde para quem pressiona (37%).
   - **Mesma instrução nos três** (qualquer uma, menos "sem instrução"): o time fica **previsível** naquele round: −18% de esquiva e ataques 8% mais lentos. Só o próprio time é avisado (narração, painel do intervalo e resumo do round); nada é dito sobre o rival.
   - **Medido** (contra time sem instrução): uma instrução num bender fica entre 43% e 49%; a mistura terra Pressionar + fogo Manter distância + água Proteger dá 50%; os três iguais perdem: Pressionar 37%, Proteger 36%, Manter distância 34%.
 - **Obediência:** uma instrução que contraria o temperamento pode ser **ignorada no round inteiro**. Explosivos resistem a Mais cauteloso, Manter distância e Proteger; calmos resistem a Mais agressivo e Pressionar. A chance é 0 até 15 pontos do centro (50) e chega a 45% nos extremos (explosivo 90 mandado ser cauteloso: ~32%). Quem desobedece joga do próprio jeito (explosivo fica agressivo, calmo fica cauteloso). A tela mostra o risco antes de confirmar e avisa quando acontece.
+- **Menos texto (v0.25 em diante):** informação em etiquetas com ícone e blocos, em vez de frases; nenhuma informação sai, só muda de forma. Ícones desenhados no traço da interface (não emoji), com o nome ao passar o mouse: divisão, temporada/rodada, posição, nota, popularidade (estrela), reputação (medalha), diretoria (escudo), energia (raio), estresse (pulso), faltas (apito), caixa.
+  - **Central (v0.25):** subtítulo do cabeçalho em etiquetas (divisão, T·rodada, posição e campanha, nota, popularidade, reputação, confiança com barrinha); Observação do rival com o técnico e o estado dos titulares em etiquetas e o elemento só como ícone; relatório da partida com Destaque/faltas em etiquetas e cada round numa linha (R1 · Venceu/Perdeu · motivo · sua tática); dinheiro da rodada em blocos.
+  - **Partida (v0.25.1):** painéis laterais com números e ícones (acertos e precisão, empurrões, derrubou na água, esquivas, bloqueios, faltas) e sem a palavra do elemento (o ícone já mostra); Preparação sem a palavra do elemento; resumo do round com o placar em etiqueta (sai a frase de instrução do topo), o quadro "Instruções no round" com ícone + número (rajadas, faltas de linha, golpes recebidos, esquivas, acertos/ataques, desviados/rebatidos) e as leituras com um ícone por tipo no lugar do marcador e frases mais curtas.
+  - **Elenco, Treino e Finanças (v0.25.2):** explicações longas saem da tela e vão para um "?" ao lado do título (abre o texto ao clicar): Escalação, Semana, tipo de treino e Folha salarial. Nas tabelas da central, o elemento aparece só como ícone (o nome fica ao passar o mouse). Vagas do elenco e totais da folha viram etiquetas no título; Diretoria em etiquetas (expectativa e confiança com barrinha); Finanças em blocos; eventos da semana com ícones (renda ¥ + ¥/★, energia, vagas, popularidade mínima) e as fichas dos benders com ícones de energia e popularidade no lugar de ⚡ e ★.
+  - **Pré-temporada, Classificação e ficha (v0.25.3):** Patrocínios com "assinados x/2" e popularidade em etiquetas no título e a explicação no "?"; quadro da temporada em etiquetas (resultado da anterior, expectativa); Mercado com o orçamento em etiquetas (elenco, caixa, folha, patrocínios, saldo fixo) e as explicações (luvas, regra do vendedor, "cabe no orçamento", renovação 1T/2T/3T) no "?"; Classificação com legenda em etiquetas (semifinais, acesso, queda; detalhe ao passar o mouse); ficha do bender com idade, temperamento e popularidade em etiquetas, energia e estresse com ícones e a explicação da evolução no "?". O Guia continua em texto: é o lugar das explicações.
+  - **Guia (v0.25.4):** a antiga aba Atributos (21 verbetes) vira três abas: **Atributos** (os seis, Temperamento, Nota), **O bender** (Energia, Estresse, Lesão, Idade, Limite de evolução, Popularidade do bender, Salário e contrato) e **Time e carreira** (Semana, Eventos, Elenco e banco, Popularidade do time, Reputação, Confiança da diretoria), além de Táticas da partida. Cada termo tem o mesmo ícone usado nas telas. Os textos não mudaram (continuam sem números).
+  - **Telas restantes (v0.25.6):** fim de temporada com Sobem/Caem em etiquetas (nome de cada time na cor dele), reputação e os motivos em etiquetas, propostas de técnico com divisão, nota, caixa, popularidade e objetivo em etiquetas e as explicações no "?"; desempate com uma frase só (quem caiu na água já aparece marcado no cartão) e sem a palavra do elemento; janela da semana com ícones em Energia, Estresse e Popularidade.
+- **Retorno neutro das instruções (v0.23):** o jogador vê o ganho e o custo típicos da própria instrução, sem veredito e sem nada do rival.
+  - **Resumo do round, quadro "Instruções no round":** uma linha por bender do jogador com instrução (Padrão não aparece), com a instrução usada naquele round e "(ignorou)" se desobedeceu. Pressionar: rajadas (fogo) ou ataques, faltas de linha e golpes recebidos. Manter distância: esquivas e acertos de ataques (fogo: também empurrões). Proteger: ataques desviados com o disco (terra) ou rebatidos (água), esquivas e ataques próprios. Mais agressivo/cauteloso e Marcar: ataques, esquivas e faltas.
+  - **Arena:** aviso curto e claro (sem cor de bom/ruim) sobre o bender do jogador quando a instrução age: "rajada" (fogo pressionando), "disco" (terra protegendo um companheiro), "rebate" (água protegendo); no máximo um a cada 5 segundos por bender. A falta de linha continua com o alerta FALTA. Firmeza da terra, empurrão do fogo à distância e ataque da água que persegue não têm aviso.
+  - Novas estatísticas na simulação: rajadas, proteções (disco/rebate) e faltas de linha.
+- **Técnico da IA lê o hábito do jogador (v0.22):** a liga guarda as escolhas dos últimos 12 rounds que o jogador jogou (formação e instrução de cada elemento). Antes da partida o técnico rival recebe um resumo: o que o jogador repetiu em pelo menos metade desses rounds (a partir de 3 rounds). Quanto mais repetido, mais chance de ele preparar a resposta, multiplicada pela leitura do técnico: Primeira 0,9, Segunda 0,75, Terceira 0,6.
+  - Dois ou mais elementos pressionando → a IA joga terra Proteger + fogo e água Distância.
+  - Dois ou mais elementos em Proteger/Distância → a IA joga terra + fogo Pressionar.
+  - Formação repetida → no round 1 a IA já entra com a formação que a vence (depois segue a regra de ler a arena).
+  - Nada é dito ao jogador; quem varia não dá hábito para ler.
+  - **Medido** (200 partidas, mesma tática nos 12 rounds, técnico da Primeira): pressionar sempre 56%→34% na v0.22 e 42% na v0.22.1; meta sempre 56%→47%; Compacta sempre 42%→39%.
 - **Técnico da IA:** depois de perder um round, em 70% das vezes troca para a formação que vence a do rival (v0.12). Também escolhe postura, formação e instruções conforme o estilo e o placar (estilo agressivo: escalonada e terra pressionando; equilibrado: compacta; defensivo: aberta e terra protegendo; perdendo: mais agressivo e compacto).
 - **Equilíbrio medido** (time com a opção contra time igual na opção padrão, ~50%): a maioria das opções fica entre 44% e 56%. Compacta e Foco no mais próximo estão um pouco fortes (~60%); Duelo de elementos está mais fraco (~35%).
 
@@ -541,7 +589,7 @@ Ataques de times opostos que se chocam no ar se anulam.
 
 ## 9c. Dicas de primeira vez ✅
 
-- **Abertura** (v0.17): na primeira vez que o jogo abre, antes de tudo (escolha de time, Guia e dicas), aparece a janela **"Sabe como funciona a Dobra Esportiva?"** com um resumo do esporte (times de três benders, um de cada elemento; arena sobre a água com zonas; empurrar para ganhar território; queda na água; vitória por território ou nocaute; melhor de três rounds) e do papel do técnico (elenco, semana, energia e estresse, tática antes de cada round; em quadra, quem joga são os benders). Ao lado do texto, uma partida de verdade roda ao vivo num campo visto de cima (benders com a forma do elemento e a cor do time, ataques, linha de território), recomeçando sozinha, em velocidade normal (1x, desde a v0.17.1; antes rodava em 2x). O botão **Vamos lá** fecha a janela, e ela não volta (fica salvo neste navegador).
+- **Abertura** (v0.17): na primeira vez que o jogo abre, antes de tudo (escolha de time, Guia e dicas), aparece a janela **"Sabe como funciona a Dobra Esportiva?"** com um resumo do esporte (times de três benders, um de cada elemento; arena sobre a água com zonas; empurrar para ganhar território; queda na água; vitória por território ou nocaute; melhor de três rounds) e do papel do técnico (elenco, semana, energia e estresse, tática antes de cada round; em quadra, quem joga são os benders). Ao lado do texto, uma partida de verdade roda ao vivo num campo visto de cima (benders com a forma do elemento e a cor do time, ataques, linha de território), recomeçando sozinha, em velocidade normal (1x, desde a v0.17.1; antes rodava em 2x). O botão **Vamos lá** fecha a janela, e ela não volta (fica salvo neste navegador). **Desde a v0.24.1, a abertura é a própria tela de título:** o título, a partida ao vivo e o texto ficam na mesma tela que os botões Novo jogo · Livre, Novo jogo · Carreira, Continuar e Partida avulsa; não há mais janela separada nem botão Vamos lá.
 
 - Na primeira visita, cada página da central (Central, Elenco e treino, Mercado, Patrocínios, Finanças, Classificação, Guia) mostra no topo um quadro curto com o essencial daquela página. O quadro some ao clicar em **Entendi**.
 - A dica da **Central** é a de boas-vindas: o caminho de uma temporada (pré-temporada → elenco → semana → partida → fim da temporada) e a barra de confiança.
@@ -629,6 +677,22 @@ Simulação de 8 temporadas em 8 carreiras com um técnico automático razoável
 - **v0.3**: 2 divisões de 8 times (acesso e rebaixamento calculados), dinheiro, salários, renda da IA, prêmios, patrocínios com metas, pré-temporada com agentes livres, treino em Equipe ou Individual.
 - **v0.5**: idade, potencial, envelhecimento, aposentadoria e contratos com renovação; carreira do técnico com propostas e demissão; relatório pós-partida e observação do rival.
 - **v0.4**: janela de transferências completa (compra, venda, ofertas da IA, IA negociando entre si), virada de temporada com acesso e rebaixamento aplicados, renovação de patrocínios e histórico.
+- **v0.25.6 / Doc, 05/11/2026**: menos texto no fim de temporada, no desempate e na janela da semana; corrige o título da janela da semana, que tinha sumido na v0.25.2 (identificador repetido com o título da aba Treino).
+- **v0.25.5 / Doc, 05/11/2026**: três dicas de primeira vez atualizadas para o fluxo novo (confiança no topo da tela, escalar arrastando, renovação no Mercado da pré-temporada).
+- **v0.25.4 / Doc, 05/11/2026**: Guia com as abas Atributos, O bender, Time e carreira e Táticas da partida; ícone do jogo ao lado de cada termo.
+- **v0.25.3 / Doc, 05/11/2026**: menos texto na pré-temporada (Patrocínios e Mercado), na Classificação e na ficha do bender; fecha a rodada do "menos texto".
+- **v0.25.2 / Doc, 05/11/2026**: menos texto em Elenco, Treino e Finanças (explicações sob um "?", elemento só como ícone nas tabelas, etiquetas e blocos, ícones nos eventos).
+- **v0.25.1 / Doc, 05/11/2026**: menos texto na partida (painéis laterais, Preparação e resumo do round); corrige a etiqueta de zona da partida, que tinha mudado de estilo na v0.25.
+- **v0.25 / Doc, 05/11/2026**: início do "menos texto": Central e subtítulo do cabeçalho em etiquetas com ícone; observação do rival, relatório da partida e dinheiro da rodada em blocos curtos.
+- **v0.24.4 / Doc, 05/11/2026**: coluna de popularidade (POP) na tabela da aba Treino, depois dos atributos.
+- **v0.24.3 / Doc, 05/11/2026**: no Mercado, os benders de outros times ficam divididos também por divisão (sub-abas com contagem, abrindo na divisão do seu time); o seletor de divisão sai.
+- **v0.24.2 / Doc, 05/11/2026**: Mercado da pré-temporada com abas (Agentes livres, Água, Terra, Fogo); a escalação sai da coluna lateral e "Começar temporada" deixa de exigir titular definido (são escalados sozinhos).
+- **v0.24.1 / Doc, 05/11/2026**: a abertura "Sabe como funciona a Dobra Esportiva?" (partida ao vivo e texto) passa a ser a tela de título, com os botões de novo jogo, continuar e partida avulsa logo abaixo; a janela separada sai.
+- **v0.24 / Doc, 05/11/2026**: tela de título (Novo jogo Livre/Carreira, Continuar, Partida avulsa); tela de times só com as grades; pré-temporada em telas próprias sem abas (Patrocínios → Mercado, com coluna lateral de escalação, contratos e pendências), em toda temporada; janela de transferências em 1 etapa (a IA contrata na abertura e ajusta ao começar a temporada); aba Mercado some na temporada; Patrocínios e Finanças viram a aba Finanças.
+- **v0.23 / Doc, 05/11/2026**: retorno neutro das instruções: quadro "Instruções no round" no resumo (ganho e custo típicos de cada instrução, só do próprio time) e avisos curtos na arena (rajada, disco, rebate). Pontos de atenção da matriz ficam registrados até virarem problema.
+- **v0.22.1 / Doc, 05/11/2026**: matriz das vantagens em 6 cenários (formações, posturas e escolhas de alvo); a punição de Manter distância em quem pressiona ficou mais suave (×1,15 e −3% de esquiva), porque passava do ponto fora da Aberta. Pressionar sempre contra o técnico da Primeira que lê o hábito: 42%.
+- **v0.22 / Doc, 05/11/2026**: Manter distância pune quem pressiona (empurrão ×1,25 e menos esquiva), o que dá resposta à dupla terra + fogo pressionando (57%). O técnico rival lê o hábito do jogador nos últimos 12 rounds (formação e instruções repetidas) e prepara a resposta; pressionar sempre cai de 56% para 34% contra um técnico da Primeira.
+- **v0.21 / Doc, 05/11/2026**: vantagens por elemento em duas instruções de cada elemento (terra firma ao pressionar; fogo rajadas ao pressionar e empurrão mais forte à distância; água ataque que persegue à distância e jato que rebate ao proteger). Fogo Pressionar caiu de 64% para 53%. Guia sem "Combina com"; "Sem instrução" virou "Padrão".
 - **v0.20.5 / Doc, 05/11/2026**: lesão em partida com alerta como o da falta (texto LESÃO, apito e anel vermelho no bender) e um selo de lesão (círculo vermelho com cruz) ao lado do nome do bender machucado até ele ser substituído.
 - **v0.20.4 / Doc, 05/11/2026**: a Observação do rival sai do quadro Próxima partida e ganha um quadro próprio logo abaixo, com o nome do rival (na cor dele) no título.
 - **v0.20.3 / Doc, 05/11/2026**: "Simular rápido" e "Recomeçar" juntos à direita do botão principal.

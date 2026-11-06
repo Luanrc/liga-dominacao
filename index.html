@@ -1,8 +1,3 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sport Bend Manager</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,6 +157,7 @@ body.in-match { overflow: hidden; }
 .week-strip .ev-day { border-style: dashed; border-color: rgba(226,176,74,.45); }
 .week-strip .ev-day strong { font: 600 13px var(--body); color: var(--text); line-height: 1.25; }
 .ev-tags { display: flex; flex-wrap: wrap; gap: 3px 8px; font-size: 11px; color: var(--muted); }
+.ev-tags span { display: inline-flex; align-items: center; gap: 2px; } .ev-tags svg, .chip-b small svg { width: 11px; height: 11px; vertical-align: -1px; margin-right: 1px; } .chip-b small { display: inline-flex; align-items: center; }
 .week-strip .ev-chips { margin-top: 4px; min-height: 28px; } .week-strip .ev-chips:empty::after { content: 'Arraste para cá'; }
 .week-strip .chip-b { font-size: 11px; padding: 3px 8px 3px 6px; max-width: 100%; }
 @media (max-width: 760px) { .week-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -502,6 +498,80 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 .gloss { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; margin: 0; }
 .gloss dt { font-weight: 600; font-size: 13px; }
 .gloss dd { margin: 0 0 8px; color: var(--muted); font-size: 13px; }
+/* etiquetas com ícone (menos texto) */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.hub-sub.chips { margin-top: 6px; gap: 5px; } .hub-sub.chips .ich { padding: 3px 8px; font-size: 12.5px; gap: 5px; }
+.ich { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; color: var(--muted); background: rgba(255,255,255,.02); white-space: nowrap; }
+.ich b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ich svg { width: 14px; height: 14px; flex: none; }
+.ich .mbar { display: inline-block; width: 46px; height: 5px; border-radius: 3px; background: rgba(239,232,216,.12); overflow: hidden; } .ich .mbar b { display: block; height: 100%; }
+.ich.w { border-color: #2f5e27; color: #a4e38f; } .ich.l { border-color: #6e2f22; color: #ff8f6e; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 10px; }
+.tile { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.tile > span { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.tile > b { font-variant-numeric: tabular-nums; font-weight: 600; }
+.tile svg, .tl svg { width: 12px; height: 12px; vertical-align: -1px; } .tile > span { display: flex; align-items: center; gap: 4px; }
+.help { display: inline-block; position: relative; margin-left: 8px; vertical-align: middle; text-transform: none; letter-spacing: 0; }
+.help > summary { list-style: none; cursor: pointer; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); color: var(--muted); font: 700 12px var(--body); }
+.help > summary::-webkit-details-marker { display: none; } .help[open] > summary { color: var(--gold); border-color: var(--gold); }
+.help > div { position: absolute; z-index: 30; top: 26px; left: -8px; width: min(360px, 80vw); padding: 10px 12px; border-radius: 8px; background: var(--panel2); border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(0,0,0,.4); font: 400 13px/1.5 var(--body); color: var(--text); }
+#viewHub .tbl td.el > span { display: none; }
+h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--body); font-weight: 400; font-size: 13px; }
+.lgd { display: inline-block; width: 12px; height: 10px; margin-right: 2px; } .lgd.up { border-left: 3px solid #7fd36b; } .lgd.down { border-left: 3px solid #ff6b5a; } .lgd.semi { border-bottom: 2px dashed var(--gold); height: 6px; }
+.bc-meta svg { width: 13px; height: 13px; vertical-align: -2px; color: var(--muted); } h3 .help { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.wk-row .lab svg { width: 11px; height: 11px; vertical-align: -1px; margin-right: 3px; }
+.gloss dt svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px; color: var(--gold); }
+.sti { display: inline-flex; align-items: center; gap: 3px; margin-right: 9px; white-space: nowrap; color: var(--muted); } .sti svg { width: 13px; height: 13px; } .sti b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.scout2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 20px; margin-bottom: 10px; }
+.scout2 h4 { margin: 0 0 6px; font: 600 11px var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.reads svg { display: inline-block; width: 13px; height: 13px; vertical-align: -2px; color: var(--muted); margin-right: 4px; }
+.reads:has(svg) { list-style: none; padding-left: 0; }
+.live small { color: var(--muted); font-weight: 400; }
+.rounds2 { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 6px; }
+.rounds2 li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+/* tela de título */
+.title-wrap { max-width: 1120px; margin: 0 auto; }
+.title-q { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 30px; line-height: 1.1; margin: 8px 0 16px; color: var(--gold); }
+@media (max-width: 600px) { .title-q { font-size: 22px; } }
+.title-menu { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 22px 0 8px; }
+.title-menu .btn { min-width: 200px; }
+.title-menu .btn { justify-content: center; text-align: center; }
+.title-menu .lgb { display: flex; flex-direction: column; gap: 4px; padding: 16px; }
+.title-menu .lgb small { font: 400 13px var(--body); opacity: .75; text-transform: none; letter-spacing: 0; }
+/* fluxo da pré-temporada: telas sem abas */
+.flow #hubNav, .flow #financePanel, .flow #payPanel { display: none; }
+.flow-steps { display: flex; gap: 8px; list-style: none; margin: 0 0 14px; padding: 0; counter-reset: fs; }
+.flow-steps li { counter-increment: fs; display: flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 600; }
+.flow-steps li::before { content: counter(fs); display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); font-size: 12px; }
+.flow-steps li + li::after { order: -1; content: '›'; color: var(--muted); margin-right: 4px; }
+.flow-steps li.on { color: var(--text); } .flow-steps li.on::before { background: var(--gold); color: #1a1408; border-color: var(--gold); }
+.flow-steps li.done::before { content: '✓'; color: #a4e38f; border-color: #2f5e27; }
+.pre-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
+.pre-side { display: none; }
+.flow .pre-grid { grid-template-columns: minmax(0, 1fr) 330px; }
+.flow .pre-main .tbl td, .flow .pre-main .tbl th { padding-left: 6px; padding-right: 6px; }
+.flow .pre-main .tbl .el span { display: none; }
+.pre-side #lineupPanel > .hint, .pre-side .pitch-note { display: none; }
+.pre-side .pitch { max-width: 260px; margin: 0 auto; }
+#othersPanel.by-elem #othersTbl th:nth-child(2), #othersPanel.by-elem #othersTbl td:nth-child(2) { display: none; }
+.div-tabs { margin: 0 0 10px; flex-wrap: wrap; } .div-tabs button { display: inline-flex; align-items: center; gap: 6px; } .div-tabs small { opacity: .7; font-weight: 400; }
+.mk-tabs { margin: 4px 0 -4px; flex-wrap: wrap; } .mk-tabs button { display: inline-flex; align-items: center; gap: 6px; } .mk-tabs small { opacity: .7; font-weight: 400; }
+.pre-side .lineup2 .prep-list th:nth-child(3), .pre-side .lineup2 .prep-list td:nth-child(3), .pre-side .lineup2 .prep-list td:first-child .hint { display: none; }
+.pre-side .prep-list { overflow-x: visible; }
+.pre-side .mini-roster li { grid-template-columns: minmax(0, 1fr); gap: 4px; } .pre-side .mini-roster li .btnrow { justify-content: flex-end; }
+.pre-side .prep-list .bench-h td { white-space: normal; letter-spacing: .06em; } .pre-side .prep-list table { width: 100%; }
+.flow .pre-side { display: grid; gap: 16px; position: sticky; top: 12px; }
+@media (max-width: 1100px) { .flow .pre-grid { grid-template-columns: minmax(0, 1fr); } .flow .pre-side { position: static; } }
+.pre-side .lineup2 { grid-template-columns: minmax(0, 1fr); }
+.pre-side .lineup2 .prep-list th:nth-child(4), .pre-side .lineup2 .prep-list td:nth-child(4), .pre-side .lineup2 .prep-list th:nth-child(5), .pre-side .lineup2 .prep-list td:nth-child(5) { display: none; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 14px; }
+.checks li::before { content: '!'; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(243,201,107,.15); color: #f3c96b; font-weight: 800; font-size: 12px; }
+.checks li.ok::before { content: '✓'; background: rgba(164,227,143,.15); color: #a4e38f; }
+.checks li.bad::before { content: '✕'; background: rgba(255,122,106,.15); color: #ff7a6a; }
+.mini-roster { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.mini-roster li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.mini-roster li .btnrow { gap: 4px; flex-wrap: nowrap; }
 @media (max-width: 560px) {
   .board { padding: 12px; gap: 8px; }
   .swatch { display: none; }
@@ -512,23 +582,34 @@ details summary { cursor: pointer; margin-bottom: 6px; }
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.20.5 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.25.6 · gestão de equipe de dominação profissional</span>
   </header>
+
+  <section class="view" id="viewTitle" hidden>
+    <div class="title-wrap">
+      <h2 class="title-q">Sabe como funciona a Dobra Esportiva?</h2>
+      <div class="intro-body">
+        <div class="intro-arena"><canvas id="introCv" width="560" height="320" aria-label="Uma partida acontecendo"></canvas><span class="intro-cap">Uma partida de verdade, simulada agora</span></div>
+        <div class="intro-text">
+          <p>Dois times de três benders, um de <b style="color:#4aa3ff">água</b>, um de <b style="color:#7ec35a">terra</b> e um de <b style="color:#ff7a3c">fogo</b>, se enfrentam numa arena suspensa sobre a água. Cada lado da arena é dividido em três zonas.</p>
+          <p>Ninguém marca gols: o objetivo é <b>empurrar os rivais para trás</b> com golpes do próprio elemento. Quando o time rival inteiro recua, o seu avança e ganha território. Quem é empurrado para além da última zona <b>cai na água</b> e fica fora do round.</p>
+          <p>No fim do tempo, vence o round quem tiver avançado mais. Derrubar os três rivais na água é <b>nocaute</b> e encerra a partida na hora. Quem vencer dois rounds leva o jogo.</p>
+          <p><b>Você é o técnico.</b> Monta o elenco, decide o treino e os eventos da semana, cuida da energia e do estresse de cada bender e, nos jogos, escolhe a postura, a formação e as instruções antes de cada round. Em quadra, quem joga são eles: o resultado depende de como você os preparou.</p>
+        </div>
+      </div>
+    <div class="title-menu">
+      <button class="btn primary lgb" type="button" data-newgame="free">Novo jogo · Livre<small>Qualquer time das três divisões</small></button>
+      <button class="btn lgb" type="button" data-newgame="career">Novo jogo · Carreira<small>Começa na Terceira Divisão</small></button>
+      <button class="btn" id="continueBtn" type="button" hidden>Continuar</button>
+      <button class="btn" id="sandboxBtn" type="button">Partida avulsa</button>
+    </div>
+    </div>
+  </section>
 
   <section class="view" id="viewStart" hidden>
     <div class="hub-head">
-      <div>
-        <h2 class="hub-title" style="--tc: var(--gold)">Escolha seu time</h2>
-        <p class="hint">Você é o técnico. São três divisões de 8 times: quanto mais alta, mais fortes os times e mais dinheiro em jogo.</p>
-        <div class="mode-pick">
-          <div class="seg" role="group" aria-label="Modo de jogo" id="modeSeg"><button type="button" data-mode="free" aria-pressed="true">Livre</button><button type="button" data-mode="career" aria-pressed="false">Carreira</button></div>
-          <p class="hint" id="modeHint"></p>
-        </div>
-      </div>
-      <div class="btnrow">
-        <button class="btn" id="continueBtn" type="button" hidden>Continuar temporada salva</button>
-        <button class="btn" id="sandboxBtn" type="button">Partida avulsa</button>
-      </div>
+      <h2 class="hub-title" style="--tc: var(--gold)">Escolha seu time</h2>
+      <div class="btnrow"><button class="btn quiet" id="backTitleBtn" type="button">Voltar</button></div>
     </div>
     <h2 id="gridTitle0">Primeira Divisão</h2>
     <div class="team-grid" id="teamGrid0"></div>
@@ -559,13 +640,12 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <button class="btn quiet" id="restartBtn" type="button">Recomeçar</button>
       </div>
     </div>
+    <ol class="flow-steps" id="flowSteps" hidden></ol>
     <nav class="hub-nav" id="hubNav" aria-label="Seções da central do time">
       <button type="button" data-page="home">Central</button>
       <button type="button" data-page="roster">Elenco</button>
       <button type="button" data-page="train">Treino</button>
-      <button type="button" data-page="market">Mercado<span class="nb" id="nbMarket"></span></button>
-      <button type="button" data-page="sponsors">Patrocínios<span class="nb" id="nbSponsors"></span></button>
-      <button type="button" data-page="finance">Finanças</button>
+      <button type="button" data-page="finance">Finanças<span class="nb" id="nbSponsors"></span></button>
       <button type="button" data-page="table">Classificação</button>
       <button type="button" data-page="guide">Guia</button>
     </nav>
@@ -577,9 +657,8 @@ details summary { cursor: pointer; margin-bottom: 6px; }
     </div>
 
     <div class="page" data-page="roster" hidden>
-      <section class="panel">
-        <h2>Escalação</h2>
-        <p class="hint">Começam 3 titulares, um de cada elemento. Arraste um reserva para o campo (ou sobre o titular) para escalá-lo no lugar de quem é do mesmo elemento. Clique num bender para ver a ficha. Na partida, os reservas sadios ficam no banco e podem entrar entre os rounds.</p>
+      <section class="panel" id="lineupPanel">
+        <h2 id="lineupTitle">Escalação</h2>
         <div class="lineup2">
           <div class="prep-field">
             <div class="pitch" id="rosterPitch" data-drop="rpitch">
@@ -592,16 +671,14 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         </div>
       </section>
       <section class="panel">
-        <h2>Elenco</h2>
-        <p class="hint" id="rosterHint"></p>
+        <h2>Elenco <span class="chips" id="rosterHint" style="display:inline-flex;vertical-align:middle;margin-left:8px"></span></h2>
         <div class="tbl-wrap"><table class="tbl pick" id="rosterTbl"></table></div>
       </section>
     </div>
 
     <div class="page" data-page="train" hidden>
       <section class="panel">
-        <h2>Semana</h2>
-        <p class="hint" id="weekHint"></p>
+        <h2 id="weekPanelTitle">Semana</h2>
         <div class="week-strip" id="weekStrip"></div>
         <div id="evPool"></div>
         <div class="train-bar">
@@ -609,47 +686,47 @@ details summary { cursor: pointer; margin-bottom: 6px; }
             <button type="button" data-m="team">Treino em equipe</button><button type="button" data-m="ind">Treino individual</button>
           </div>
           <label class="f inline" for="teamPlan" id="teamPlanWrap">Foco da equipe <select id="teamPlan"></select></label>
+          <span id="trainHint"></span>
         </div>
-        <p class="hint" id="trainHint"></p>
         <div class="tbl-wrap"><table class="tbl" id="trainTbl"></table></div>
       </section>
     </div>
 
     <div class="page" data-page="market" hidden>
+     <div class="pre-grid"><div class="pre-main">
       <section class="panel">
-        <h2>Mercado</h2>
-        <p class="hint" id="marketHint"></p>
-        <div class="budget" id="budgetBox"></div>
+        <h2 id="marketTitle">Mercado</h2>
+        <div class="chips" id="budgetBox"></div>
+        <p class="hint" id="marketHint" hidden></p>
         <div id="offersBox"></div>
       </section>
+      <div class="seg mk-tabs" role="tablist" aria-label="Listas do mercado" id="mkTabs"></div>
       <section class="panel" id="faPanel">
-        <h2>Agentes livres</h2>
-        <p class="hint">Contratar custa luvas (2 rodadas de salário, mais caras para benders populares). O salário entra na folha a partir da 1ª rodada. Clique num bender para ver a ficha com os atributos.</p>
+        <h2>Agentes livres <details class="help"><summary aria-label="Como funciona" title="Como funciona">?</summary><div>Contratar custa luvas (2 rodadas de salário, mais caras para benders populares). O salário entra na folha a partir da 1ª rodada. Clique num bender para ver a ficha com os atributos.</div></details></h2>
         <div class="train-bar"><label class="f inline chk"><input type="checkbox" data-budget> Só quem cabe no orçamento</label></div>
         <div class="tbl-wrap" id="marketWrap"><table class="tbl" id="marketTbl"></table></div>
       </section>
       <section class="panel" id="othersPanel">
-        <h2>Benders de outros times</h2>
-        <p class="hint">Comprar custa o valor de mercado. O time vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 6 no elenco. Clique num bender para ver a ficha com os atributos.</p>
+        <h2 id="othersTitle">Benders de outros times</h2>
+        <div class="seg div-tabs" role="tablist" aria-label="Divisão" id="divTabs"></div>
+        
         <div class="train-bar">
-          <label class="f inline" for="othersDiv">Divisão <select id="othersDiv"><option value="all">Todas</option><option value="0">Primeira</option><option value="1">Segunda</option><option value="2">Terceira</option></select></label>
           <label class="f inline chk" for="othersAvail"><input type="checkbox" id="othersAvail" checked> Só os que estão à venda</label>
           <label class="f inline chk"><input type="checkbox" data-budget> Só quem cabe no orçamento</label>
         </div>
         <div class="tbl-wrap"><table class="tbl" id="othersTbl"></table></div>
       </section>
-    </div>
-
-    <div class="page" data-page="sponsors" hidden>
-      <section class="panel" id="boardPanel"></section>
-      <section class="panel" id="sponsorPanel"></section>
+      <section class="panel" id="newsPanel" hidden></section>
+     </div>
+     <aside class="pre-side" id="preSide"><section class="panel" id="preCheck"></section><section class="panel" id="preContracts"></section></aside></div>
     </div>
 
     <div class="page" data-page="finance" hidden>
+      <section class="panel" id="boardPanel"></section>
+      <section class="panel" id="sponsorPanel"></section>
       <section class="panel" id="financePanel"></section>
-      <section class="panel">
-        <h2>Folha salarial</h2>
-        <p class="hint" id="payHint"></p>
+      <section class="panel" id="payPanel">
+        <h2>Folha salarial <span class="chips" id="payHint" style="display:inline-flex;vertical-align:middle;margin-left:8px"></span></h2>
         <div id="renewBox"></div>
         <div class="tbl-wrap"><table class="tbl" id="payTbl"></table></div>
       </section>
@@ -683,32 +760,42 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       </section>
       <div class="gtabs" data-gtabs>
         <div class="seg gtab" role="tablist" aria-label="Guia">
-          <button type="button" data-gtab="attrs" aria-pressed="true">Atributos</button><button type="button" data-gtab="tactics" aria-pressed="false">Táticas da partida</button>
+          <button type="button" data-gtab="attrs" aria-pressed="true">Atributos</button><button type="button" data-gtab="bender" aria-pressed="false">O bender</button><button type="button" data-gtab="career" aria-pressed="false">Time e carreira</button><button type="button" data-gtab="tactics" aria-pressed="false">Táticas da partida</button>
         </div>
       <section class="panel" data-gpane="attrs">
-        <h2>Guia dos atributos</h2>
+        <h2>Atributos</h2>
           <dl class="gloss">
-            <dt>POD · Poder</dt><dd>Força do golpe: quanto empurra o rival.</dd>
-            <dt>PRE · Precisão</dt><dd>Mira e antecipação do movimento do alvo. Dificulta a esquiva do rival.</dd>
-            <dt>AGI · Agilidade</dt><dd>Velocidade, chance de esquiva e ritmo de ataque.</dd>
-            <dt>FIR · Firmeza</dt><dd>Aguenta golpes sem ser empurrado. Na terra, também bloqueia com discos.</dd>
-            <dt>DIS · Disciplina</dt><dd>Evita faltas (pisar na linha e golpes acima dos ombros).</dd>
-            <dt>LEI · Leitura de jogo</dt><dd>Escolhe melhor o alvo, reage mais rápido e antecipa golpes para esquivar.</dd>
-            <dt>Temperamento</dt><dd>Calmo puxa a postura para a defesa, explosivo para o ataque: o jogador segue principalmente a sua ordem, mas sempre com um pouco do próprio jeito. Em quadra, o <b>explosivo esquenta</b> quando o time está atrás (ou quando ele é empurrado para trás): empurra mais e ataca mais rápido, mas comete mais faltas. O <b>calmo fica frio</b> quando o time não está atrás: esquiva mais e comete menos faltas. Não se treina.</dd>
-            <dt>Semana</dt><dd>Na segunda você decide; na quarta é o treino (ou descanso); os eventos acontecem na terça, quinta, sexta ou sábado; no domingo é o jogo. O treino e os eventos da semana acontecem antes do jogo, então o cansaço deles já pesa no domingo.</dd>
-            <dt>Energia</dt><dd>Cada dia livre recupera energia, e quanto mais cansado o bender estiver, mais ele recupera. Treinar na quarta cansa bastante; descansar na quarta recupera mais que um dia livre comum. Evento ocupa o dia (não recupera) e cansa. A partida também cansa; reserva que não entra tem o domingo livre. Alternar semanas de treino com semanas de descanso mantém o titular inteiro para os jogos. Cansado rende menos em quadra e treina pior.</dd>
-            <dt>Nota</dt><dd>Resume os atributos, pesando mais os que mais decidem partidas (Poder e Firmeza).</dd>
-            <dt>Salário e contrato</dt><dd>Pago a cada rodada, fixado no contrato: mesmo que o bender melhore, o salário só muda na renovação. Contratos duram algumas temporadas (agentes livres jovens assinam por mais tempo). Quando o contrato termina, você renova na pré-temporada pelo salário que ele pede (benders populares pedem mais) ou ele vai embora de graça.</dd>
-            <dt>Idade</dt><dd>Jovens evoluem mais rápido no treino e ainda amadurecem sozinhos a cada temporada. Com a idade, os veteranos perdem Agilidade e Poder (e um pouco de Firmeza e Precisão), compensando um pouco com Leitura e Disciplina. Os mais velhos podem se aposentar no fim da temporada.</dd>
-            <dt>Limite de evolução</dt><dd>Cada bender tem um limite até onde pode evoluir, que você não vê. Jovens costumam ter muito espaço para crescer; veteranos já estão perto do limite. Quando o treino passa a render quase nada, é sinal de que ele chegou lá.</dd>
-            <dt>POP · Popularidade do bender</dt><dd>Sobe quando o bender joga, vence, empurra rivais, derruba alguém na água e faz eventos; cai um pouco a cada semana na reserva. Explosivos ganham popularidade mais rápido. Aumenta a renda dos eventos, o valor de mercado e as luvas.</dd>
-            <dt>Popularidade do time</dt><dd>Sobe com vitórias, nocautes, playoffs, título e acesso, e um pouco com os eventos dos seus benders; cai com derrotas e rebaixamento. Times populares recebem propostas de patrocínio maiores, mas com metas mais difíceis, e enchem a arquibancada. Em compensação, a torcida cobra mais: perder estressa mais os benders.</dd>
-            <dt>Reputação do técnico</dt><dd>É a sua. No começo de cada temporada a diretoria espera uma posição conforme a força do elenco em relação à divisão. No fim, a reputação sobe se você superar a expectativa e cai se ficar abaixo; playoffs, título e acesso dão um bônus, e o rebaixamento pesa contra. Nas divisões de baixo os ganhos valem menos e têm um teto. Com mais reputação, times maiores fazem propostas para você no fim da temporada.</dd>
-            <dt>Confiança da diretoria</dt><dd>Só existe durante a temporada e começa mais alta quanto maior a sua reputação. Vitórias aumentam, derrotas diminuem; também pesam a posição na tabela em relação à expectativa, o caixa no vermelho e sequências de derrotas. Se ela se esgotar no meio da temporada, você é demitido na hora. No fim da temporada, também é demitido com a confiança muito baixa ou se for rebaixado com um elenco montado para brigar em cima. A demissão custa reputação, e você escolhe um novo time entre os que aceitam você.</dd>
-            <dt>Estresse</dt><dd>Sobe a cada partida, mais ainda nas derrotas e quanto mais popular for o time; metas de patrocínio em aberto, treinos e eventos também pesam. Explosivos se estressam mais rápido, calmos aguentam mais. Descansar na quarta alivia bastante; cada dia livre alivia um pouco; vencer e ficar na reserva também. Estresse derruba principalmente Precisão, Disciplina e Leitura de jogo e, quando está muito alto, faz o bender ignorar instruções com mais frequência.</dd>
-            <dt>Eventos</dt><dd>Além do treino de quarta, um bender pode fazer um evento por semana, no dia do evento: rende dinheiro e popularidade, mas ocupa o dia e cansa. Evento no começo da semana pesa menos no domingo do que no sábado. Alguns exigem popularidade mínima e têm poucas vagas.</dd>
-            <dt>Lesão</dt><dd>Mostra por quantas semanas (rodadas) o bender fica fora. Na partida, cada vez que ele é empurrado de zona, cai na água ou leva um golpe acima dos ombros (a jogada que dá falta) há uma pequena chance de se machucar (cansado se machuca mais); treinar com energia baixa também pode machucar. Quem se lesiona numa partida joga o resto dela com Poder, Agilidade e Firmeza reduzidos, até você trocá-lo no intervalo. Lesionado não treina nem faz eventos que exigem o físico (exibição, festival, aula), mas pode descansar e fazer eventos tranquilos (beneficente, entrevista, rádio, autógrafos). Só entra em quadra se não houver outro bender sadio do elemento.</dd>
-            <dt>Elenco e banco</dt><dd>O elenco tem um mínimo e um máximo de benders (a aba Elenco mostra as vagas). Cada partida começa com os titulares, um de cada elemento; os reservas sadios ficam no banco e podem entrar no intervalo entre os rounds, à vontade, sempre no lugar de alguém do mesmo elemento. Quem entra em quadra conta como quem jogou (gasta energia e acumula estresse).</dd>
+            <dt data-ic="push">POD · Poder</dt><dd>Força do golpe: quanto empurra o rival.</dd>
+            <dt data-ic="target">PRE · Precisão</dt><dd>Mira e antecipação do movimento do alvo. Dificulta a esquiva do rival.</dd>
+            <dt data-ic="dodge">AGI · Agilidade</dt><dd>Velocidade, chance de esquiva e ritmo de ataque.</dd>
+            <dt data-ic="block">FIR · Firmeza</dt><dd>Aguenta golpes sem ser empurrado. Na terra, também bloqueia com discos.</dd>
+            <dt data-ic="whistle">DIS · Disciplina</dt><dd>Evita faltas (pisar na linha e golpes acima dos ombros).</dd>
+            <dt data-ic="eye">LEI · Leitura de jogo</dt><dd>Escolhe melhor o alvo, reage mais rápido e antecipa golpes para esquivar.</dd>
+            <dt data-ic="flame">Temperamento</dt><dd>Calmo puxa a postura para a defesa, explosivo para o ataque: o jogador segue principalmente a sua ordem, mas sempre com um pouco do próprio jeito. Em quadra, o <b>explosivo esquenta</b> quando o time está atrás (ou quando ele é empurrado para trás): empurra mais e ataca mais rápido, mas comete mais faltas. O <b>calmo fica frio</b> quando o time não está atrás: esquiva mais e comete menos faltas. Não se treina.</dd>
+            <dt data-ic="ovr">Nota</dt><dd>Resume os atributos, pesando mais os que mais decidem partidas (Poder e Firmeza).</dd>
+          </dl>
+      </section>
+      <section class="panel" data-gpane="bender" hidden>
+        <h2>O bender</h2>
+          <dl class="gloss">
+            <dt data-ic="bolt">Energia</dt><dd>Cada dia livre recupera energia, e quanto mais cansado o bender estiver, mais ele recupera. Treinar na quarta cansa bastante; descansar na quarta recupera mais que um dia livre comum. Evento ocupa o dia (não recupera) e cansa. A partida também cansa; reserva que não entra tem o domingo livre. Alternar semanas de treino com semanas de descanso mantém o titular inteiro para os jogos. Cansado rende menos em quadra e treina pior.</dd>
+            <dt data-ic="stress">Estresse</dt><dd>Sobe a cada partida, mais ainda nas derrotas e quanto mais popular for o time; metas de patrocínio em aberto, treinos e eventos também pesam. Explosivos se estressam mais rápido, calmos aguentam mais. Descansar na quarta alivia bastante; cada dia livre alivia um pouco; vencer e ficar na reserva também. Estresse derruba principalmente Precisão, Disciplina e Leitura de jogo e, quando está muito alto, faz o bender ignorar instruções com mais frequência.</dd>
+            <dt data-ic="cross">Lesão</dt><dd>Mostra por quantas semanas (rodadas) o bender fica fora. Na partida, cada vez que ele é empurrado de zona, cai na água ou leva um golpe acima dos ombros (a jogada que dá falta) há uma pequena chance de se machucar (cansado se machuca mais); treinar com energia baixa também pode machucar. Quem se lesiona numa partida joga o resto dela com Poder, Agilidade e Firmeza reduzidos, até você trocá-lo no intervalo. Lesionado não treina nem faz eventos que exigem o físico (exibição, festival, aula), mas pode descansar e fazer eventos tranquilos (beneficente, entrevista, rádio, autógrafos). Só entra em quadra se não houver outro bender sadio do elemento.</dd>
+            <dt data-ic="cal">Idade</dt><dd>Jovens evoluem mais rápido no treino e ainda amadurecem sozinhos a cada temporada. Com a idade, os veteranos perdem Agilidade e Poder (e um pouco de Firmeza e Precisão), compensando um pouco com Leitura e Disciplina. Os mais velhos podem se aposentar no fim da temporada.</dd>
+            <dt data-ic="ovr">Limite de evolução</dt><dd>Cada bender tem um limite até onde pode evoluir, que você não vê. Jovens costumam ter muito espaço para crescer; veteranos já estão perto do limite. Quando o treino passa a render quase nada, é sinal de que ele chegou lá.</dd>
+            <dt data-ic="star">POP · Popularidade do bender</dt><dd>Sobe quando o bender joga, vence, empurra rivais, derruba alguém na água e faz eventos; cai um pouco a cada semana na reserva. Explosivos ganham popularidade mais rápido. Aumenta a renda dos eventos, o valor de mercado e as luvas.</dd>
+            <dt data-ic="cash">Salário e contrato</dt><dd>Pago a cada rodada, fixado no contrato: mesmo que o bender melhore, o salário só muda na renovação. Contratos duram algumas temporadas (agentes livres jovens assinam por mais tempo). Quando o contrato termina, você renova na pré-temporada pelo salário que ele pede (benders populares pedem mais) ou ele vai embora de graça.</dd>
+          </dl>
+      </section>
+      <section class="panel" data-gpane="career" hidden>
+        <h2>Time e carreira</h2>
+          <dl class="gloss">
+            <dt data-ic="cal">Semana</dt><dd>Na segunda você decide; na quarta é o treino (ou descanso); os eventos acontecem na terça, quinta, sexta ou sábado; no domingo é o jogo. O treino e os eventos da semana acontecem antes do jogo, então o cansaço deles já pesa no domingo.</dd>
+            <dt data-ic="flag">Eventos</dt><dd>Além do treino de quarta, um bender pode fazer um evento por semana, no dia do evento: rende dinheiro e popularidade, mas ocupa o dia e cansa. Evento no começo da semana pesa menos no domingo do que no sábado. Alguns exigem popularidade mínima e têm poucas vagas.</dd>
+            <dt data-ic="people">Elenco e banco</dt><dd>O elenco tem um mínimo e um máximo de benders (a aba Elenco mostra as vagas). Cada partida começa com os titulares, um de cada elemento; os reservas sadios ficam no banco e podem entrar no intervalo entre os rounds, à vontade, sempre no lugar de alguém do mesmo elemento. Quem entra em quadra conta como quem jogou (gasta energia e acumula estresse).</dd>
+            <dt data-ic="star">Popularidade do time</dt><dd>Sobe com vitórias, nocautes, playoffs, título e acesso, e um pouco com os eventos dos seus benders; cai com derrotas e rebaixamento. Times populares recebem propostas de patrocínio maiores, mas com metas mais difíceis, e enchem a arquibancada. Em compensação, a torcida cobra mais: perder estressa mais os benders.</dd>
+            <dt data-ic="medal">Reputação do técnico</dt><dd>É a sua. No começo de cada temporada a diretoria espera uma posição conforme a força do elenco em relação à divisão. No fim, a reputação sobe se você superar a expectativa e cai se ficar abaixo; playoffs, título e acesso dão um bônus, e o rebaixamento pesa contra. Nas divisões de baixo os ganhos valem menos e têm um teto. Com mais reputação, times maiores fazem propostas para você no fim da temporada.</dd>
+            <dt data-ic="board">Confiança da diretoria</dt><dd>Só existe durante a temporada e começa mais alta quanto maior a sua reputação. Vitórias aumentam, derrotas diminuem; também pesam a posição na tabela em relação à expectativa, o caixa no vermelho e sequências de derrotas. Se ela se esgotar no meio da temporada, você é demitido na hora. No fim da temporada, também é demitido com a confiança muito baixa ou se for rebaixado com um elenco montado para brigar em cima. A demissão custa reputação, e você escolhe um novo time entre os que aceitam você.</dd>
           </dl>
       </section>
       <section class="panel" data-gpane="tactics" hidden>
@@ -744,11 +831,11 @@ details summary { cursor: pointer; margin-bottom: 6px; }
         <h3 class="sub">Instruções individuais</h3>
         <dl class="gloss">
           <dt>Padrão</dt><dd>O bender segue a tática do time.</dd>
-          <dt>Pressionar</dt><dd>Joga colado na linha, prefere alvos perto e ataca um pouco mais rápido. Em troca, esquiva menos (fica exposto) e comete bem mais faltas de linha. Combina com a terra, mais forte de perto.</dd>
-          <dt>Manter distância</dt><dd>Prefere alvos longe, se movimenta mais e esquiva mais, mas ataca um pouco mais devagar. Combina com o fogo, mais forte de longe.</dd>
+          <dt>Pressionar</dt><dd>Joga colado na linha, prefere alvos perto e ataca um pouco mais rápido. Em troca, esquiva menos (fica exposto) e comete bem mais faltas de linha. Na terra, finca o pé enquanto avança e fica mais difícil de empurrar. No fogo, solta rajadas com mais frequência.</dd>
+          <dt>Manter distância</dt><dd>Prefere alvos longe, se movimenta mais e esquiva mais, mas ataca um pouco mais devagar. Na água, o ataque persegue melhor o alvo. No fogo, cada golpe empurra mais forte.</dd>
           <dt>Mais agressivo</dt><dd>Puxa a postura daquele bender para a agressiva, sem mudar a do time.</dd>
           <dt>Mais cauteloso</dt><dd>Puxa a postura daquele bender para a defensiva, sem mudar a do time.</dd>
-          <dt>Proteger</dt><dd>Esquiva mais, mas ataca um pouco mais devagar. Na terra, também tenta erguer um disco para interceptar ataques que vão num companheiro próximo.</dd>
+          <dt>Proteger</dt><dd>Esquiva mais, mas ataca um pouco mais devagar. Na terra, tenta erguer um disco para interceptar ataques que vão num companheiro próximo. Na água, tenta rebater com um jato os ataques mais leves que vão num companheiro próximo.</dd>
           <dt>Marcar um rival</dt><dd>Ataca sempre o rival escolhido, ignorando a escolha de alvo do time.</dd>
           <dt>Mesma instrução para todos</dt><dd>Dar a mesma instrução a todos os benders em quadra deixa o time <b>previsível</b>: naquele round o rival antecipa os movimentos (o time esquiva bem menos e ataca um pouco mais devagar). Misture as instruções, ou deixe alguém no Padrão.</dd>
         </dl>
@@ -876,21 +963,6 @@ details summary { cursor: pointer; margin-bottom: 6px; }
       <div class="btnrow modal-actions"><button class="btn" type="button" id="confirmNo">Cancelar</button><button class="btn primary" type="button" id="confirmYes">Confirmar</button></div>
     </section>
   </div>
-  <div class="modal-back" id="introModal" hidden>
-    <section class="modal intro-modal" role="dialog" aria-modal="true" aria-labelledby="introTitle">
-      <h2 id="introTitle">Sabe como funciona a Dobra Esportiva?</h2>
-      <div class="intro-body">
-        <div class="intro-arena"><canvas id="introCv" width="560" height="320" aria-label="Uma partida acontecendo"></canvas><span class="intro-cap">Uma partida de verdade, simulada agora</span></div>
-        <div class="intro-text">
-          <p>Dois times de três benders, um de <b style="color:#4aa3ff">água</b>, um de <b style="color:#7ec35a">terra</b> e um de <b style="color:#ff7a3c">fogo</b>, se enfrentam numa arena suspensa sobre a água. Cada lado da arena é dividido em três zonas.</p>
-          <p>Ninguém marca gols: o objetivo é <b>empurrar os rivais para trás</b> com golpes do próprio elemento. Quando o time rival inteiro recua, o seu avança e ganha território. Quem é empurrado para além da última zona <b>cai na água</b> e fica fora do round.</p>
-          <p>No fim do tempo, vence o round quem tiver avançado mais. Derrubar os três rivais na água é <b>nocaute</b> e encerra a partida na hora. Quem vencer dois rounds leva o jogo.</p>
-          <p><b>Você é o técnico.</b> Monta o elenco, decide o treino e os eventos da semana, cuida da energia e do estresse de cada bender e, nos jogos, escolhe a postura, a formação e as instruções antes de cada round. Em quadra, quem joga são eles: o resultado depende de como você os preparou.</p>
-        </div>
-      </div>
-      <div class="btnrow modal-actions"><button class="btn primary lgb" type="button" id="introOk">Vamos lá</button></div>
-    </section>
-  </div>
   <div class="modal-back" id="weekModal" hidden>
     <section class="modal week-modal" role="dialog" aria-modal="true" aria-labelledby="weekTitle">
       <div class="gm-head"><h2 id="weekTitle">Como foi a semana</h2><button class="btn sm xbtn" id="weekClose" type="button" aria-label="Fechar">✕</button></div>
@@ -984,6 +1056,9 @@ const TAC = {
   protDodge: 0.10, protCd: 1.05,
   sameDodge: -0.18, sameCd: 1.08,
   // temperamento: o explosivo esquenta quando está atrás; o calmo fica frio quando está à frente
+  // efeitos próprios de cada elemento (v0.21): terra pressionando finca o pé; fogo pressionando solta mais rajadas;
+  // água mantendo distância persegue melhor o alvo; água protegendo rebate ataques fracos que vão num companheiro próximo
+  earthPressBrace: 6, firePressBurst: 0.45, firePressCd: 1.05, fireDistKb: 1.1, waterDistHome: 1.8, waterGuard: 0.18, waterGuardMaxKb: 200, distVsPressKb: 1.15, distVsPressDodge: -0.03,
   rageKb: 0.05, rageCd: 0.05, calmDodge: 0.04, foulBase: 0.8, foulTmp: 0.004,
   // duelo de elementos: mirar nos ataques que vêm na direção do time
   duelChance: 0.14, duelPre: 0.002, duelLei: 0.001, duelRange: 230, duelCd: 0.7, duelSlow: 1.25, // os três com a mesma instrução: o rival lê o plano
@@ -1052,7 +1127,7 @@ function createMatch(defs, seed, arena = 'round', coach = null) {
   };
   m.teams = defs.map((d, ti) => ({
     name: d.name, short: d.short || d.name, color: d.color, posture: d.posture || 'bal',
-    targeting: d.targeting || 'free', baseTargeting: d.targeting || 'free', formation: d.formation || 'open', auto: !!d.auto, pop: d.pop ?? 45, style: d.style || 'bal', limit: AL / 2, roundWins: 0, advances: 0, idx: ti,
+    targeting: d.targeting || 'free', baseTargeting: d.targeting || 'free', formation: d.formation || 'open', auto: !!d.auto, pop: d.pop ?? 45, style: d.style || 'bal', scout: d.scout || null, limit: AL / 2, roundWins: 0, advances: 0, idx: ti,
     players: d.players.map((pd, i) => newMatchPlayer(ti, ti * 10 + i, i, pd)),
     bench: (d.bench || []).map((pd, k) => newMatchPlayer(ti, ti * 10 + 3 + k, -1, pd)),
   }));
@@ -1063,7 +1138,7 @@ function createMatch(defs, seed, arena = 'round', coach = null) {
 
 function newMatchPlayer(ti, id, slot, pd) {
   const p = { id, team: ti, slot, name: pd.name, elem: pd.elem, st: { lei: 50, tmp: 50, ...pd.st }, ref: pd.id, instr: pd.instr || 'none', obey: true,
-    stats: { shots: 0, hits: 0, pushes: 0, falls: 0, dodges: 0, blocks: 0, fouls: 0, taken: 0 } };
+    stats: { shots: 0, hits: 0, pushes: 0, falls: 0, dodges: 0, blocks: 0, fouls: 0, taken: 0, bursts: 0, guards: 0, lineFouls: 0 } };
   if (pd.injured) injure(p, true); // lesionado que entra mesmo assim (não havia outro do elemento)
   return p;
 }
@@ -1149,7 +1224,7 @@ function step(m) {
         m.mode = 'play'; emit(m, 'start', { text: `Round ${m.round}: começou!` });
         // registra a tática de cada time neste round (para o relatório pós-partida)
         m.tacticLog = m.tacticLog || [];
-        m.tacticLog[m.round - 1] = m.teams.map((t) => ({ posture: t.posture, targeting: t.targeting, formation: t.formation, instr: t.players.map((p) => p.instr) }));
+        m.tacticLog[m.round - 1] = m.teams.map((t) => ({ posture: t.posture, targeting: t.targeting, formation: t.formation, instr: t.players.map((p) => p.instr), ie: Object.fromEntries(t.players.map((p) => [p.elem, p.instr])) }));
         // obediência: quem recebeu uma ordem contra o próprio temperamento pode ignorá-la neste round
         // os três com a mesma instrução (não vale "sem instrução"): o rival lê o plano
         for (const t of m.teams) { const ins = t.players.map((p) => p.instr || 'none'); t.sameInstr = ins.length >= 3 && ins[0] !== 'none' && ins.every((x) => x === ins[0]); if (t.sameInstr) emit(m, 'readplan', { team: t.idx, text: `${t.name} deu a mesma instrução aos três benders e ficou previsível: o rival antecipa os movimentos neste round.` }); }
@@ -1279,7 +1354,7 @@ function think(m, p) {
   // falta: pisar além da linha (afobação)
   if (!inTb && m.mode === 'play') {
     const pf = 0.0007 * (1.25 - p.st.dis / 100) * p.post.foul * SIM_TUNING.foulMul * (ins === 'press' ? TAC.pressFoul : 1);
-    if (m.rng() < pf) foul(m, p, 'linha');
+    if (m.rng() < pf) { p.stats.lineFouls++; foul(m, p, 'linha'); }
   }
 }
 
@@ -1421,8 +1496,11 @@ function shoot(m, p, isBurst) {
   });
   p.stats.shots++;
   if (!isBurst) {
-    p.cd = E.cd * (1.15 - p.st.agi * 0.003) * p.post.cd * ({ press: TAC.pressCd, distance: TAC.distCd, protect: TAC.protCd }[instrOf(p)] || 1) * (team.formation === 'stagger' && p === anchorOf(team) ? TAC.anchorCd : 1) * (team.sameInstr ? TAC.sameCd : 1) * (1 - moodOf(m, p).rage * TAC.rageCd) * (team.targeting === 'mirror' ? TAC.duelSlow : 1) * (0.85 + m.rng() * 0.3);
-    if (p.elem === 'fire' && m.rng() < 0.35) p.burst = 0.12;
+    p.cd = E.cd * (1.15 - p.st.agi * 0.003) * p.post.cd * ({ press: p.elem === 'fire' ? TAC.firePressCd : TAC.pressCd, distance: TAC.distCd, protect: TAC.protCd }[instrOf(p)] || 1) * (team.formation === 'stagger' && p === anchorOf(team) ? TAC.anchorCd : 1) * (team.sameInstr ? TAC.sameCd : 1) * (1 - moodOf(m, p).rage * TAC.rageCd) * (team.targeting === 'mirror' ? TAC.duelSlow : 1) * (0.85 + m.rng() * 0.3);
+    if (p.elem === 'fire' && m.rng() < (instrOf(p) === 'press' ? TAC.firePressBurst : 0.35)) {
+      p.burst = 0.12; p.stats.bursts++;
+      if (instrOf(p) === 'press') emit(m, 'burst', { pid: p.id, team: p.team, x: p.x, y: p.y });
+    }
   }
 }
 
@@ -1437,7 +1515,8 @@ function updateProjs(m) {
       let da = want - cur;
       while (da > Math.PI) da -= 2 * Math.PI;
       while (da < -Math.PI) da += 2 * Math.PI;
-      const turn = clamp(da, -E.home * DT, E.home * DT);
+      const home = E.home * (pr.elem === 'water' && pr.owner && instrOf(pr.owner) === 'distance' ? TAC.waterDistHome : 1);
+      const turn = clamp(da, -home * DT, home * DT);
       const sp = Math.hypot(pr.vx, pr.vy), na = cur + turn;
       pr.vx = Math.cos(na) * sp; pr.vy = Math.sin(na) * sp;
     }
@@ -1463,8 +1542,16 @@ function updateProjs(m) {
         const g = m.teams[t.team].players.find((q) => q !== t && q.alive && q.active && q.elem === 'earth' && q.stagger <= 0 &&
           instrOf(q) === 'protect' && Math.hypot(q.x - t.x, q.y - t.y) < 80);
         if (g && m.rng() < 0.1 + g.st.fir * 0.002) {
-          pr.dead = true; g.stats.blocks++;
-          emit(m, 'block', { pid: g.id, team: g.team, x: pr.x, y: pr.y, text: `${g.name} protege ${t.name} com um disco!` });
+          pr.dead = true; g.stats.blocks++; g.stats.guards++;
+          emit(m, 'block', { pid: g.id, team: g.team, x: pr.x, y: pr.y, guard: 'disco', text: `${g.name} protege ${t.name} com um disco!` });
+          continue;
+        }
+        // água protegendo: rebate com um jato ataques fracos (o fogo) que vão num companheiro próximo
+        const wg = !g && pr.kb <= TAC.waterGuardMaxKb && m.teams[t.team].players.find((q) => q !== t && q.alive && q.active && q.elem === 'water' && q.stagger <= 0 &&
+          instrOf(q) === 'protect' && Math.hypot(q.x - t.x, q.y - t.y) < 80);
+        if (wg && m.rng() < TAC.waterGuard + wg.st.pre * 0.002) {
+          pr.dead = true; wg.stats.blocks++; wg.stats.guards++;
+          emit(m, 'block', { pid: wg.id, team: wg.team, x: pr.x, y: pr.y, guard: 'rebate', text: `${wg.name} rebate o ataque e protege ${t.name}!` });
           continue;
         }
       }
@@ -1492,7 +1579,7 @@ function updateProjs(m) {
         break;
       }
       const oi = instrOf(o), backline = m.teams[o.team].formation === 'stagger' && o !== anchorOf(m.teams[o.team]);
-      const prot = (oi === 'protect' ? TAC.protDodge : oi === 'distance' ? TAC.distDodge : oi === 'press' ? TAC.pressDodge : 0) + (backline ? TAC.backDodge : 0) + (m.teams[o.team].sameInstr ? TAC.sameDodge : 0);
+      const prot = (oi === 'protect' ? TAC.protDodge : oi === 'distance' ? TAC.distDodge : oi === 'press' ? TAC.pressDodge + (instrOf(pr.owner) === 'distance' ? TAC.distVsPressDodge : 0) : 0) + (backline ? TAC.backDodge : 0) + (m.teams[o.team].sameInstr ? TAC.sameDodge : 0);
       const ch = (0.1 + o.st.agi * 0.0045 + post.dodge + readB + prot + moodOf(m, o).calm * TAC.calmDodge - (pr.owner.st.pre - 60) * 0.004) * Math.min(1, tc / 0.4);
       if (m.rng() < ch) {
         const side = rx * pr.vy - ry * pr.vx; // lado do projétil
@@ -1532,8 +1619,8 @@ function hit(m, pr, o) {
   if (m.mode !== 'tb' && m.rng() < pf) { foul(m, a, 'cabeca', o); maybeInjure(m, o, 'head'); return; }
   const D = m.teams[o.team], edge = m.mode !== 'tb' && FORM_BEATS[team.formation] === D.formation;
   // quem segura a linha finca o pé, a não ser contra ataque concentrado da Compacta
-  const brace = D.formation === 'stagger' && o === anchorOf(D) && !(edge && team.formation === 'compact') ? TAC.anchorBrace : 0;
-  const imp = pr.kb * rangeMul(pr.elem, pr.dist) * SIM_TUNING.kbMul * (0.6 + a.st.pow * 0.008) / (0.6 + (o.st.fir + brace) * 0.008) * (edge ? 1 + TAC.formEdge[team.formation] : 1) * (1 + moodOf(m, a).rage * TAC.rageKb);
+  const brace = (D.formation === 'stagger' && o === anchorOf(D) && !(edge && team.formation === 'compact') ? TAC.anchorBrace : 0) + (o.elem === 'earth' && instrOf(o) === 'press' ? TAC.earthPressBrace : 0);
+  const imp = pr.kb * rangeMul(pr.elem, pr.dist) * SIM_TUNING.kbMul * (0.6 + a.st.pow * 0.008) / (0.6 + (o.st.fir + brace) * 0.008) * (edge ? 1 + TAC.formEdge[team.formation] : 1) * (1 + moodOf(m, a).rage * TAC.rageKb) * (a.elem === 'fire' && instrOf(a) === 'distance' ? TAC.fireDistKb : 1) * (instrOf(a) === 'distance' && instrOf(o) === 'press' ? TAC.distVsPressKb : 1);
   const L = Math.hypot(pr.vx, pr.vy);
   o.vx += pr.vx / L * imp; o.vy += pr.vy / L * imp * 0.5;
   o.stagger = Math.max(o.stagger, 0.22 + imp / 1200);
@@ -2135,11 +2222,36 @@ function aiCoach(m, ti) {
   if (m.round > 1 && last && last.winner !== ti && m.rng() < 0.7) formation = Object.keys(FORM_BEATS).find((k) => FORM_BEATS[k] === op.formation) || formation;
   // o técnico defensivo segura o placar com o Duelo de elementos quando está ganhando
   const targeting = st === 'def' && me.roundWins > op.roundWins ? 'mirror' : me.baseTargeting;
-  const instr = {};
+  let instr = {};
   if (st === 'agg' || losing) instr.earth = 'press';
   else if (st === 'def') instr.earth = 'protect';
   if (st !== 'agg') instr.fire = 'distance';
+  // o técnico estudou os últimos jogos do jogador: quanto mais repetido o hábito, mais ele prepara a resposta
+  const sc = me.scout;
+  if (sc && sc.n >= HABIT.minRounds) {
+    if (m.round === 1 && sc.formation && m.rng() < sc.read * sc.formation.share) formation = Object.keys(FORM_BEATS).find((k) => FORM_BEATS[k] === sc.formation.k) || formation;
+    const fx = sc.instr, push = ELEMS.filter((e) => fx[e] && fx[e].k === 'press'), hold = ELEMS.filter((e) => fx[e] && (fx[e].k === 'protect' || fx[e].k === 'distance'));
+    const share = (es) => es.reduce((a, e) => a + fx[e].share, 0) / es.length;
+    if (push.length >= 2 && m.rng() < sc.read * share(push)) instr = { earth: 'protect', fire: 'distance', water: 'distance' };
+    else if (hold.length >= 2 && m.rng() < sc.read * share(hold)) instr = { earth: 'press', fire: 'press' };
+  }
   return { posture, formation, instr, targeting };
+}
+// hábito do jogador: as escolhas dos últimos rounds que ele jogou, lidas pelo técnico rival antes da partida
+const HABIT = { keep: 12, minRounds: 3, minShare: 0.5, read: [0.9, 0.75, 0.6] };
+function recordHabit(L, m) {
+  if (!m || !m.tacticLog) return;
+  const ui = m.teams.findIndex((t) => !t.auto); if (ui < 0) return;
+  L.habit = L.habit || [];
+  for (const tl of m.tacticLog) if (tl && tl[ui]) L.habit.push({ formation: tl[ui].formation, ie: tl[ui].ie || {} });
+  L.habit = L.habit.slice(-HABIT.keep);
+}
+function scoutFor(L, t) {
+  const H = L.habit || [], n = H.length; if (!n) return null;
+  const top = (vals) => { const c = {}; for (const v of vals) if (v) c[v] = (c[v] || 0) + 1; const k = Object.keys(c).sort((a, b) => c[b] - c[a])[0]; return k && c[k] / n >= HABIT.minShare ? { k, share: c[k] / n } : null; };
+  const instr = {};
+  for (const e of ELEMS) { const r = top(H.map((h) => h.ie[e])); if (r && r.k !== 'none') instr[e] = r; }
+  return { n, read: HABIT.read[t.div] ?? 0.6, formation: top(H.map((h) => h.formation)), instr };
 }
 
 const STAGE = { season: (L) => `Rodada ${L.week + 1}`, semis: () => 'Semifinal', final: () => 'Final' };
@@ -2226,6 +2338,7 @@ function startSeason(L) {
 
 // encerra a rodada: recebe a partida do técnico (ou null para simular) e simula o resto
 function finishWeek(L, userMatch) {
+  recordHabit(L, userMatch);
   const week = runWeekDays(L) || { gains: [], events: [], injuries: [], subs: [], cashBefore: L.teams[L.user].cash };
   const fixtures = currentFixtures(L), res = [], money = { salaries: 0, sponsors: 0, prizes: 0, bonuses: [] };
   const me = L.teams[L.user], cashBefore = week.cashBefore, phase = L.phase;
@@ -2450,11 +2563,14 @@ function checkMetas(L, money) {
 }
 
 // ================= JANELA DE TRANSFERÊNCIAS =================
-// Acontece na pré-temporada, em 2 etapas. A cada etapa a IA negocia, o mercado se renova e chegam ofertas pelos seus benders.
-const WINDOW_STEPS = 2;
+// Acontece na pré-temporada, em 1 etapa (v0.24). Na abertura a IA faz as contratações dela e chegam as ofertas pelos seus benders;
+// ao começar a temporada, a IA faz uma última rodada de ajustes (startSeason).
+const WINDOW_STEPS = 1;
 function newWindow(L, r) {
   const w = { step: 1, steps: WINDOW_STEPS, offers: [], news: [] };
-  L.window = w;
+  L.window = w; L.preStep = 'sponsors'; // fluxo da pré-temporada: Patrocínios → Mercado
+  aiWindowMoves(L, r);
+  refreshFreeAgents(L, r);
   w.offers = makeAIOffers(L, r);
   return w;
 }
@@ -2813,6 +2929,7 @@ function releasePlayer(L, id) {
 function serialize(L) { return JSON.stringify({ ...L, usedNames: [...L.usedNames] }); }
 function deserialize(s) {
   const o = JSON.parse(s); if (o.v !== 2) return null; o.usedNames = new Set(o.usedNames);
+  if (o.window && o.window.steps > o.window.step) o.window.steps = o.window.step; // janela em 1 etapa (v0.24)
   // saves antigos: cria popularidade e eventos que ainda não existiam
   const r = mulberry32(o.rngState || 1);
   for (const p of o.teams.flatMap((t) => t.roster).concat(o.freeAgents)) if (p.st.pop === undefined) p.st.pop = initialPop(p.st, r);
@@ -2844,7 +2961,7 @@ function deserialize(s) {
   return o;
 }
 
-if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, DAY, DAYS, DAY_NAME, EVENT_DAYS, evDayOf, rosterShort, fixInjuredStarters, isInjured, MIN_ROSTER, MAX_ROSTER, INJURY, renewContract, seasonBlockers, wageOf, takeJob, chooseCoachOffer, expectedPos, repNeeded, formOf, newSeason, advanceWindow, buyPlayer, sellPlayer, sellQuote, canBuy, acceptOffer, declineOffer, valueOf, offerTiers, EVENTS, teamPop, eventIncome, newLeague, setUser, startSeason, finishWeek, standings, userFixture, currentFixtures, ovr, salary, payroll, teamOVR, starters, matchDef, aiCoach, signSponsor, signPlayer, releasePlayer, serialize, deserialize, DIVS };
+if (typeof module !== 'undefined') module.exports = { recordHabit, scoutFor, HABIT, runWeekDays, applySunday, DAY, DAYS, DAY_NAME, EVENT_DAYS, evDayOf, rosterShort, fixInjuredStarters, isInjured, MIN_ROSTER, MAX_ROSTER, INJURY, renewContract, seasonBlockers, wageOf, takeJob, chooseCoachOffer, expectedPos, repNeeded, formOf, newSeason, advanceWindow, buyPlayer, sellPlayer, sellQuote, canBuy, acceptOffer, declineOffer, valueOf, offerTiers, EVENTS, teamPop, eventIncome, newLeague, setUser, startSeason, finishWeek, standings, userFixture, currentFixtures, ovr, salary, payroll, teamOVR, starters, matchDef, aiCoach, signSponsor, signPlayer, releasePlayer, serialize, deserialize, DIVS };
 
 </script>
 <script>
@@ -2996,7 +3113,14 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     }
   }
   function ring(x, y, color, r0 = 6, grow = 70, life = 0.6) { particles.push({ x, y, vx: 0, vy: 0, life, max: life, color, size: r0, grow, kind: 'ring' }); }
-  function float(x, y, text, color) { floats.push({ x, y, text, color, life: 1.2, max: 1.2 }); }
+  function float(x, y, text, color, size = 20) { floats.push({ x, y, text, color, size, life: 1.2, max: 1.2 }); }
+  // aviso curto e neutro quando a instrução de um bender seu age (no máximo um a cada poucos segundos por bender)
+  const instrPopT = {};
+  function instrPop(ev, text) {
+    const t = match.teams[ev.team], p = playerById(ev.pid); if (!t || t.auto || !p) return;
+    if (instrPopT[p.id] && match.clock - instrPopT[p.id] < 5) return; instrPopT[p.id] = match.clock;
+    const s = W2S(p.x, p.y); float(s[0], s[1] - 66, text, '#efe8d8', 15);
+  }
 
   function handle(ev) {
     if ((ev.type === 'push' || ev.type === 'water') && recs[match.round] && ev.pid !== undefined) { const R = recs[match.round]; R.pushed[ev.pid] = (R.pushed[ev.pid] || 0) + (ev.type === 'water' ? 0 : 1); if (ev.type === 'water') R.fell[ev.pid] = 1; }
@@ -3031,8 +3155,10 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       case 'injury': float(sp[0], sp[1] - 30, 'LESÃO', '#ff6b7a'); ring(sp[0], sp[1] - 10, '#ff6b7a', 6, 70, 0.7); addLog(ev.text, ev.team, true); sfx.whistle(); break;
       case 'sub': addLog(ev.text, ev.team, true); break;
       case 'readplan': if (!match.teams[ev.team].auto && match.teams.some((t) => t.auto)) addLog('Seus três benders estão com a mesma instrução: o time fica previsível neste round.', ev.team, true); break;
+      case 'burst': instrPop(ev, 'rajada'); break;
       case 'block':
         burst(sp[0], sp[1], '#b48a52', 8, 120, 3, 'sq');
+        if (ev.guard) instrPop(ev, ev.guard);
         if (match.clock - lastBlockLog > 8) { addLog(ev.text, ev.team); lastBlockLog = match.clock; }
         break;
       case 'dodge': {
@@ -3446,8 +3572,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
 
   function drawFloats() {
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = '800 20px "Big Shoulders Display", Impact, sans-serif';
     for (const f of floats) {
+      ctx.font = `800 ${f.size || 20}px "Big Shoulders Display", Impact, sans-serif`;
       ctx.globalAlpha = Math.min(1, f.life / f.max * 2);
       ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillText(f.text, f.x + 1.5, f.y + 1.5);
       ctx.fillStyle = f.color; ctx.fillText(f.text, f.x, f.y);
@@ -3563,7 +3689,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     let R = recs[match.round];
     if (!R) {
       R = recs[match.round] = { start: {}, heat: [new Array(HX * HY).fill(0), new Array(HX * HY).fill(0)], terr: [], lastT: -1, pushed: {}, fell: {}, shape: [{ w: 0, g: 0, n: 0 }, { w: 0, g: 0, n: 0 }] };
-      for (const p of allPlayers(match)) R.start[p.id] = { ...p.stats };
+      R.ins = {}; for (const p of allPlayers(match)) { R.start[p.id] = { ...p.stats }; R.ins[p.id] = { instr: p.instr || 'none', obey: p.obey !== false }; }
     }
     if (match.clock - R.lastT < 0.25) return;
     R.lastT = match.clock;
@@ -3619,27 +3745,42 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     // leituras do round para orientar as instruções
     const reads = [];
     const mostPushed = rows[me].slice().sort((a, b) => b.s.pushedTaken - a.s.pushedTaken)[0];
-    if (mostPushed && mostPushed.s.pushedTaken >= 2) reads.push(`<b>${esc(mostPushed.p.name)}</b> foi empurrado ${mostPushed.s.pushedTaken} vezes. Proteger ou Mais cauteloso ajudam a segurar a linha; na Escalonada, quem fica na frente aguenta mais.`);
+    if (mostPushed && mostPushed.s.pushedTaken >= 2) reads.push(`${ic('push')} <b>${esc(mostPushed.p.name)}</b> foi empurrado ${mostPushed.s.pushedTaken} vezes. Proteger ou Mais cauteloso ajudam a segurar a linha.`);
     const threat = rows[op].slice().sort((a, b) => (b.s.pushes + b.s.falls * 2) - (a.s.pushes + a.s.falls * 2))[0];
-    if (threat && threat.s.pushes + threat.s.falls >= 2) reads.push(`<b>${esc(threat.p.name)}</b> (rival) ${[threat.s.pushes ? `empurrou ${threat.s.pushes} vez${threat.s.pushes === 1 ? '' : 'es'}` : '', threat.s.falls ? `derrubou ${threat.s.falls} na água` : ''].filter(Boolean).join(' e ')}. Dá para mandar alguém Marcar ${esc(threat.p.name)} ou escolher alvo "Foco no mais perigoso".`);
+    if (threat && threat.s.pushes + threat.s.falls >= 2) reads.push(`${ic('star')} <b>${esc(threat.p.name)}</b> (rival) ${[threat.s.pushes ? `empurrou ${threat.s.pushes} vez${threat.s.pushes === 1 ? '' : 'es'}` : '', threat.s.falls ? `derrubou ${threat.s.falls} na água` : ''].filter(Boolean).join(' e ')}. Dá para Marcar ${esc(threat.p.name)} ou focar no mais perigoso.`);
     const foul = rows[me].slice().sort((a, b) => b.s.fouls - a.s.fouls)[0];
-    if (foul && foul.s.fouls >= 2) reads.push(`<b>${esc(foul.p.name)}</b> cometeu ${foul.s.fouls} faltas. Pressionar e postura Agressiva aumentam as faltas; Disciplina baixa também.`);
+    if (foul && foul.s.fouls >= 2) reads.push(`${ic('whistle')} <b>${esc(foul.p.name)}</b>: ${foul.s.fouls} faltas. Pressionar, postura Agressiva e Disciplina baixa aumentam as faltas.`);
     const cold = rows[me].filter((x) => x.s.shots >= 8).sort((a, b) => a.s.hits / a.s.shots - b.s.hits / b.s.shots)[0];
-    if (cold && cold.s.hits / cold.s.shots < 0.3) reads.push(`<b>${esc(cold.p.name)}</b> acertou só ${Math.round(cold.s.hits / cold.s.shots * 100)}% dos ataques. ${cold.p.elem === 'fire' ? 'O fogo rende mais de longe: Manter distância pode ajudar.' : cold.p.elem === 'earth' ? 'A terra rende mais de perto: Pressionar pode ajudar.' : 'Mirar quem está mais vulnerável costuma render mais.'}`);
-    if (T[me].sameInstr) reads.push('Seus três benders tinham a mesma instrução e o time ficou previsível. Misture as instruções no próximo round.');
+    if (cold && cold.s.hits / cold.s.shots < 0.3) reads.push(`${ic('target')} <b>${esc(cold.p.name)}</b> acertou só ${Math.round(cold.s.hits / cold.s.shots * 100)}%. ${cold.p.elem === 'fire' ? 'O fogo rende mais de longe: Manter distância pode ajudar.' : cold.p.elem === 'earth' ? 'A terra rende mais de perto: Pressionar pode ajudar.' : 'Mirar quem está mais vulnerável costuma render mais.'}`);
+    if (T[me].sameInstr) reads.push(`${ic('lock')} Mesma instrução nos três: o time ficou previsível. Misture as instruções.`);
     const dis = rows[me].filter((x) => x.p.obey === false);
-    if (dis.length) reads.push(`${dis.map((x) => `<b>${esc(x.p.name)}</b>`).join(' e ')} ignorou a instrução neste round. O risco aparece ao lado de cada instrução.`);
+    if (dis.length) reads.push(`${ic('stress')} ${dis.map((x) => `<b>${esc(x.p.name)}</b>`).join(' e ')} ignorou a instrução. O risco aparece ao lado de cada instrução.`);
     const prow = (ti) => rows[ti].map(({ p, s }) => `<tr><td><span class="dot" style="background:${T[ti].color}"></span>${icon(p.elem)} ${esc(p.name)}</td><td class="num">${s.hits}<span class="hint"> (${s.shots ? Math.round(s.hits / s.shots * 100) : 0}%)</span></td>
       <td class="num">${s.pushes}</td><td class="num">${s.falls}</td><td class="num">${s.pushedTaken}${s.fell ? ' <span class="hint">· caiu</span>' : ''}</td><td class="num">${s.dodges}</td><td class="num">${s.fouls}</td></tr>`).join('');
+    // instruções no round: só fatos do próprio time, o ganho e o custo típicos de cada instrução, sem veredito
+    const pl = (n, a, b) => `${n} ${n === 1 ? a : b}`;
+    const insFacts = (p, s) => {
+      const ins = insOf(p).instr, f = [];
+      void pl;
+      if (ins === 'press') { if (p.elem === 'fire') f.push(sti('flame', s.bursts, 'Rajadas')); else f.push(sti('target', s.shots, 'Ataques')); f.push(sti('whistle', s.lineFouls, 'Faltas de linha'), sti('hit', s.taken, 'Golpes recebidos')); }
+      else if (ins === 'distance') { f.push(sti('dodge', s.dodges, 'Esquivas'), sti('target', `${s.hits}/${s.shots}`, 'Acertos de ataques feitos')); if (p.elem === 'fire') f.push(sti('push', s.pushes, 'Empurrões')); }
+      else if (ins === 'protect') { if (p.elem !== 'fire') f.push(sti('board', s.guards, p.elem === 'earth' ? 'Ataques desviados com o disco' : 'Ataques rebatidos')); f.push(sti('dodge', s.dodges, 'Esquivas'), sti('target', s.shots, 'Ataques próprios')); }
+      else f.push(sti('target', s.shots, 'Ataques'), sti('dodge', s.dodges, 'Esquivas'), sti('whistle', s.fouls, 'Faltas'));
+      return f.join('');
+    };
+    const insOf = (p) => (R.ins && R.ins[p.id]) || { instr: p.instr || 'none', obey: p.obey !== false };
+    const insLabel = (p) => { const i = insOf(p).instr; if (i.startsWith('mark:')) { const o = allPlayers(match).find((q) => q.id === +i.slice(5)); return `Marcar ${o ? esc(o.name) : 'rival'}`; } return INSTR[i] || i; };
+    const insRows = rows[me].filter(({ p }) => insOf(p).instr !== 'none').map(({ p, s }) => `<tr><td>${icon(p.elem)} ${esc(p.name)}</td><td>${insLabel(p)}${!insOf(p).obey ? ' <span class="hint">(ignorou)</span>' : ''}</td><td>${insFacts(p, s)}</td></tr>`).join('');
     const w = T[me].roundWins, lw = T[op].roundWins, last = match.roundLog && match.roundLog[match.roundLog.length - 1];
     $('breakTitle').textContent = final ? `Resumo do round ${r} · fim de partida` : `Resumo do round ${r}`;
-    $('breakBody').innerHTML = `<p class="hint">${final ? `Placar final em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. ${esc(T[match.winner].name)} vence${match.winReason === 'ko' ? ' por nocaute' : ''}.` : `Placar em rounds: <b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>. Feche este resumo no ✕ para ajustar a tática na Preparação; dá para reabri-lo em "Resumo do round".`}</p>
+    $('breakBody').innerHTML = `<div class="chips" style="margin-bottom:10px">${lbl('trophy', `<b style="color:${mc}">${esc(T[me].name)} ${w}</b> × <b style="color:${oc}">${lw} ${esc(T[op].name)}</b>`, 'Placar em rounds')}${final ? lbl('', `<b>${esc(T[match.winner].name)}</b> vence${match.winReason === 'ko' ? ' por nocaute' : ''}`, 'Resultado', match.winner === me ? 'w' : 'l') : ''}</div>
       <div class="brk-grid">
         <div class="brk-card"><h3>Onde ${esc(T[me].name)} jogou</h3>${heatSvg(R, me)}</div>
         <div class="brk-card"><h3>Onde ${esc(T[op].name)} jogou</h3>${heatSvg(R, op)}</div>
         <div class="brk-card"><h3>Território ao longo do round</h3>${terrSvg(R, me)}</div>
         <div class="brk-card"><h3>Comparação do round</h3><div class="cmp">${cmp}</div></div>
       </div>
+      ${insRows ? `<div class="brk-card"><h3>Instruções no round</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Bender</th><th>Instrução</th><th>O que aconteceu</th></tr></thead><tbody>${insRows}</tbody></table></div></div>` : ''}
       ${reads.length ? `<div class="brk-card"><h3>Leituras do round</h3><ul class="reads">${reads.slice(0, 5).map((x) => `<li>${x}</li>`).join('')}</ul></div>` : ''}
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Bender</th><th class="num">Acertos</th><th class="num">Empurrões</th><th class="num">Derrubou</th><th class="num">Foi empurrado</th><th class="num">Esquivas</th><th class="num">Faltas</th></tr></thead>
         <tbody>${prow(me)}${prow(op)}</tbody></table></div>
@@ -3725,7 +3866,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       `<optgroup label="Marcar">${foes.map((o) => markOpt(p, o)).join('')}</optgroup>`;
     const canSub = canSubstitute(match);
     $('prepRows').innerHTML = t.players.map((p) => `<tr data-mref="${p.ref ?? ''}" data-drop="row:${p.id}"${canSub ? ` data-drag="sub:${p.id}"` : ''}>
-      <td>${icon(p.elem)} <b>${esc(p.name)}</b> <span class="hint">${ELN[p.elem]}</span>${p.injured ? '<span class="inj-tag" title="Joga com Poder, Agilidade e Firmeza reduzidos até ser substituído">Lesionado</span>' : ''}</td>
+      <td title="${ELN[p.elem]}">${icon(p.elem)} <b>${esc(p.name)}</b>${p.injured ? '<span class="inj-tag" title="Joga com Poder, Agilidade e Firmeza reduzidos até ser substituído">Lesionado</span>' : ''}</td>
       <td class="num ov">${p.st.ovr ?? '—'}</td>
       <td>${p.st.energy !== undefined ? energyBar(p.st.energy) : '<span class="hint">—</span>'}</td>
       <td>${stressBar(p.st.stress || 0)}</td>
@@ -3734,7 +3875,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       (t.bench && t.bench.length ? `<tr class="bench-h"><td colspan="5">Banco · arraste para o campo para substituir</td></tr>` +
         t.bench.slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || (b.st.ovr || 0) - (a.st.ovr || 0)).map((q) => {
           const on = t.players.find((p) => p.elem === q.elem);
-          return `<tr class="bench" data-mref="${q.ref ?? ''}" data-drop="bench:${q.id}"${canSub && !q.injured ? ` data-drag="sub:${q.id}"` : ''}><td>${icon(q.elem)} ${esc(q.name)} <span class="hint">${ELN[q.elem]}</span>${q.injured ? '<span class="inj-tag">Lesionado</span>' : ''}</td>
+          return `<tr class="bench" data-mref="${q.ref ?? ''}" data-drop="bench:${q.id}"${canSub && !q.injured ? ` data-drag="sub:${q.id}"` : ''}><td title="${ELN[q.elem]}">${icon(q.elem)} ${esc(q.name)}${q.injured ? '<span class="inj-tag">Lesionado</span>' : ''}</td>
           <td class="num ov">${q.st.ovr ?? '—'}</td><td>${q.st.energy !== undefined ? energyBar(q.st.energy) : '<span class="hint">—</span>'}</td><td>${stressBar(q.st.stress || 0)}</td>
           <td>${on && canSub && !q.injured ? `<button class="btn sm" type="button" data-sub="${q.id}" data-out="${on.id}" title="Entrar no lugar de ${esc(on.name)}">Entra ⇄ ${esc(on.name)}</button>` : ''}</td></tr>`;
         }).join('') : '');
@@ -3802,12 +3943,12 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const T = match.teams[ti], el = new Set(duelEligible(match, ti).map((p) => p.id));
     const both = match.teams.every((t) => !t.auto);
     $('duelTitle').textContent = both ? `Desempate: quem duela por ${T.name}?` : 'Desempate: quem vai duelar?';
-    $('duelHint').innerHTML = 'Empate no território. Um bender de cada time sobe na plataforma do centro. Quem sair dos limites do círculo perderá o duelo. <b>Quem caiu na água neste round não pode duelar.</b>';
+    $('duelHint').innerHTML = 'Empate no território: um bender de cada time duela na plataforma do centro. Quem sair do círculo perde.';
     $('duelGrid').innerHTML = T.players.map((p) => {
       const ok = el.has(p.id);
       return `<button class="duel-card" type="button" data-duel="${p.id}"${ok ? '' : ' disabled aria-disabled="true" title="Caiu na água neste round: não pode duelar"'} style="border-top:3px solid ${ELC[p.elem]}">
         <span class="dn">${icon(p.elem)} ${esc(p.name)}</span>
-        <span class="hint">${ELN[p.elem]} · ${tmpLabel(p.st.tmp)}</span>
+        <span class="hint">${tmpLabel(p.st.tmp)}</span>
         <span class="bars">${STAT_LABELS.map(([k, l]) => `<span class="bar"><span>${l} ${p.st[k]}</span><i><b style="width:${p.st[k]}%"></b></i></span>`).join('')}</span>
         ${ok ? '<span class="pick-cta">Escolher para o duelo</span>' : '<span class="ban">Caiu na água</span>'}
       </button>`;
@@ -3859,7 +4000,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       if (t.auto) { // adversário: nada de tática nem instruções, só os benders e os números
         card.innerHTML = `<div class="hud-th"><div class="tc-name">${t.name}</div><button class="hud-min" type="button" data-min="${ti}" title="Minimizar ou expandir o painel" aria-label="Minimizar ou expandir o painel">${hudMin[ti] ? '+' : '–'}</button></div>` + t.players.map((p) => `<div class="pl">
           <i class="icon ${p.elem}"></i>
-          <div class="pname">${p.name}<small>${ELN[p.elem]}</small></div>
+          <div class="pname" title="${ELN[p.elem]}">${p.name}</div>
           <span class="chip" id="chip${p.id}">Zona 1</span>
           <div class="bars">${STAT_LABELS.map(([k, l]) => `<div class="bar"><span>${l} ${p.st[k]}</span><i><b style="width:${p.st[k]}%"></b></i></div>`).join('')}</div>
           <div class="live" id="live${p.id}"></div>
@@ -3881,7 +4022,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
         </div>` +
         t.players.map((p) => `<div class="pl">
           <i class="icon ${p.elem}"></i>
-          <div class="pname">${p.name}<small>${ELN[p.elem]} · ${tmpLabel(p.st.tmp).toLowerCase()}${p.st.stress >= 25 ? ` · <span class="stx">${stressLabel(p.st.stress).toLowerCase()}</span>` : ''}</small></div>
+          <div class="pname" title="${ELN[p.elem]}">${p.name}<small>${tmpLabel(p.st.tmp).toLowerCase()}${p.st.stress >= 25 ? ` · <span class="stx">${stressLabel(p.st.stress).toLowerCase()}</span>` : ''}</small></div>
           <span class="chip" id="chip${p.id}">Zona 1</span>
           <div class="instr"><select id="ins${p.id}" data-ins="${p.id}" aria-label="Instrução para ${p.name}">${insOpts(p)}</select><span class="risk" id="risk${p.id}"></span></div>
           <div class="bars">${STAT_LABELS.map(([k, l]) => `<div class="bar"><span>${l} ${p.st[k]}</span><i><b style="width:${p.st[k]}%"></b></i></div>`).join('')}</div>
@@ -3918,7 +4059,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       if (chip.textContent !== txt) chip.textContent = txt;
       chip.className = cls;
       const s = p.stats, acc = s.shots ? Math.round(s.hits / s.shots * 100) : 0;
-      live.innerHTML = `Acertos <b>${s.hits}</b> (${acc}%) · Empurrões <b>${s.pushes}</b> · Na água <b>${s.falls}</b> · Esquivas <b>${s.dodges}</b>${s.blocks ? ` · Bloqueios <b>${s.blocks}</b>` : ''}${s.fouls ? ` · Faltas <b>${s.fouls}</b>` : ''}`;
+      live.innerHTML = `${sti('target', `${s.hits} <small>${acc}%</small>`, 'Acertos (precisão)')}${sti('push', s.pushes, 'Empurrões')}${sti('drop', s.falls, 'Derrubou na água')}${sti('dodge', s.dodges, 'Esquivas')}${s.blocks ? sti('block', s.blocks, 'Bloqueios') : ''}${s.fouls ? sti('whistle', s.fouls, 'Faltas') : ''}`;
     }
   }
 
@@ -3961,7 +4102,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       }
       a.disabled = b.disabled = c.disabled = !open;
       const ins = t.players.map((p) => p.instr || 'none'), same = ins[0] !== 'none' && ins.every((x) => x === ins[0]);
-      const txt = (open ? 'Intervalo: escolha a tática e as instruções individuais para o próximo round.' : over ? 'Partida encerrada.' : 'Táticas travadas durante o round.')
+      const txt = (open ? 'Intervalo: ajuste a tática do próximo round.' : over ? 'Partida encerrada.' : 'Tática travada no round.')
         + (open && same ? ' Atenção: os três estão com a mesma instrução, o time fica previsível.' : '');
       if (l.textContent !== txt) l.textContent = txt;
       l.classList.toggle('open', open);
@@ -4082,7 +4223,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
 
   function showView(v) {
     const changed = $(v).hidden; // só volta ao topo quando troca de tela
-    for (const id of ['viewStart', 'viewHub', 'viewMatch']) $(id).hidden = id !== v;
+    for (const id of ['viewTitle', 'viewStart', 'viewHub', 'viewMatch']) $(id).hidden = id !== v;
     inMatchView = v === 'viewMatch';
     document.body.classList.toggle('in-match', inMatchView);
     document.body.dataset.mode = mode;
@@ -4092,10 +4233,16 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   }
 
   // ---- escolha de time ----
+  // tela de título: novo jogo (Livre ou Carreira), continuar e partida avulsa
   function renderStart() {
+    $('continueBtn').hidden = !loadSave();
+    showView('viewTitle'); showIntro();
+  }
+  document.querySelectorAll('[data-newgame]').forEach((b) => b.addEventListener('click', () => { gameMode = b.dataset.newgame; renderTeams(); }));
+  // tela de times: só as grades (no modo Carreira, só a Terceira Divisão)
+  function renderTeams() {
     pendingL = newLeague(Math.floor(Math.random() * 1e9));
     selTeam = null;
-    $('continueBtn').hidden = !loadSave();
     $('pickModal').hidden = true;
     renderMode();
     [0, 1, 2].forEach((di) => {
@@ -4111,17 +4258,13 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   // modo Livre: qualquer time; modo Carreira: começa num time da Terceira Divisão
   let gameMode = 'free';
   function renderMode() {
-    document.querySelectorAll('#modeSeg [data-mode]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.mode === gameMode ? 'true' : 'false'));
-    $('modeHint').textContent = gameMode === 'career'
-      ? 'Carreira: você começa num time da Terceira Divisão, com pouca reputação. Suba, se firme e chegue ao título da Primeira.'
-      : 'Livre: escolha qualquer time das três divisões.';
     [0, 1].forEach((di) => { $('gridTitle' + di).hidden = $('teamGrid' + di).hidden = gameMode === 'career'; });
     if (gameMode === 'career' && selTeam !== null && pendingL.teams[selTeam].div !== 2) {
       selTeam = null; document.querySelectorAll('.tcard').forEach((x) => x.setAttribute('aria-pressed', 'false'));
     }
   }
   $('viewStart').addEventListener('click', (e) => {
-    const mb = e.target.closest('#modeSeg [data-mode]'); if (mb) { gameMode = mb.dataset.mode; renderMode(); return; }
+    if (e.target.closest('#backTitleBtn')) { renderStart(); return; }
     const b = e.target.closest('.tcard'); if (!b) return;
     selTeam = +b.dataset.t;
     document.querySelectorAll('.tcard').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
@@ -4155,7 +4298,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   });
   $('continueBtn').addEventListener('click', () => { const s = loadSave(); if (s) { L = s; mode = 'league'; renderHub(); firstGuide(); } });
   // guia em janela: conteúdo da aba Guia (sem o quadro de dicas)
-  // abas do guia: Atributos / Táticas da partida, e dentro das táticas: Postura do time / Instruções
+  // abas do guia: Atributos / O bender / Time e carreira / Táticas da partida, e dentro das táticas: Postura do time / Instruções
   document.addEventListener('click', (e) => {
     const b = e.target.closest('[data-gtab], [data-gsub]'); if (!b) return;
     const root = b.closest('[data-gtabs]'); if (!root) return;
@@ -4191,9 +4334,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   // ---------- abertura: só na primeira vez que o jogo abre, antes de tudo ----------
   const INTRO_ON = true;
   let introRaf = 0;
-  function introSeen() { try { return localStorage.getItem('sbm-intro') === '1'; } catch (e) { return false; } }
   function showIntro() {
-    $('introModal').hidden = false;
     const cv = $('introCv'), g = cv.getContext('2d'), W = cv.width, H = cv.height;
     const pad = 30, sx = (W - pad * 2) / AL, top = (H - AW * sx) / 2, X = (x) => pad + x * sx, Y = (y) => top + y * sx;
     const COL = { water: '#4aa3ff', earth: '#7ec35a', fire: '#ff7a3c' }, TEAM = ['#ff5a7a', '#f2ead6'];
@@ -4208,7 +4349,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       g.fill(); g.stroke();
     };
     const frame = () => {
-      if ($('introModal').hidden) return;
+      if ($('viewTitle').hidden) return;
       // velocidade normal (1x): passos da simulação pelo tempo real, não pela taxa de quadros da tela
       const now = performance.now(); acc += Math.min(0.1, (now - last) / 1000); last = now;
       while (acc >= DT) { step(m); m.events.length = 0; acc -= DT; if (m.mode === 'over') break; }
@@ -4239,7 +4380,6 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     };
     cancelAnimationFrame(introRaf); introRaf = requestAnimationFrame(frame);
   }
-  $('introOk').addEventListener('click', () => { $('introModal').hidden = true; cancelAnimationFrame(introRaf); try { localStorage.setItem('sbm-intro', '1'); } catch (e) {} });
   function firstGuide() { if (L && !(L.tips && L.tips.guide)) openGuide(); }
   $('guideClose').addEventListener('click', closeGuide);
   $('guideModal').addEventListener('click', (e) => { if (e.target === $('guideModal') || e.target.closest('[data-guideok]')) closeGuide(); });
@@ -4257,6 +4397,41 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     if (p.contract === 1) return '<span class="warn">Último ano</span>';
     return `${p.contract || 0} temp.`;
   }
+  // ícones das etiquetas: desenho simples, na cor do texto (passar o mouse mostra o nome)
+  const ICO = {
+    div: '<path d="M3 13h10M4 13V7l4-4 4 4v6M7 13v-3h2v3"/>',
+    cal: '<rect x="2.5" y="3.5" width="11" height="10" rx="1.5"/><path d="M2.5 7h11M5.5 2v3M10.5 2v3"/>',
+    trophy: '<path d="M5 2.5h6v3a3 3 0 0 1-6 0zM5 4H2.5a2 2 0 0 0 2.5 2.5M11 4h2.5A2 2 0 0 1 11 6.5M8 8.5v3M5.5 13.5h5"/>',
+    ovr: '<path d="M3 13V9M6.5 13V6M10 13V8M13.5 13V3"/>',
+    star: '<path d="M8 2l1.8 3.8 4.2.5-3.1 2.9.8 4.1L8 11.3 4.3 13.3l.8-4.1L2 6.3l4.2-.5z"/>',
+    medal: '<circle cx="8" cy="10" r="3.5"/><path d="M5.5 2.5 7 6.8M10.5 2.5 9 6.8"/>',
+    board: '<path d="M8 2 13 4v4c0 3-2.2 5-5 6-2.8-1-5-3-5-6V4z"/>',
+    bolt: '<path d="M9 1.5 3.5 9H8l-1 5.5L12.5 7H8z"/>',
+    stress: '<path d="M1.5 8h3l1.5-4 2.5 8 1.8-5 1 1h3.2"/>',
+    whistle: '<circle cx="6" cy="10" r="3.5"/><path d="M8.5 7.5 14 5v2.5L9.5 9"/>',
+    cash: '<rect x="1.5" y="4" width="13" height="8" rx="1.5"/><circle cx="8" cy="8" r="1.8"/>',
+    target: '<circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/>',
+    push: '<path d="M2 8h9M8 4.5 11.5 8 8 11.5M14 3.5v9"/>',
+    drop: '<path d="M8 2.5c2.5 3.2 4 5.3 4 7.2a4 4 0 0 1-8 0c0-1.9 1.5-4 4-7.2z"/>',
+    dodge: '<path d="M3 12.5c0-5 3.5-8 9-8M9.5 2 12 4.5 9.5 7"/>',
+    block: '<rect x="3" y="3" width="10" height="10" rx="1.5"/><path d="M3 8h10"/>',
+    flame: '<path d="M8 1.8c.4 2.4 3.7 4 3.7 7.4A3.7 3.7 0 0 1 4.3 9.2c0-1.5.7-2.5 1.6-3.3.1 1.2.6 2 1.4 2.3C7.1 6 7.4 3.8 8 1.8z"/>',
+    hit: '<path d="M8 1.5v3M8 11.5v3M1.5 8h3M11.5 8h3M3.4 3.4l2.1 2.1M10.5 10.5l2.1 2.1M12.6 3.4l-2.1 2.1M5.5 10.5l-2.1 2.1"/>',
+    eye: '<path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/>',
+    cross: '<path d="M6 2.5h4v3.5h3.5v4H10v3.5H6V10H2.5V6H6z"/>',
+    flag: '<path d="M3.5 14V2.5M3.5 3h8l-1.8 2.8L11.5 8.5h-8"/>',
+    people: '<circle cx="6" cy="5.5" r="2.2"/><path d="M2 13c.4-2.4 2-3.7 4-3.7s3.6 1.3 4 3.7M10.5 3.6a2.2 2.2 0 0 1 0 4.2M12 9.6c1.2.4 2 1.6 2.2 3.4"/>',
+    lock: '<rect x="3.5" y="7" width="9" height="6.5" rx="1.2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/>',
+  };
+  const ic = (k, t) => `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[k] || ''}</svg>`;
+  const lbl = (k, val, title, cls = '') => `<span class="ich ${cls}" title="${esc(title || '')}">${k ? ic(k) : ''}${val}</span>`;
+  // número com ícone, sem moldura (painéis da partida e quadro de instruções)
+  // Guia: o ícone de cada termo, o mesmo das telas
+  document.querySelectorAll('.gloss dt[data-ic]').forEach((dt) => dt.insertAdjacentHTML('afterbegin', ic(dt.dataset.ic)));
+  // explicação sob demanda: um "?" ao lado do título que abre o texto
+  const helpTip = (txt) => `<details class="help"><summary aria-label="Como funciona" title="Como funciona">?</summary><div>${txt}</div></details>`;
+  const sti = (k, n, title) => `<span class="sti" title="${esc(title)}">${ic(k)}<b>${n}</b></span>`;
+  const confCol = (v) => (v >= 60 ? '#7fd36b' : v >= 35 ? '#f2c94c' : v >= 15 ? '#ff9a6b' : '#ff5a5a');
   function confBar(v) {
     const col = v >= 60 ? '#7fd36b' : v >= 35 ? '#f2c94c' : v >= 15 ? '#ff9a6b' : '#ff5a5a';
     return `<span class="energy"><i style="width:90px"><b style="width:${Math.max(3, r0(v))}%;background:${col}"></b></i>${r0(v)}</span>`;
@@ -4289,6 +4464,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   // ---- ordenação das tabelas: clicar no cabeçalho ordena; clicar de novo inverte ----
   const sortState = { roster: { key: 'elem', dir: 1 }, market: { key: 'ovr', dir: -1 }, others: { key: 'ovr', dir: -1 }, table: { key: 'pos', dir: 1 }, pay: { key: 'salary', dir: -1 } };
   const othersFilter = { div: 'all', avail: true };
+  let mkTab = 'fa'; // aba do mercado: agentes livres ou benders de outros times de um elemento
   let budgetOnly = false;
   const TEXT_KEYS = new Set(['name', 'elem', 'pos', 'team']);
   function sth(tbl, key, label, cls = '', title = '') {
@@ -4439,7 +4615,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const row = (p, starter) => {
       const cur = me.roster.find((q) => q.id === me.starters[p.elem]);
       return `<tr data-lpick="${p.id}" class="${p.id === selBender ? 'sel' : ''}${starter ? '' : ' bench'}" data-drop="${starter ? 'srow' : 'rrow'}:${p.id}"${!starter && !isInjured(p) ? ` data-drag="lres:${p.id}"` : starter ? ` data-drag="lst:${p.id}"` : ''}>
-        <td>${icon(p.elem)} <b>${esc(p.name)}</b> <span class="hint">${ELN[p.elem]}</span>${injTag(p)}</td>
+        <td title="${ELN[p.elem]}">${icon(p.elem)} <b>${esc(p.name)}</b>${injTag(p)}</td>
         <td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td><td>${energyBar(p.energy)}</td><td>${stressBar(p.stress || 0)}</td>
         <td>${starter ? '<span class="badge-st">Titular</span>' : isInjured(p) ? '' : `<button class="btn sm" type="button" data-starter="${p.id}" title="Escalar no lugar de ${esc(cur ? cur.name : '')}">Escalar ⇄ ${esc(cur ? cur.name : '')}</button>`}</td></tr>`;
     };
@@ -4482,8 +4658,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       // linhas: atributo treinado, popularidade (se mudou), energia e estresse; subir estresse é ruim
       const rows = [];
       if (g) rows.push([ATTRS.find((a) => a[0] === g.k)[2], o.st[g.k], p.st[g.k], false]);
-      if (Math.abs((p.st.pop || 0) - (o.st.pop || 0)) >= 0.05) rows.push(['Popularidade', o.st.pop, p.st.pop, false]);
-      rows.push(['Energia', o.energy, p.energy, false], ['Estresse', o.stress, p.stress || 0, true]);
+      if (Math.abs((p.st.pop || 0) - (o.st.pop || 0)) >= 0.05) rows.push([`${ic('star')} Popularidade`, o.st.pop, p.st.pop, false]);
+      rows.push([`${ic('bolt')} Energia`, o.energy, p.energy, false], [`${ic('stress')} Estresse`, o.stress, p.stress || 0, true]);
       const rowHtml = rows.map(([lab, a, b, inv]) => {
         const d = b - a, good = inv ? d < 0 : d > 0, cls = Math.abs(d) < 0.05 ? '' : good ? 'up' : 'down';
         return `<div class="wk-row"><span class="lab">${lab}</span><div class="wk-bar" data-a="${a}" data-b="${b}"><span class="base" style="width:${Math.min(100, a)}%"></span><span class="chg ${cls}" style="left:${Math.min(100, a)}%;width:0"></span></div>
@@ -4520,16 +4696,17 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   const dirArrow = (a, b) => (Math.abs(b - a) < 0.05 ? '<span class="hint">=</span>' : b > a ? '<b class="pos">↑</b>' : '<b class="neg">↓</b>');
   function reportFinHtml(rep) {
     const m = rep.money;
-    return `<dl class="fin">
-          <dt>Patrocínios</dt><dd>${signed(m.sponsors)}</dd>
-          <dt>Salários</dt><dd>${signed(-m.salaries)}</dd>
-          ${m.prizes && !m.bonuses.some((b) => b.prize) ? `<dt>Prêmio da vitória</dt><dd>${signed(m.prizes)}</dd>` : ''}
-          ${m.events && m.events.length ? `<dt>Eventos (${m.events.map((e) => `${esc(e.name)}: ${esc(e.event)}`).join(', ')})</dt><dd class="pos">${signed(m.events.reduce((a, e) => a + e.amount, 0))}</dd>` : ''}
-          ${m.bonuses.map((b) => `<dt>${esc(b.label)}</dt><dd class="pos">${signed(b.amount)}</dd>`).join('')}
-          <dt>Caixa</dt><dd>${yen(rep.cashBefore)} ${dirArrow(rep.cashBefore, rep.cashAfter)} <b>${yen(rep.cashAfter)}</b></dd>
-          ${rep.fameBefore !== undefined ? `<dt>Popularidade do time</dt><dd>${r0(rep.fameBefore)} ${dirArrow(rep.fameBefore, rep.fameAfter)} <b>${r0(rep.fameAfter)}</b></dd>` : ''}
-          ${rep.confBefore !== undefined && rep.confAfter !== undefined && rep.confBefore !== rep.confAfter ? `<dt>Confiança da diretoria</dt><dd>${r0(rep.confBefore)} ${dirArrow(rep.confBefore, rep.confAfter)} <b>${r0(rep.confAfter)}</b></dd>` : ''}
-        </dl>
+    const tile = (lab, val, title, cls = '') => `<div class="tile" title="${esc(title || lab)}"><span>${lab}</span><b class="${cls}">${val}</b></div>`;
+    return `<div class="tiles">
+          ${tile('Caixa', `${yen(rep.cashBefore)} ${dirArrow(rep.cashBefore, rep.cashAfter)} ${yen(rep.cashAfter)}`)}
+          ${tile('Patrocínios', signed(m.sponsors))}
+          ${tile('Salários', signed(-m.salaries))}
+          ${m.prizes && !m.bonuses.some((b) => b.prize) ? tile('Prêmio da vitória', signed(m.prizes), '', 'pos') : ''}
+          ${m.events && m.events.length ? tile('Eventos', signed(m.events.reduce((a, e) => a + e.amount, 0)), m.events.map((e) => `${e.name}: ${e.event}`).join(', '), 'pos') : ''}
+          ${m.bonuses.map((b) => tile(esc(b.label), signed(b.amount), '', 'pos')).join('')}
+          ${rep.fameBefore !== undefined ? tile(`${ic('star')} Popularidade`, `${r0(rep.fameBefore)} ${dirArrow(rep.fameBefore, rep.fameAfter)} ${r0(rep.fameAfter)}`, 'Popularidade do time') : ''}
+          ${rep.confBefore !== undefined && rep.confAfter !== undefined && rep.confBefore !== rep.confAfter ? tile(`${ic('board')} Diretoria`, `${r0(rep.confBefore)} ${dirArrow(rep.confBefore, rep.confAfter)} ${r0(rep.confAfter)}`, 'Confiança da diretoria') : ''}
+        </div>
         ${rep.injuries && (rep.injuries.mine.length || (rep.injuries.subs || []).length) ? `<div class="gains"><span>Lesões:</span>${rep.injuries.mine.map((x) => x.healed ? `<span>${esc(x.name)} <b class="pos">recuperado</b></span>` : `<span>${esc(x.name)} <b class="neg">fora ${x.weeks} sem.</b> (${x.where})</span>`).join('')}${(rep.injuries.subs || []).map((x) => `<span>${esc(x.in)} assume o lugar de ${esc(x.out)}</span>`).join('')}</div>` : ''}`;
   }
   function weekLogHtml(w) {
@@ -4554,8 +4731,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const weeks = hist.length > 1 ? hist : [];
     return `<div class="bc-head">
         <div><div class="bc-name" style="color:${ELC[p.elem]}">${icon(p.elem)} ${esc(p.name)}</div>
-          <div class="bc-meta" style="margin-top:6px"><span>${label !== undefined ? label : st ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}${injTag(p)}</span><span>${ELN[p.elem]}</span><span><b>${p.age}</b> anos</span>
-            <span>Temperamento <b>${tmpLabel(p.st.tmp).toLowerCase()}</b> (${p.st.tmp})</span><span>Popularidade <b>${r0(p.st.pop)}</b></span></div></div>
+          <div class="chips" style="margin-top:6px">${label !== undefined ? label : st ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}${injTag(p)}
+            ${lbl('cal', `<b>${p.age}</b> anos`, 'Idade')}${lbl('', `<b>${tmpLabel(p.st.tmp)}</b> ${p.st.tmp}`, 'Temperamento')}${lbl('star', `<b>${r0(p.st.pop)}</b>`, 'Popularidade')}</div></div>
         <div class="kv"><b>${ovr(p.st)}</b><span>Nota</span></div>
       </div>
       <div class="bc-body">
@@ -4567,17 +4744,17 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
             return `<div class="attr-row"><span>${nm}</span><span class="v">${r0(now[k])}</span><span class="d ${d > 0 ? 'pos' : d < 0 ? 'neg' : 'hint'}">${first ? fmt(d) : ''}</span>
               <span class="bar2" title="Azul: início da temporada · dourado: evolução"><i style="width:${Math.min(base, now[k])}%"></i>${d > 0 ? `<b style="left:${base}%;width:${d}%"></b>` : ''}</span></div>`;
           }).join('')}</div>
-          <div class="bc-meta" style="margin-top:10px"><span>Energia ${energyBar(p.energy)}</span><span>Estresse ${stressBar(p.stress || 0)}</span></div>
+          <div class="bc-meta" style="margin-top:10px"><span title="Energia">${ic('bolt')} ${energyBar(p.energy)}</span><span title="Estresse">${ic('stress')} ${stressBar(p.stress || 0)}</span></div>
         </div>
       </div>
-      ${weeks.length ? `<h3 class="sub">Evolução semana a semana</h3>
+      ${weeks.length ? `<h3 class="sub">Evolução semana a semana${helpTip('Cada coluna é uma rodada; ▲ marca as semanas em que o atributo subiu com o treino. A cor mais forte mostra quanto ele já cresceu desde o início da temporada.')}</h3>
         <div class="tbl-wrap"><table class="tbl matrix"><thead><tr><th>Atributo</th>${weeks.map((h) => `<th>${h.w === 0 ? 'Início' : 'S' + h.w}</th>`).join('')}<th>Ganho</th></tr></thead><tbody>
         ${ATTRS.map(([k, , nm]) => `<tr><td>${nm}</td>${weeks.map((h, i) => {
           const up = i > 0 && h[k] > weeks[i - 1][k] + 0.05, g = h[k] - weeks[0][k];
           return `<td style="${g > 0.05 ? `background:rgba(226,176,74,${Math.min(0.45, 0.08 + g * 0.08)})` : ''}"${up ? ' title="Treinou nesta semana"' : ''}>${dec1(h[k])}${up ? '<span class="pos">▲</span>' : ''}</td>`;
         }).join('')}<td class="${delta(k) > 0 ? 'pos' : 'hint'}">${fmt(delta(k))}</td></tr>`).join('')}
         </tbody></table></div>
-        <p class="hint">Cada coluna é uma rodada; ▲ marca as semanas em que o atributo subiu com o treino. A cor mais forte mostra quanto ele já cresceu desde o início da temporada.</p>`
+`
       : `<p class="hint">${L.phase === 'preseason' ? 'A evolução semana a semana aparece quando a temporada começar.' : 'A evolução aparece depois da primeira rodada.'}</p>`}`;
   }
 
@@ -4591,14 +4768,17 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const danger = st.reduce((b, p) => (p.st.pow > b.st.pow ? p : b), st[0]), star = st.reduce((b, p) => (ovr(p.st) > ovr(b.st) ? p : b), st[0]);
     const avg = (a, k) => r0(a.reduce((x, p) => x + (p[k] || 0), 0) / a.length);
     return `${noTitle ? '' : '<h3 class="sub">Observação do rival</h3>'}
-      <div class="scout">
-        <div><span class="hint">Últimos jogos</span><div>${formBadges(rival.idx)}</div></div>
-        <div><span class="hint">Técnico (estilo ${STYLES[rival.style].toLowerCase()})</span>
-          <div>Costuma começar com postura <b>${POSTURE[T.posture].name}</b> e ${T.instr}. Quando está perdendo, fica agressivo e a terra pressiona.</div></div>
-        <div><span class="hint">Estado dos titulares</span><div>Rival: energia ${avg(st, 'energy')}, estresse ${avg(st, 'stress')} · Seu time: energia ${avg(mine, 'energy')}, estresse ${avg(mine, 'stress')}</div></div>
+      <div class="scout2">
+        <div><h4>Últimos jogos</h4><div>${formBadges(rival.idx)}</div></div>
+        <div><h4>Técnico · estilo ${STYLES[rival.style].toLowerCase()}</h4><div class="chips">
+          ${lbl('whistle', `Começa <b>${POSTURE[T.posture].name}</b> · ${T.instr}`, 'Como costuma começar')}
+          ${lbl('', `Perdendo: <b>agressivo</b> · a terra pressiona`, 'Quando está perdendo')}</div></div>
+        <div><h4>Titulares</h4><div class="chips">
+          ${lbl('', `<b style="color:${rival.color}">Rival</b> ${ic('bolt')}<b>${avg(st, 'energy')}</b> ${ic('stress')}<b>${avg(st, 'stress')}</b>`, 'Energia e estresse médios dos titulares do rival')}
+          ${lbl('', `<b style="color:${me.color}">Seu time</b> ${ic('bolt')}<b>${avg(mine, 'energy')}</b> ${ic('stress')}<b>${avg(mine, 'stress')}</b>`, 'Energia e estresse médios dos seus titulares')}</div></div>
       </div>
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Elemento</th><th>Bender</th><th class="num">Nota</th><th class="num">POD</th><th class="num">FIR</th><th class="num">AGI</th><th>Temperamento</th><th>Energia</th><th>Estresse</th><th></th></tr></thead><tbody>
-        ${st.map((p) => `<tr data-mpick="${p.id}" title="Clique para ver a ficha"><td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td>
+        ${st.map((p) => `<tr data-mpick="${p.id}" title="Clique para ver a ficha"><td class="el" title="${ELN[p.elem]}">${icon(p.elem)}</td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td>
           <td class="num">${r0(p.st.pow)}</td><td class="num">${r0(p.st.fir)}</td><td class="num">${r0(p.st.agi)}</td>
           <td>${tmpLabel(p.st.tmp)}</td><td>${energyBar(p.energy)}</td><td>${stressBar(p.stress || 0)}</td>
           <td>${[p === danger ? '<span class="tag-s">Mais perigoso</span>' : '', p === star ? '<span class="tag-s">Estrela</span>' : ''].join(' ')}</td></tr>`).join('')}
@@ -4617,15 +4797,14 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const mineSide = r.h === L.user ? 0 : 1, myP = d.players[mineSide];
     const fouls = myP.reduce((a, p) => a + p.fouls, 0), dis = myP.reduce((a, p) => a + p.disobey, 0);
     const notes = [];
-    if (fouls >= 3) notes.push(`Seu time cometeu ${fouls} faltas.`);
-    if (dis) notes.push(`${dis} desobediência${dis > 1 ? 's' : ''} do seu time.`);
+    if (fouls >= 3) notes.push(lbl('whistle', `<b>${fouls}</b> faltas`, 'Faltas do seu time na partida'));
+    if (dis) notes.push(lbl('', `<b>${dis}</b> desobediência${dis > 1 ? 's' : ''}`, 'Desobediências do seu time'));
     const stressed = myP.filter((p) => p.stress >= 50).map((p) => p.name);
-    if (stressed.length) notes.push(`Jogaram estressados: ${stressed.map(esc).join(', ')}.`);
+    if (stressed.length) notes.push(lbl('stress', `Estressados: <b>${stressed.map(esc).join(', ')}</b>`, 'Jogaram estressados'));
     return `<details class="mrep" open><summary><h3 class="sub">Relatório da sua partida</h3></summary>
-      ${mvp ? `<p>Destaque: <b>${esc(mvp.name)}</b> (${esc(sides[d.players[0].includes(mvp) ? 0 : 1].name)})</p>` : ''}
-      <ul class="rounds">${d.rounds.map((x) => `<li><b>Round ${x.round}</b> · ${esc(L.teams[x.winner].name)} venceu ${REASON[x.reason] || ''}
-        ${x.tactics ? (r.h === L.user ? `<div class="tl"><span style="color:${H.color}">${esc(H.short)}</span> ${tacticLine(x.tactics[0], d.players[0])}</div>` : `<div class="tl"><span style="color:${A.color}">${esc(A.short)}</span> ${tacticLine(x.tactics[1], d.players[1])}</div>`) : ''}</li>`).join('')}</ul>
-      ${notes.length ? `<p class="hint">${notes.join(' ')}</p>` : ''}
+      <div class="chips">${mvp ? lbl('star', `Destaque <b>${esc(mvp.name)}</b>`, `Destaque da partida (${sides[d.players[0].includes(mvp) ? 0 : 1].name})`) : ''}${notes.join('')}</div>
+      <ul class="rounds2">${d.rounds.map((x) => `<li><b>R${x.round}</b>${lbl('', x.winner === L.user ? 'Venceu' : 'Perdeu', `${L.teams[x.winner].name} venceu ${REASON[x.reason] || ''}`, x.winner === L.user ? 'w' : 'l')}<span class="hint">${REASON[x.reason] || ''}</span>
+        ${x.tactics ? `<span class="tl">${tacticLine(x.tactics[mineSide], d.players[mineSide])}</span>` : ''}</li>`).join('')}</ul>
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Time</th><th>Bender</th><th class="num">Acertos</th><th class="num">Precisão</th><th class="num">Empurrões</th><th class="num">Na água</th><th class="num">Esquivas</th><th class="num">Bloqueios</th><th class="num">Faltas</th><th class="num">Desobed.</th><th>Estresse</th></tr></thead><tbody>
       ${d.players.map((side, si) => side.map((p) => `<tr class="${si === mineSide ? 'me' : ''}"><td><span class="dot" style="background:${sides[si].color}"></span>${esc(sides[si].short)}</td>
         <td class="nm">${icon(p.elem)} ${esc(p.name)}${p.ref === d.mvp ? ' <span class="tag-s on">Destaque</span>' : ''}</td>
@@ -4637,8 +4816,29 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   function renderHub() {
     $('headAction').innerHTML = ''; // só a pré-temporada usa o botão do cabeçalho
     const me = L.teams[L.user], D = DIVS[me.div], table = standings(L, me.div), pos = table.indexOf(me) + 1, pre = L.phase === 'preseason';
+    // pré-temporada: telas próprias, sem abas (Patrocínios → Mercado); a central volta quando a temporada começa
+    const flow = pre && !(L.coach.fired && L.coach.fired.when === 'mid');
+    if (flow && !L.preStep) L.preStep = 'sponsors';
+    $('viewHub').classList.toggle('flow', flow);
+    $('flowSteps').hidden = !flow;
+    if (flow) {
+      hubPage = L.preStep === 'market' ? 'market' : 'finance';
+      $('flowSteps').innerHTML = [['sponsors', 'Patrocínios'], ['market', 'Mercado']].map(([k, n]) => `<li class="${L.preStep === k ? 'on' : L.preStep === 'market' && k === 'sponsors' ? 'done' : ''}">${n}</li>`).join('') + '<li>Temporada</li>';
+    } else if (hubPage === 'market') hubPage = 'home';
+    // a escalação vai para a coluna lateral do Mercado durante o fluxo e volta para o Elenco depois
+    { const lp = $('lineupPanel'), side = $('preSide'), rp = document.querySelector('#viewHub .page[data-page="roster"]');
+      void side; if (lp.parentElement !== rp) rp.insertBefore(lp, rp.firstChild); }
     $('hubTitle').textContent = me.name; $('hubTitle').style.setProperty('--tc', me.color);
-    $('hubSub').textContent = `${L.gameMode === 'career' ? 'Modo carreira · ' : ''}${D.name} · Temporada ${L.season} · ${phaseLabel()}${pre ? '' : ` · ${me.rec.w}V ${me.rec.l}D · ${pos}º lugar`} · nota do time ${teamOVR(me)} · popularidade do time ${r0(me.fame)} · reputação do técnico ${r0(L.coach.rep)}${L.coach.conf !== undefined && L.phase !== 'preseason' && L.phase !== 'done' ? ` · confiança da diretoria ${r0(L.coach.conf)}` : ''}`;
+    $('hubSub').classList.add('chips');
+    $('hubSub').innerHTML = [
+      lbl('div', `<b>${D.name}</b>${L.gameMode === 'career' ? ' · carreira' : ''}`, 'Divisão'),
+      lbl('cal', `T${L.season} · <b>${phaseLabel().replace(/ de (\d+)/, '/$1').replace('-feira', '')}</b>`, `Temporada ${L.season} · ${phaseLabel()}`),
+      pre ? '' : lbl('trophy', `<b>${pos}º</b> · ${me.rec.w}V ${me.rec.l}D`, 'Posição e campanha'),
+      lbl('ovr', `<b>${teamOVR(me)}</b>`, 'Nota do time'),
+      lbl('star', `<b>${r0(me.fame)}</b>`, 'Popularidade do time'),
+      lbl('medal', `<b>${r0(L.coach.rep)}</b>`, 'Reputação do técnico'),
+      L.coach.conf !== undefined && L.phase !== 'preseason' && L.phase !== 'done' ? lbl('board', `<i class="mbar"><b style="width:${Math.max(4, r0(L.coach.conf))}%;background:${confCol(L.coach.conf)}"></b></i><b>${r0(L.coach.conf)}</b>`, 'Confiança da diretoria') : '',
+    ].join('');
 
     // ---- próxima etapa ----
     const np = $('nextPanel'), f = userFixture(L);
@@ -4653,7 +4853,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
             <span class="btnrow"><button class="btn sm primary" type="button" data-takejob="${o.team}">Assumir</button></span></li>`; }).join('')}</ul>`;
     } else if (pre) {
       const blockers = seasonBlockers(L), expN = me.roster.filter((p) => p.expiring).length;
-      const ok = ELEMS.every((e) => me.starters[e]) && !blockers.length;
+      const ok = !blockers.length && ELEMS.every((e) => me.roster.some((p) => p.elem === e && !p.expiring)); // os titulares são escalados sozinhos ao começar a temporada
       const ag = L.aging;
       const W = L.window, last = W.step >= W.steps, hist = (L.history || []).slice(-1)[0];
       np.innerHTML = `<h2>Pré-temporada · temporada ${L.season}</h2>
@@ -4671,26 +4871,39 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
         ${ag && (ag.mine.changes.length || ag.mine.retired.length || ag.retired.length) ? `<h3 class="sub">Um ano mais velhos</h3>
           <p class="hint">${ag.mine.retired.length ? `<b class="neg">Aposentados do seu time: ${ag.mine.retired.map(esc).join(', ')}.</b> ` : ''}${ag.mine.changes.length ? `No seu elenco: ${ag.mine.changes.map((c) => `${esc(c.name)} (${c.age} anos) <b class="${c.d > 0 ? 'pos' : 'neg'}">${c.d > 0 ? '+' : ''}${c.d}</b>`).join(', ')}. ` : ''}${ag.retired.length ? `Na liga, ${ag.retired.length} bender${ag.retired.length > 1 ? 's se aposentaram' : ' se aposentou'}.` : ''}</p>` : ''}
         ${W.news.length ? `<h3 class="sub">Notícias do mercado</h3><ul class="news">${W.news.slice(0, 10).map((n) => `<li><span class="hint">Etapa ${n.step}</span> ${esc(n.text)}</li>`).join('')}</ul>` : ''}`;
-      $('headAction').innerHTML = last ? `<button class="btn primary" id="seasonBtn" type="button"${ok ? '' : ' disabled title="Resolva os itens da lista antes de começar"'}>Começar temporada</button>`
-        : `<button class="btn primary" id="stepBtn" type="button">Encerrar etapa ${W.step} da janela</button>`;
-      if ($('seasonBtn')) $('seasonBtn').onclick = () => confirmAct('Começar a temporada?', 'A janela de transferências fecha: não dá mais para contratar, comprar, vender ou dispensar até a próxima pré-temporada.', 'Começar temporada', () => { if (startSeason(L)) { save(); renderHub(); } });
+      $('headAction').innerHTML = L.preStep === 'market'
+        ? `<button class="btn quiet" id="backSponsorsBtn" type="button">Voltar aos patrocínios</button> <button class="btn primary" id="seasonBtn" type="button"${ok ? '' : ' disabled title="Resolva os itens pendentes ao lado antes de começar"'}>Começar temporada</button>`
+        : '<button class="btn primary" id="toMarketBtn" type="button">Seguir para o mercado</button>';
+      if ($('backSponsorsBtn')) $('backSponsorsBtn').onclick = () => { L.preStep = 'sponsors'; save(); renderHub(); window.scrollTo(0, 0); };
+      if ($('toMarketBtn')) $('toMarketBtn').onclick = () => { const go = () => { L.preStep = 'market'; save(); renderHub(); window.scrollTo(0, 0); };
+        if (L.sponsors.length) go(); else confirmAct('Seguir sem patrocínio?', 'Sem patrocínio, o time só recebe prêmios. Dá para voltar e assinar antes de começar a temporada.', 'Seguir sem patrocínio', go); };
+      if ($('seasonBtn')) $('seasonBtn').onclick = () => confirmAct('Começar a temporada?', 'A janela de transferências fecha: não dá mais para contratar, comprar, vender ou dispensar até a próxima pré-temporada.', 'Começar temporada', () => { if (startSeason(L)) { save(); hubPage = 'home'; renderHub(); window.scrollTo(0, 0); } });
+      // coluna lateral do Mercado: o que falta antes de começar e os contratos do elenco
+      $('preCheck').innerHTML = `<h2>Antes de começar</h2><ul class="checks">
+        <li class="${L.sponsors.length ? 'ok' : ''}">Patrocínios: ${L.sponsors.length} de 2</li>
+        <li class="${rosterShort(L) ? 'bad' : 'ok'}">Elenco: ${me.roster.filter((p) => !p.expiring).length} de ${MAX_ROSTER} (mínimo ${MIN_ROSTER})</li>
+        ${expN ? `<li class="${blockers.length ? 'bad' : ''}">Contratos encerrados: ${expN}${blockers.length ? ` · sem bender de ${blockers.map((e) => ELN[e]).join(' e ')}` : ''}</li>` : ''}
+        ${W.offers.length ? `<li>Ofertas pelos seus benders: ${W.offers.length}</li>` : ''}</ul>`;
+      $('newsPanel').hidden = !W.news.length;
+      $('newsPanel').innerHTML = W.news.length ? `<h2>Notícias do mercado</h2><ul class="news">${W.news.slice(0, 12).map((n) => `<li>${esc(n.text)}</li>`).join('')}</ul>` : '';
       if ($('stepBtn')) $('stepBtn').onclick = () => confirmAct(`Encerrar a etapa ${W.step} da janela?`, 'As ofertas e os agentes livres desta etapa mudam, e os outros times fazem as contratações deles. Não dá para voltar a esta etapa.', 'Encerrar etapa', () => { if (advanceWindow(L)) { save(); renderHub(); } });
     } else if (L.phase === 'done') {
       const ch = L.divs.map((x) => L.teams[x.champion]), mv = L.movement;
       const mine = mv.up.includes(me.idx) ? `Seu time conseguiu o acesso à ${DIVS[me.div - 1].name}!` : mv.down.includes(me.idx) ? `Seu time foi rebaixado para a ${DIVS[me.div + 1].name}.` : '';
-      np.innerHTML = `<h2>Temporada encerrada</h2>
+      const teamChip = (i) => `<span class="ich"><b style="color:${L.teams[i].color}">${esc(L.teams[i].name)}</b></span>`;
+      np.innerHTML = `<h2>Temporada encerrada${helpTip('Na próxima temporada: acesso e rebaixamento aplicados, patrocinadores decidem se renovam e a janela de transferências abre.')}</h2>
         <div class="champs">${ch.map((t, di) => `<div><span class="hint">${DIVS[di].name}</span><div class="sn" style="color:${t.color}">${esc(t.name)}</div><span class="hint">campeão</span></div>`).join('')}</div>
-        <p class="hint">${L.divs[me.div].champion === me.idx ? '<b style="color:var(--gold)">Seu time é campeão!</b> ' : ''}${mine}
-        Sobem: ${mv.up.map((i) => esc(L.teams[i].name)).join(' e ')}. Caem: ${mv.down.map((i) => esc(L.teams[i].name)).join(' e ')}.</p>
-        ${L.coach.last ? `<p>Reputação do técnico: <b>${r0(L.coach.rep)}</b> <span class="${L.coach.last.d >= 0 ? 'pos' : 'neg'}">(${L.coach.last.d >= 0 ? '+' : ''}${String(L.coach.last.d).replace('.', ',')})</span> <span class="hint">· ${esc(L.coach.last.why.join(', '))}</span></p>` : ''}
-        ${fired ? `<p><b class="neg">Você foi demitido.</b> ${esc(fired.reason)} Sua reputação caiu para ${r0(L.coach.rep)}. Escolha um dos times abaixo para continuar a carreira.</p>` : ''}
-        <h3 class="sub">Propostas para você</h3>
-        ${L.coach.offers.length ? `<p class="hint">${fired ? 'Estes times aceitam você.' : 'Outros times querem você como técnico.'} Se aceitar, você assume o novo time na próxima temporada, com o elenco, o caixa e os patrocínios dele; seu time atual passa a ser da IA.</p>
+        ${L.divs[me.div].champion === me.idx || mine ? `<p>${L.divs[me.div].champion === me.idx ? '<b style="color:var(--gold)">Seu time é campeão!</b> ' : ''}${mine}</p>` : ''}
+        <div class="chips" style="margin:6px 0">${lbl('', '<i class="lgd up"></i>Sobem', 'Sobem de divisão', 'w')}${mv.up.map(teamChip).join('')}</div>
+        <div class="chips" style="margin:6px 0">${lbl('', '<i class="lgd down"></i>Caem', 'Caem de divisão', 'l')}${mv.down.map(teamChip).join('')}</div>
+        ${L.coach.last ? `<div class="chips" style="margin:10px 0">${lbl('medal', `Reputação <b>${r0(L.coach.rep)}</b> <b class="${L.coach.last.d >= 0 ? 'pos' : 'neg'}">${L.coach.last.d >= 0 ? '+' : ''}${String(L.coach.last.d).replace('.', ',')}</b>`, 'Reputação do técnico')}${L.coach.last.why.map((w) => lbl('', esc(w), 'Por quê')).join('')}</div>` : ''}
+        ${fired ? `<p><b class="neg">Você foi demitido.</b> ${esc(fired.reason)} Escolha um time abaixo para continuar.</p>` : ''}
+        <h3 class="sub">Propostas para você${helpTip(`${fired ? 'Estes times aceitam você.' : 'Outros times querem você como técnico.'} Se aceitar, você assume o novo time na próxima temporada, com o elenco, o caixa e os patrocínios dele; seu time atual passa a ser da IA.`)}</h3>
+        ${L.coach.offers.length ? `
           <ul class="offers">${L.coach.offers.map((o) => { const t = L.teams[o.team], sel = L.coach.accepted === o.team;
-            return `<li><span><span class="dot" style="background:${t.color}"></span><b>${esc(t.name)}</b> · ${DIVS[t.div].name} · nota ${teamOVR(t)} · caixa ${yen(t.cash)} · popularidade ${r0(t.fame)}<br><span class="hint">Objetivo da diretoria: ${esc(o.goal)}</span></span>
+            return `<li><span><span class="dot" style="background:${t.color}"></span><b>${esc(t.name)}</b> <span class="chips" style="display:inline-flex;margin-left:6px">${lbl('div', DIVS[t.div].name, 'Divisão')}${lbl('ovr', `<b>${teamOVR(t)}</b>`, 'Nota do time')}${lbl('cash', `<b>${yen(t.cash)}</b>`, 'Caixa')}${lbl('star', `<b>${r0(t.fame)}</b>`, 'Popularidade')}${lbl('trophy', esc(o.goal), 'Objetivo da diretoria')}</span></span>
               <span class="btnrow"><button class="btn sm${sel ? ' primary' : ''}" type="button" data-coach="${o.team}">${sel ? 'Aceita ✓' : 'Aceitar'}</button></span></li>`; }).join('')}</ul>`
           : '<p class="hint">Nenhuma proposta nesta temporada. Supere as expectativas da diretoria para chamar a atenção de outros times.</p>'}
-        <p class="hint">Na próxima temporada: acesso e rebaixamento aplicados, patrocinadores decidem se renovam e a janela de transferências abre.</p>
         ${L.history && L.history.length ? `<h3 class="sub">Suas temporadas</h3><ul class="news">${L.history.map((h) => `<li>Temporada ${h.season}${h.team ? ` (${esc(h.team)})` : ''}: ${h.pos}º na ${DIVS[h.div].name}, ${h.w}V ${h.l}D${h.champ ? ' · campeão' : ''}${h.moved === 'up' ? ' · subiu' : h.moved === 'down' ? ' · caiu' : ''}${h.fired ? ' · demitido' : ''}</li>`).join('')}${(L.coach.firedLog || []).filter((x) => x.when === 'mid').map((x) => `<li>Temporada ${x.season}: demitido de ${esc(x.team)} na rodada ${x.week}</li>`).join('')}</ul>` : ''}
         <div class="btnrow"><button class="btn primary" id="newSeasonBtn" type="button"${fired && (L.coach.accepted === null || L.coach.accepted === undefined) ? ' disabled' : ''}>Avançar para a temporada ${L.season + 1}${L.coach.accepted !== null && L.coach.accepted !== undefined ? ` no comando de ${esc(L.teams[L.coach.accepted].name)}` : ''}</button>
         ${fired && (L.coach.accepted === null || L.coach.accepted === undefined) ? '<span class="hint">Escolha um time para continuar.</span>' : ''}</div>`;
@@ -4729,9 +4942,9 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     // ---- patrocínios ----
     const sp = $('sponsorPanel');
     if (pre) {
-      sp.innerHTML = `<h2>Patrocínios</h2>
+      sp.innerHTML = `<h2>Patrocínios <span class="ich" title="Patrocínios assinados">${L.sponsors.length}/2</span> <span class="ich" title="Popularidade do time: define o tamanho das propostas">${ic('star')}<b>${r0(me.fame)}</b></span>${helpTip(`Escolha até 2. Cada um paga um valor fixo por rodada e um bônus quando a meta é cumprida. Não há multa se a meta falhar, mas o patrocinador pode não renovar. A popularidade do time (${r0(me.fame)}) define a expectativa: times populares recebem propostas maiores, mas com metas mais difíceis.`)}</h2>
         ${L.refusedSponsors && L.refusedSponsors.length ? `<p class="hint neg">Não quiseram renovar: ${L.refusedSponsors.map(esc).join(', ')}.</p>` : ''}
-        <p class="hint">Escolha até 2. Cada um paga um valor fixo por rodada e um bônus quando a meta é cumprida. Não há multa se a meta falhar, mas o patrocinador pode não renovar. A popularidade do time (${r0(me.fame)}) define a expectativa: times populares recebem propostas maiores, mas com metas mais difíceis.</p>
+
         ${L.sponsors.length ? `<div class="sp-grid">${L.sponsors.map((s) => sponsorCard(s, `<button class="btn sm" type="button" data-drop="${s.id}">Cancelar</button>`)).join('')}</div>` : ''}
         <div class="sp-grid">${L.sponsorOffers.map((s) => sponsorCard(s, `<button class="btn sm" type="button" data-sponsor="${s.id}"${L.sponsors.length >= 2 ? ' disabled' : ''}>Assinar</button>`)).join('')}</div>`;
     } else {
@@ -4742,21 +4955,26 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const pay = payroll(me), inc = sponsorIncome(), net = inc - pay;
     $('financePanel').innerHTML = `<h2>Finanças</h2>
       <div class="cash ${me.cash < 0 ? 'neg' : ''}">${yen(me.cash)}</div>
-      <dl class="fin">
-        <dt>Patrocínios por rodada</dt><dd>${signed(inc)}</dd>
-        <dt>Salários por rodada</dt><dd>${signed(-pay)}</dd>
-        <dt>Saldo fixo por rodada</dt><dd class="${net < 0 ? 'neg' : 'pos'}">${signed(net)}</dd>
-        <dt>Prêmio por vitória</dt><dd>${yen(PRIZES.win * D.mult)}</dd>
-        <dt>Eventos na última rodada</dt><dd>${signed(L.lastReport && L.lastReport.money.events ? L.lastReport.money.events.reduce((a, e) => a + e.amount, 0) : 0)}</dd>
-        <dt>Popularidade do time</dt><dd>${r0(me.fame)}</dd>
-      </dl>
+      <div class="tiles">
+        <div class="tile"><span>Patrocínios / rodada</span><b>${signed(inc)}</b></div>
+        <div class="tile"><span>Salários / rodada</span><b>${signed(-pay)}</b></div>
+        <div class="tile" title="Patrocínios menos salários, sem prêmios, metas e eventos"><span>Saldo fixo / rodada</span><b class="${net < 0 ? 'neg' : 'pos'}">${signed(net)}</b></div>
+        <div class="tile"><span>${ic('trophy')} Prêmio por vitória</span><b>${yen(PRIZES.win * D.mult)}</b></div>
+        <div class="tile"><span>Eventos na última rodada</span><b>${signed(L.lastReport && L.lastReport.money.events ? L.lastReport.money.events.reduce((a, e) => a + e.amount, 0) : 0)}</b></div>
+        <div class="tile"><span>${ic('star')} Popularidade</span><b>${r0(me.fame)}</b></div>
+      </div>
       ${me.cash < 0 ? '<p class="hint neg">Caixa negativo: contratações bloqueadas até voltar ao positivo.</p>' : ''}`;
 
     // ---- diretoria (aba Patrocínios): expectativa e confiança ----
-    $('boardPanel').innerHTML = `<h2>Diretoria</h2>
-      ${L.coach.expect ? `<p>Expectativa para a temporada: <b>${L.coach.expect}º lugar</b> (${BOARD_GOAL(me.div, L.coach.expect).toLowerCase()}).</p>` : '<p class="hint">A diretoria define a expectativa no começo da temporada.</p>'}
-      ${L.coach.conf !== undefined && L.phase === 'season' ? `<div class="conf"><span class="hint">Confiança da diretoria</span> ${confBar(L.coach.conf)} <b>${confLabel(L.coach.conf)}</b>
-        ${L.coach.conf < 25 ? `<span class="neg">A diretoria está perdendo a paciência${L.week >= 3 ? ': se chegar a zero, você é demitido' : ''}.</span>` : ''}</div>` : ''}`;
+    const histL = (L.history || []).slice(-1)[0], agL = L.aging;
+    $('boardPanel').innerHTML = pre ? `<h2>Temporada ${L.season}</h2>
+      <div class="chips">${histL ? lbl('cal', `T${histL.season}: <b>${histL.pos}º</b> · ${DIVS[histL.div].name} · ${histL.w}V ${histL.l}D${histL.champ ? ' · <b style="color:var(--gold)">campeão</b>' : ''}${histL.moved === 'up' ? ' · <b class="pos">subiu</b>' : histL.moved === 'down' ? ' · <b class="neg">caiu</b>' : ''}`, `Temporada ${histL.season}`) : ''}
+      ${lbl('trophy', `Diretoria espera <b>${expectedPos(L, me.idx)}º</b> · ${BOARD_GOAL(me.div, expectedPos(L, me.idx)).toLowerCase()}`, 'Expectativa da diretoria (conforme a força do elenco quando a temporada começar)')}</div>
+      ${agL && (agL.mine.changes.length || agL.mine.retired.length) ? `<p class="hint">${agL.mine.retired.length ? `<b class="neg">Aposentados: ${agL.mine.retired.map(esc).join(', ')}.</b> ` : ''}${agL.mine.changes.length ? `Um ano mais velhos: ${agL.mine.changes.map((c) => `${esc(c.name)} <b class="${c.d > 0 ? 'pos' : 'neg'}">${c.d > 0 ? '+' : ''}${c.d}</b>`).join(', ')}.` : ''}</p>` : ''}`
+      : `<h2>Diretoria</h2>
+      <div class="chips">${L.coach.expect ? lbl('trophy', `Expectativa <b>${L.coach.expect}º lugar</b> · ${BOARD_GOAL(me.div, L.coach.expect).toLowerCase()}`, 'Expectativa da diretoria para a temporada') : lbl('trophy', 'Expectativa definida no começo da temporada', 'Expectativa da diretoria')}
+      ${L.coach.conf !== undefined && L.phase === 'season' ? lbl('board', `Confiança <i class="mbar"><b style="width:${Math.max(4, r0(L.coach.conf))}%;background:${confCol(L.coach.conf)}"></b></i><b>${r0(L.coach.conf)}</b> · ${confLabel(L.coach.conf)}`, 'Confiança da diretoria', L.coach.conf < 25 ? 'l' : '') : ''}</div>
+      ${L.coach.conf !== undefined && L.phase === 'season' && L.coach.conf < 25 ? `<p class="neg" style="margin:8px 0 0">A diretoria está perdendo a paciência${L.week >= 3 ? ': se chegar a zero, você é demitido' : ''}.</p>` : ''}`;
     // ---- relatório da última rodada ----
     const rp = $('reportPanel'), rep = L.lastReport;
     rp.hidden = !rep;
@@ -4793,19 +5011,19 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     for (const p of me.roster) if (isInjured(p)) { if (TRAINABLE.includes(p.plan)) p.plan = 'rest'; if (p.ev && EVENTS[p.ev] && EVENTS[p.ev].phys) p.ev = null; }
     const locked = L.day === 'sun', inWeek = ['season', 'semis', 'final'].includes(L.phase);
     // eventos: arraste o bender para o evento; quem não for arrastado para nenhum não faz evento (descansa nos dias livres)
-    const chip = (p) => `<span class="chip-b"${locked ? '' : ` data-drag="ev:${p.id}"`} title="${locked ? '' : 'Arraste para um evento'}">${icon(p.elem)} ${esc(p.name)} <small title="Energia">${r0(p.energy)}⚡</small> <small title="Popularidade">${r0(p.st.pop)}★</small>${injTag(p)}${p.ev && !locked ? `<button class="x" type="button" data-unev="${p.id}" title="Tirar do evento" aria-label="Tirar ${esc(p.name)} do evento">×</button>` : ''}</span>`;
+    const chip = (p) => `<span class="chip-b"${locked ? '' : ` data-drag="ev:${p.id}"`} title="${locked ? '' : 'Arraste para um evento'}">${icon(p.elem)} ${esc(p.name)} <small title="Energia">${ic('bolt')}${r0(p.energy)}</small> <small title="Popularidade">${ic('star')}${r0(p.st.pop)}</small>${injTag(p)}${p.ev && !locked ? `<button class="x" type="button" data-unev="${p.id}" title="Tirar do evento" aria-label="Tirar ${esc(p.name)} do evento">×</button>` : ''}</span>`;
     const byElem = (a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st);
     // a faixa da semana é o quadro dos eventos: cada dia de evento recebe os benders arrastados
     { const fx = userFixture(L), rv = fx ? L.teams[fx.h === L.user ? fx.a : fx.h] : null;
-      $('weekHint').textContent = locked ? 'A semana já aconteceu: as decisões voltam na segunda, depois do jogo.'
-        : 'Arraste os benders para os dias de evento. Quem não for a nenhum evento descansa nos dias livres. O treino de quarta fica na tabela abaixo.';
+      $('weekPanelTitle').innerHTML = 'Semana' + (locked ? ' <span class="ich" title="As decisões voltam na segunda, depois do jogo">' + ic('lock') + ' semana jogada</span>' : '')
+        + helpTip('Arraste os benders para os dias de evento. Quem não for a nenhum evento descansa nos dias livres. O treino de quarta fica na tabela abaixo. Cada evento mostra a renda (base + valor por ponto de popularidade do bender), a energia gasta, as vagas e as exigências.');
       $('weekStrip').innerHTML = DAYS.map((d) => {
         const k = L.events.find((x) => evDayOf(L, x) === d), now = inWeek && ((d === 'seg' && !locked) || (d === 'dom' && locked)), done = inWeek && locked && d !== 'dom';
         if (k) {
           const E = EVENTS[k], used = eventTaken(L, k, -1);
-          const tags = [E.base || E.perPop ? `<span title="Renda: base mais um valor por ponto de popularidade do bender">${yen(E.base * D.mult)} + ${yen(E.perPop * D.mult)}/POP</span>` : '<span>Não paga</span>',
-            `<span title="Energia gasta no dia">−${E.energy}⚡</span>`, `<span title="Vagas">${used}/${E.slots} vaga${E.slots > 1 ? 's' : ''}</span>`];
-          if (E.req) tags.push(`<span title="Popularidade mínima">POP ${E.req}+</span>`);
+          const tags = [E.base || E.perPop ? `<span title="Renda: base mais um valor por ponto de popularidade do bender">${ic('cash')}${yen(E.base * D.mult)} + ${yen(E.perPop * D.mult)}/${ic('star')}</span>` : '<span>Não paga</span>',
+            `<span title="Energia gasta no dia">${ic('bolt')}−${E.energy}</span>`, `<span title="Vagas">${ic('people')}${used}/${E.slots}</span>`];
+          if (E.req) tags.push(`<span title="Popularidade mínima">${ic('star')}${E.req}+</span>`);
           if (E.phys) tags.push('<span title="Lesionado não participa">físico</span>');
           if (E.fame) tags.push('<span title="Também aumenta a popularidade do time">+ time</span>');
           return `<div class="wd ev-day${done ? ' done' : ''}" data-drop="event:${k}"><b>${DAY_NAME[d]}</b><strong>${E.name}</strong><div class="ev-tags">${tags.join('')}</div>
@@ -4816,13 +5034,14 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       }).join('');
       $('evPool').innerHTML = `<div class="ev-pool" data-drop="event:none"><h4>Sem evento · descansam nos dias livres</h4><div class="ev-chips">${me.roster.filter((p) => !p.ev).sort(byElem).map(chip).join('')}</div></div>
         <div class="ev-msg" id="evMsg" role="status"></div>`; }
-    $('trainHint').textContent = team ? 'Treino em equipe: todo o elenco segue o mesmo foco na quarta.' : 'Treino individual: escolha o plano de quarta de cada bender (treinar um atributo ou descansar).';
+    $('trainHint').innerHTML = helpTip(team ? 'Treino em equipe: todo o elenco segue o mesmo foco na quarta.' : 'Treino individual: escolha o plano de quarta de cada bender (treinar um atributo ou descansar).');
     const isSt = (p) => me.starters[p.elem] === p.id;
-    $('trainTbl').innerHTML = `<thead><tr><th>Status</th><th>Elemento</th><th>Bender</th><th class="num">Nota</th>${ATTRS.map((a) => `<th class="num" title="${a[2]}">${a[1]}</th>`).join('')}<th>Energia</th><th>Estresse</th><th>Quarta</th></tr></thead><tbody>` +
+    $('trainTbl').innerHTML = `<thead><tr><th>Status</th><th>Elemento</th><th>Bender</th><th class="num">Nota</th>${ATTRS.map((a) => `<th class="num" title="${a[2]}">${a[1]}</th>`).join('')}<th class="num" title="Popularidade">POP</th><th>Energia</th><th>Estresse</th><th>Quarta</th></tr></thead><tbody>` +
       me.roster.slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || isSt(b) - isSt(a)).map((p) => `<tr data-mpick="${p.id}">
         <td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}${injTag(p)}</td>
         <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td>
         ${ATTRS.map(([k]) => `<td class="num">${r0(p.st[k])}</td>`).join('')}
+        <td class="num pop">${r0(p.st.pop)}</td>
         <td>${energyBar(p.energy)}</td><td>${stressBar(p.stress || 0)}</td>
         <td><select data-plan="${p.id}" aria-label="Plano de quarta de ${esc(p.name)}"${team || locked ? ' disabled' : ''}>${planOpts(p)}</select></td></tr>`).join('') + '</tbody>';
 
@@ -4837,7 +5056,15 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       <p class="hint">Renove agora pelo salário que eles pedem, ou eles vão embora de graça quando a temporada começar.</p>
       <ul class="offers">${exp.map((p) => `<li><span>${icon(p.elem)} <b>${esc(p.name)}</b> · ${p.age} anos · nota ${ovr(p.st)} · salário atual ${yen(wageOf(p))} → pede <b>${yen(askWage(p))}</b></span>
         <span class="btnrow">${[1, 2, 3].map((y) => `<button class="btn sm" type="button" data-renew="${p.id}:${y}">Renovar ${y} temp.</button>`).join('')}</span></li>`).join('')}</ul>` : '';
-    $('rosterHint').textContent = `${me.roster.length} de ${MAX_ROSTER} vagas (mínimo ${MIN_ROSTER}). Clique num bender para ver a ficha completa e a evolução dos atributos na temporada.${pre ? ' Vender e dispensar ficam em Finanças, na folha salarial.' : ''}`;
+    if (pre) $('preContracts').innerHTML = `<h2>Seu elenco · ${me.roster.length}/${MAX_ROSTER}</h2>
+      ${exp.length ? `<h3 class="sub">Contratos encerrados${helpTip('Sem renovar, saem quando a temporada começar. 1T, 2T e 3T renovam por 1, 2 ou 3 temporadas pelo salário pedido.')}</h3>
+        <ul class="mini-roster">${exp.map((p) => `<li><span>${icon(p.elem)} <b>${esc(p.name)}</b> · ${ovr(p.st)} · pede ${yen(askWage(p))}</span>
+          <span class="btnrow">${[1, 2, 3].map((y) => `<button class="btn sm" type="button" data-renew="${p.id}:${y}" title="Renovar por ${y} temporada${y > 1 ? 's' : ''}">${y}T</button>`).join('')}</span></li>`).join('')}</ul>` : ''}
+      <ul class="mini-roster">${me.roster.filter((p) => !p.expiring).slice().sort((a, b) => ELEM_ORDER[a.elem] - ELEM_ORDER[b.elem] || ovr(b.st) - ovr(a.st)).map((p) => { const q = sellQuote(L, p.id);
+        return `<li><span data-mpick="${p.id}" style="cursor:pointer">${icon(p.elem)} ${esc(p.name)} · <b>${ovr(p.st)}</b> <span class="hint">· ${yen(wageOf(p))}</span></span>
+          <span class="btnrow"><button class="btn sm" type="button" data-sell="${p.id}"${q && q.ok ? '' : ` disabled title="${esc(q ? q.why : '')}"`}>Vender${q && q.price ? ' · ' + yen(q.price) : ''}</button><button class="btn sm" type="button" data-release="${p.id}"${canRelease(L, p.id) ? '' : ' disabled title="Precisa haver outro bender deste elemento no elenco"'}>Dispensar</button></span></li>`; }).join('')}</ul>`;
+    $('rosterHint').innerHTML = lbl('people', `<b>${me.roster.length}</b>/${MAX_ROSTER} · mín. ${MIN_ROSTER}`, 'Vagas no elenco');
+    $('lineupTitle').innerHTML = 'Escalação' + helpTip('Começam 3 titulares, um de cada elemento. Arraste um reserva para o campo (ou sobre o titular) para escalá-lo no lugar de quem é do mesmo elemento. Clique num bender para ver a ficha. Na partida, os reservas sadios ficam no banco e podem entrar entre os rounds.');
     $('rosterTbl').innerHTML = `<thead><tr>${sth('roster', 'starter', 'Status')}${sth('roster', 'elem', 'Elemento')}${sth('roster', 'name', 'Bender')}${sth('roster', 'ovr', 'Nota', 'num')}${sth('roster', 'age', 'Idade', 'num')}${attrHeads('roster')}${sth('roster', 'pop', 'POP', 'num', 'Popularidade')}${sth('roster', 'tmp', 'Temperamento')}${sth('roster', 'energy', 'Energia')}${sth('roster', 'stress', 'Estresse')}${sth('roster', 'inj', 'Lesão')}</tr></thead><tbody>` +
       roster.map((p) => {
         const st = isSt(p), cur = me.roster.find((q) => q.id === me.starters[p.elem]);
@@ -4854,7 +5081,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       }).join('') + '</tbody>';
     // ---- finanças: folha salarial ----
     const payRows = sortRows(me.roster, 'pay', Object.assign({}, benderGetters, { starter: (p) => (isSt(p) ? 0 : 1), value: (p) => valueOf(L, p) }));
-    $('payHint').textContent = `Folha de ${yen(payroll(me))} por rodada, ${yen(payroll(me) * WEEKS)} na temporada (${WEEKS} rodadas). O salário é fixo até o fim do contrato.`;
+    $('payHint').innerHTML = lbl('cash', `<b>${yen(payroll(me))}</b> / rodada`, 'Folha por rodada') + lbl('', `<b>${yen(payroll(me) * WEEKS)}</b> na temporada`, `${WEEKS} rodadas`) + helpTip('O salário é fixo até o fim do contrato. Contratos encerrados são renovados na pré-temporada.');
     $('payTbl').innerHTML = `<thead><tr>${sth('pay', 'starter', 'Status')}${sth('pay', 'elem', 'Elemento')}${sth('pay', 'name', 'Bender')}${sth('pay', 'ovr', 'Nota', 'num')}${sth('pay', 'age', 'Idade', 'num')}${sth('pay', 'pop', 'POP', 'num', 'Popularidade')}${sth('pay', 'salary', 'Salário', 'num')}${sth('pay', 'contract', 'Contrato')}${sth('pay', 'value', 'Valor', 'num', 'Valor de mercado')}${pre ? '<th></th><th></th>' : ''}</tr></thead><tbody>` +
       payRows.map((p) => `<tr data-mpick="${p.id}"><td>${isSt(p) ? '<span class="badge-st">Titular</span>' : '<span class="badge-res">Reserva</span>'}</td>
         <td class="el">${icon(p.elem)} <span>${ELN[p.elem]}</span></td><td class="nm">${esc(p.name)}</td><td class="num ov">${ovr(p.st)}</td><td class="num">${p.age}</td>
@@ -4865,9 +5092,16 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
 
     // ---- mercado (só na pré-temporada) ----
     const full = me.roster.length >= MAX_ROSTER;
-    $('faPanel').hidden = $('othersPanel').hidden = !pre;
+    $('mkTabs').hidden = !pre;
+    $('faPanel').hidden = !pre || mkTab !== 'fa'; $('othersPanel').hidden = !pre || mkTab === 'fa';
+    if (pre) {
+      const forSale = (e) => L.teams.filter((t) => t.idx !== L.user).reduce((a, t) => a + t.roster.filter((p) => { if (p.elem !== e) return false; const c = canBuy(L, p.id); return c.ok || c.why === 'Caixa insuficiente' || c.why === 'Elenco cheio'; }).length, 0);
+      $('mkTabs').innerHTML = [['fa', 'Agentes livres', L.freeAgents.length], ...ELEMS.map((e) => [e, `${icon(e)} ${ELN[e]}`, forSale(e)])].map(([k, n, c]) => `<button type="button" role="tab" data-mktab="${k}" aria-pressed="${mkTab === k}">${n} <small>${c}</small></button>`).join('');
+      $('othersPanel').classList.toggle('by-elem', mkTab !== 'fa');
+      $('othersTitle').innerHTML = (mkTab === 'fa' ? 'Benders de outros times' : `Benders de ${ELN[mkTab].toLowerCase()} de outros times`) + helpTip('Comprar custa o valor de mercado. O time vendedor só aceita se continuar com pelo menos 1 bender do mesmo elemento e 6 no elenco. Clique num bender para ver a ficha com os atributos.');
+    }
     $('marketHint').textContent = !pre ? 'Mercado fechado. A janela de transferências abre na pré-temporada da próxima temporada.'
-      : `Janela de transferências: etapa ${L.window.step} de ${L.window.steps}. Elenco ${me.roster.length} de ${MAX_ROSTER} (mínimo ${MIN_ROSTER})${full ? ' (cheio: venda ou dispense alguém para abrir vaga)' : ''}. A cada etapa, os outros times negociam e chegam novas ofertas.`;
+      : `Elenco ${me.roster.length} de ${MAX_ROSTER} (mínimo ${MIN_ROSTER})${full ? ' (cheio: venda ou dispense alguém para abrir vaga)' : ''}. Os outros times já fizeram as contratações deles; ao começar a temporada, fazem os últimos ajustes.`;
     $('offersBox').innerHTML = !pre ? '' : `<h3 class="sub">Ofertas recebidas</h3>` + (L.window.offers.length ? `<ul class="offers">${L.window.offers.map((o) => {
       const p = me.roster.find((q) => q.id === o.pid), t = L.teams[o.team], v = valueOf(L, p), only = me.roster.filter((q) => q.elem === p.elem).length < 2;
       const diff = Math.round((o.amount / v - 1) * 100);
@@ -4879,9 +5113,10 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       // orçamento: o caixa paga o preço e ainda sobra para o salário dele na temporada inteira
       const income = L.sponsors.reduce((a, sp) => a + sp.base, 0), pay = payroll(me);
       const fitOf = (price, wage) => { const after = me.cash - price, season = wage * WEEKS; return { after, season, ok: after >= season, cost: price + season }; };
-      $('budgetBox').innerHTML = `<span>Caixa <b>${yen(me.cash)}</b></span><span>Folha <b>${yen(pay)}</b> por rodada</span><span>Patrocínios <b>${yen(income)}</b> por rodada</span>
-        <span>Saldo fixo <b class="${income - pay < 0 ? 'neg' : 'pos'}">${yen(income - pay)}</b> por rodada (sem prêmios, metas e eventos)</span>
-        <span>Cabe no orçamento = o caixa paga o preço e ainda cobre o salário dele nas ${WEEKS} rodadas da temporada</span>`;
+      $('budgetBox').innerHTML = lbl('people', `Elenco <b>${me.roster.length}</b>/${MAX_ROSTER} · mín. ${MIN_ROSTER}`, me.roster.length >= MAX_ROSTER ? 'Elenco cheio: venda ou dispense alguém para abrir vaga' : 'Vagas no elenco', me.roster.length >= MAX_ROSTER ? 'l' : '')
+        + lbl('cash', `Caixa <b>${yen(me.cash)}</b>`, 'Caixa') + lbl('', `Folha <b>${yen(pay)}</b>/rod.`, 'Salários por rodada') + lbl('', `Patrocínios <b>${yen(income)}</b>/rod.`, 'Patrocínios por rodada')
+        + lbl('', `Saldo fixo <b class="${income - pay < 0 ? 'neg' : 'pos'}">${yen(income - pay)}</b>/rod.`, 'Patrocínios menos salários, sem prêmios, metas e eventos');
+      $('marketTitle').innerHTML = 'Mercado' + helpTip(`Os outros times já fizeram as contratações deles; ao começar a temporada, fazem os últimos ajustes. <b>Cabe no orçamento</b> = o caixa paga o preço e ainda cobre o salário dele nas ${WEEKS} rodadas da temporada.`);
       document.querySelectorAll('[data-budget]').forEach((c) => { c.checked = budgetOnly; });
       let faList = L.freeAgents;
       if (budgetOnly) faList = faList.filter((p) => fitOf(signingFee(p), salary(p)).ok);
@@ -4897,8 +5132,12 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
             <td><button class="btn sm" type="button" data-sign="${p.id}"${can ? '' : ' disabled'}${emerg ? ' title="Contratação de emergência: falta este elemento no elenco; o caixa fica no vermelho"' : ''}>${emerg ? 'Emergência' : 'Contratar'} · ${yen(fee)}</button></td></tr>`;
         }).join('') + '</tbody>';
       // benders dos outros times
-      $('othersDiv').value = othersFilter.div; $('othersAvail').checked = othersFilter.avail;
-      let pool = L.teams.filter((t) => t.idx !== L.user && (othersFilter.div === 'all' || t.div === +othersFilter.div)).flatMap((t) => t.roster.map((p) => ({ p, t, c: canBuy(L, p.id) })));
+      if (othersFilter.div === 'all') othersFilter.div = String(me.div); // abre na divisão do seu time
+      $('othersAvail').checked = othersFilter.avail;
+      { const avail = (c) => c.ok || c.why === 'Caixa insuficiente' || c.why === 'Elenco cheio';
+        $('divTabs').innerHTML = DIVS.map((D, di) => { const n = L.teams.filter((t) => t.idx !== L.user && t.div === di).reduce((a, t) => a + t.roster.filter((p) => (mkTab === 'fa' || p.elem === mkTab) && (!othersFilter.avail || avail(canBuy(L, p.id)))).length, 0);
+          return `<button type="button" role="tab" data-divtab="${di}" aria-pressed="${othersFilter.div === String(di)}">${D.name}${di === me.div ? ' · sua' : ''} <small>${n}</small></button>`; }).join(''); }
+      let pool = L.teams.filter((t) => t.idx !== L.user && (othersFilter.div === 'all' || t.div === +othersFilter.div)).flatMap((t) => t.roster.filter((p) => mkTab === 'fa' || p.elem === mkTab).map((p) => ({ p, t, c: canBuy(L, p.id) })));
       if (othersFilter.avail) pool = pool.filter((x) => x.c.ok || x.c.why === 'Caixa insuficiente' || x.c.why === 'Elenco cheio');
       if (budgetOnly) pool = pool.filter((x) => fitOf(valueOf(L, x.p), wageOf(x.p)).ok);
       const rows = sortRows(pool, 'others', Object.assign({}, ...Object.entries(benderGetters).map(([k, g]) => ({ [k]: (x) => g(x.p) })),
@@ -4931,17 +5170,14 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
             <td><span class="dot" style="background:${t.color}"></span>${esc(t.name)}${L.divs[di].champion === t.idx ? ' <small class="ko">CAMPEÃO</small>' : ''}</td><td class="num">${t.rec.w}</td><td class="num">${t.rec.l}</td>
             <td class="num">${t.rec.rf - t.rec.ra > 0 ? '+' : ''}${t.rec.rf - t.rec.ra}</td><td class="num">${t.rec.ko}</td><td class="num">${teamOVR(t)}</td><td class="num pop">${r0(t.fame)}</td></tr>`;
         }).join('') + '</tbody>';
-      $('tableHint' + slot).textContent = 'Os 4 primeiros vão às semifinais.'
-        + (di > 0 ? ' Sobem o campeão e o melhor colocado entre os demais (em verde, a zona de acesso pela tabela).' : '')
-        + (di < lastDiv ? ` Os 2 últimos (em vermelho) caem para a ${DIVS[di + 1].name}.` : '');
+      $('tableHint' + slot).innerHTML = `<span class="chips">${lbl('', '<i class="lgd semi"></i>4 primeiros: semifinais', 'Os 4 primeiros vão às semifinais')}${di > 0 ? lbl('', '<i class="lgd up"></i>Acesso', 'Sobem o campeão e o melhor colocado entre os demais (em verde, a zona de acesso pela tabela)') : ''}${di < lastDiv ? lbl('', '<i class="lgd down"></i>Caem', `Os 2 últimos caem para a ${DIVS[di + 1].name}`) : ''}</span>`;
     });
 
     // cabeçalho e menu
     $('headCash').textContent = yen(me.cash);
     $('headCash').classList.toggle('neg', me.cash < 0);
     $('nbSponsors').textContent = pre ? `${L.sponsors.length}/2` : '';
-    $('nbMarket').textContent = pre ? (L.window.offers.length ? `${L.window.offers.length} oferta${L.window.offers.length > 1 ? 's' : ''}` : 'aberto') : '';
-    showPage(hubPage);
+    showPage(hubPage, flow && L.preStep !== 'market' ? 'sponsors' : null);
     showView('viewHub');
   }
 
@@ -4955,9 +5191,9 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       <li><b>Segunda-feira:</b> defina o treino de quarta (ou descanso) de cada bender e quem faz os eventos da semana. Depois, avance para domingo.</li>
       <li><b>Domingo:</b> veja como foi a semana, ajuste a escalação e jogue (ou pule para o resultado). Entre os rounds você ajusta a tática.</li>
       <li><b>Fim da temporada:</b> playoffs, acesso e rebaixamento, propostas de outros times e a janela de transferências.</li></ol>
-      <p>A diretoria acompanha tudo: a barra de confiança aqui na Central mostra como está a sua situação.</p>`],
+      <p>A diretoria acompanha tudo: a confiança dela (o escudo no topo da tela) mostra como está a sua situação.</p>`],
     roster: ['Elenco', `<ul>
-      <li>Cada partida começa com os <b>titulares</b>, um de cada elemento. Na <b>Escalação</b>, use "Escalar no lugar de…" para pôr um reserva em quadra. Durante a partida, os reservas ficam no banco e podem entrar entre os rounds.</li>
+      <li>Cada partida começa com os <b>titulares</b>, um de cada elemento. Na <b>Escalação</b>, arraste um reserva para o campo (ou use "Escalar ⇄") para pô-lo em quadra. Durante a partida, os reservas ficam no banco e podem entrar entre os rounds.</li>
       <li>O elenco tem de ${MIN_ROSTER} a ${MAX_ROSTER} benders. Lesionados aparecem com o selo de semanas fora.</li>
       <li>Clique num bender da tabela para ver a <b>ficha</b>: atributos, o gráfico de competências e a evolução de cada atributo ao longo da temporada.</li>
       <li>Reservas que não entram recuperam mais energia e podem fazer eventos.</li></ul>`],
@@ -4968,7 +5204,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
       <li>Jovens evoluem mais rápido. Com o tempo, cada bender chega ao seu limite e o treino passa a render pouco.</li>
       <li><b>Treino em equipe</b> aplica o mesmo plano para todos; <b>individual</b> deixa escolher bender a bender.</li></ul>`],
     market: ['Mercado', `<ul>
-      <li>Na <b>pré-temporada</b> abrem os agentes livres e a <b>janela de transferências</b>, que anda em etapas.</li>
+      <li>Na <b>pré-temporada</b> abrem os agentes livres e a <b>janela de transferências</b>. Os outros times contratam antes de você chegar ao mercado.</li>
       <li>Outros times fazem ofertas pelos seus benders; você aceita ou recusa.</li>
       <li>Todo contrato tem salário fixo e dura algumas temporadas. Quem termina o contrato sai de graça se não for renovado.</li>
       <li>Se faltar um elemento no elenco e o caixa não der, a contratação de emergência deixa o caixa no vermelho.</li></ul>`],
@@ -4980,7 +5216,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     finance: ['Finanças', `<ul>
       <li>Os patrocínios não pagam a folha inteira: <b>prêmios, metas e eventos</b> fecham a conta.</li>
       <li>Caixa no vermelho reduz a confiança da diretoria.</li>
-      <li>A <b>folha salarial</b> mostra salário, contrato e valor de cada bender. Contratos encerrados são renovados aqui, na pré-temporada.</li></ul>`],
+      <li>A <b>folha salarial</b> mostra salário, contrato e valor de cada bender. Contratos encerrados são renovados na pré-temporada, no Mercado, em "Seu elenco".</li></ul>`],
     table: ['Classificação', `<ul>
       <li>Cada divisão tem 8 times e 14 rodadas, em turno e returno: cada confronto acontece uma vez em cada casa. Os 4 primeiros vão às semifinais.</li>
       <li>Entre duas divisões, sobem o campeão de baixo e o melhor dos outros; caem os 2 últimos de cima.</li></ul>`],
@@ -5008,16 +5244,15 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     if (e.target.closest('[data-tipsreset]') && L) { L.tips = {}; save(); showPage(hubPage); }
   });
 
-  function showPage(pg) {
+  function showPage(pg, tipKey) {
     hubPage = pg;
-    document.querySelectorAll('#viewHub .page').forEach((el) => { el.hidden = el.dataset.page !== pg; if (el.dataset.page === pg) placeTip(el, pg); });
+    document.querySelectorAll('#viewHub .page').forEach((el) => { el.hidden = el.dataset.page !== pg; if (el.dataset.page === pg) placeTip(el, tipKey || pg); });
     document.querySelectorAll('#hubNav [data-page]').forEach((b) => b.setAttribute('aria-current', b.dataset.page === pg ? 'page' : 'false'));
   }
 
   // ---- ações na central ----
   $('viewHub').addEventListener('change', (e) => {
     if (e.target.id === 'teamPlan') { L.teamPlan = e.target.value; save(); renderHub(); return; }
-    if (e.target.id === 'othersDiv') { othersFilter.div = e.target.value; renderHub(); return; }
     if (e.target.id === 'othersAvail') { othersFilter.avail = e.target.checked; renderHub(); return; }
     if (e.target.dataset.budget !== undefined) { budgetOnly = e.target.checked; renderHub(); return; }
     const id = e.target.dataset.plan; if (!id) return;
@@ -5027,6 +5262,8 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
     const t = e.target.closest('button'); if (!t || !L) return;
     const me = L.teams[L.user];
     if (t.dataset.page) { showPage(t.dataset.page); window.scrollTo(0, 0); return; }
+    if (t.dataset.mktab) { mkTab = t.dataset.mktab; renderHub(); return; }
+    if (t.dataset.divtab) { othersFilter.div = t.dataset.divtab; renderHub(); return; }
     if (t.dataset.sort) {
       const [tbl, key] = t.dataset.sort.split(':'), s = sortState[tbl];
       if (s.key === key) s.dir = -s.dir; else { s.key = key; s.dir = TEXT_KEYS.has(key) || key === 'starter' ? 1 : -1; }
@@ -5053,7 +5290,9 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
 
   function leagueDefs() {
     const f = userFixture(L), H = L.teams[f.h], A = L.teams[f.a];
-    return { H, defs: [matchDef(L, H, f.h !== L.user), matchDef(L, A, f.a !== L.user)] };
+    const defs = [matchDef(L, H, f.h !== L.user), matchDef(L, A, f.a !== L.user)];
+    defs.forEach((d, i) => { if (d.auto) d.scout = scoutFor(L, i ? A : H); });
+    return { H, defs };
   }
   function playLeagueMatch() {
     mode = 'league';
@@ -5105,9 +5344,7 @@ if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, 
   setInterval(bgTick, 250);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) last = performance.now(); });
   { const s = loadSave(); if (s) { L = s; renderHub(); } else renderStart(); }
-  if (INTRO_ON && !introSeen()) showIntro();
+  void INTRO_ON; // a abertura agora é a própria tela de título
   requestAnimationFrame(frame);
 })();
 </script>
-
-</html>

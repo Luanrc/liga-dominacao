@@ -428,11 +428,36 @@ function aiCoach(m, ti) {
   if (m.round > 1 && last && last.winner !== ti && m.rng() < 0.7) formation = Object.keys(FORM_BEATS).find((k) => FORM_BEATS[k] === op.formation) || formation;
   // o técnico defensivo segura o placar com o Duelo de elementos quando está ganhando
   const targeting = st === 'def' && me.roundWins > op.roundWins ? 'mirror' : me.baseTargeting;
-  const instr = {};
+  let instr = {};
   if (st === 'agg' || losing) instr.earth = 'press';
   else if (st === 'def') instr.earth = 'protect';
   if (st !== 'agg') instr.fire = 'distance';
+  // o técnico estudou os últimos jogos do jogador: quanto mais repetido o hábito, mais ele prepara a resposta
+  const sc = me.scout;
+  if (sc && sc.n >= HABIT.minRounds) {
+    if (m.round === 1 && sc.formation && m.rng() < sc.read * sc.formation.share) formation = Object.keys(FORM_BEATS).find((k) => FORM_BEATS[k] === sc.formation.k) || formation;
+    const fx = sc.instr, push = ELEMS.filter((e) => fx[e] && fx[e].k === 'press'), hold = ELEMS.filter((e) => fx[e] && (fx[e].k === 'protect' || fx[e].k === 'distance'));
+    const share = (es) => es.reduce((a, e) => a + fx[e].share, 0) / es.length;
+    if (push.length >= 2 && m.rng() < sc.read * share(push)) instr = { earth: 'protect', fire: 'distance', water: 'distance' };
+    else if (hold.length >= 2 && m.rng() < sc.read * share(hold)) instr = { earth: 'press', fire: 'press' };
+  }
   return { posture, formation, instr, targeting };
+}
+// hábito do jogador: as escolhas dos últimos rounds que ele jogou, lidas pelo técnico rival antes da partida
+const HABIT = { keep: 12, minRounds: 3, minShare: 0.5, read: [0.9, 0.75, 0.6] };
+function recordHabit(L, m) {
+  if (!m || !m.tacticLog) return;
+  const ui = m.teams.findIndex((t) => !t.auto); if (ui < 0) return;
+  L.habit = L.habit || [];
+  for (const tl of m.tacticLog) if (tl && tl[ui]) L.habit.push({ formation: tl[ui].formation, ie: tl[ui].ie || {} });
+  L.habit = L.habit.slice(-HABIT.keep);
+}
+function scoutFor(L, t) {
+  const H = L.habit || [], n = H.length; if (!n) return null;
+  const top = (vals) => { const c = {}; for (const v of vals) if (v) c[v] = (c[v] || 0) + 1; const k = Object.keys(c).sort((a, b) => c[b] - c[a])[0]; return k && c[k] / n >= HABIT.minShare ? { k, share: c[k] / n } : null; };
+  const instr = {};
+  for (const e of ELEMS) { const r = top(H.map((h) => h.ie[e])); if (r && r.k !== 'none') instr[e] = r; }
+  return { n, read: HABIT.read[t.div] ?? 0.6, formation: top(H.map((h) => h.formation)), instr };
 }
 
 const STAGE = { season: (L) => `Rodada ${L.week + 1}`, semis: () => 'Semifinal', final: () => 'Final' };
@@ -519,6 +544,7 @@ function startSeason(L) {
 
 // encerra a rodada: recebe a partida do técnico (ou null para simular) e simula o resto
 function finishWeek(L, userMatch) {
+  recordHabit(L, userMatch);
   const week = runWeekDays(L) || { gains: [], events: [], injuries: [], subs: [], cashBefore: L.teams[L.user].cash };
   const fixtures = currentFixtures(L), res = [], money = { salaries: 0, sponsors: 0, prizes: 0, bonuses: [] };
   const me = L.teams[L.user], cashBefore = week.cashBefore, phase = L.phase;
@@ -743,11 +769,14 @@ function checkMetas(L, money) {
 }
 
 // ================= JANELA DE TRANSFERÊNCIAS =================
-// Acontece na pré-temporada, em 2 etapas. A cada etapa a IA negocia, o mercado se renova e chegam ofertas pelos seus benders.
-const WINDOW_STEPS = 2;
+// Acontece na pré-temporada, em 1 etapa (v0.24). Na abertura a IA faz as contratações dela e chegam as ofertas pelos seus benders;
+// ao começar a temporada, a IA faz uma última rodada de ajustes (startSeason).
+const WINDOW_STEPS = 1;
 function newWindow(L, r) {
   const w = { step: 1, steps: WINDOW_STEPS, offers: [], news: [] };
-  L.window = w;
+  L.window = w; L.preStep = 'sponsors'; // fluxo da pré-temporada: Patrocínios → Mercado
+  aiWindowMoves(L, r);
+  refreshFreeAgents(L, r);
   w.offers = makeAIOffers(L, r);
   return w;
 }
@@ -1106,6 +1135,7 @@ function releasePlayer(L, id) {
 function serialize(L) { return JSON.stringify({ ...L, usedNames: [...L.usedNames] }); }
 function deserialize(s) {
   const o = JSON.parse(s); if (o.v !== 2) return null; o.usedNames = new Set(o.usedNames);
+  if (o.window && o.window.steps > o.window.step) o.window.steps = o.window.step; // janela em 1 etapa (v0.24)
   // saves antigos: cria popularidade e eventos que ainda não existiam
   const r = mulberry32(o.rngState || 1);
   for (const p of o.teams.flatMap((t) => t.roster).concat(o.freeAgents)) if (p.st.pop === undefined) p.st.pop = initialPop(p.st, r);
@@ -1137,4 +1167,4 @@ function deserialize(s) {
   return o;
 }
 
-if (typeof module !== 'undefined') module.exports = { runWeekDays, applySunday, DAY, DAYS, DAY_NAME, EVENT_DAYS, evDayOf, rosterShort, fixInjuredStarters, isInjured, MIN_ROSTER, MAX_ROSTER, INJURY, renewContract, seasonBlockers, wageOf, takeJob, chooseCoachOffer, expectedPos, repNeeded, formOf, newSeason, advanceWindow, buyPlayer, sellPlayer, sellQuote, canBuy, acceptOffer, declineOffer, valueOf, offerTiers, EVENTS, teamPop, eventIncome, newLeague, setUser, startSeason, finishWeek, standings, userFixture, currentFixtures, ovr, salary, payroll, teamOVR, starters, matchDef, aiCoach, signSponsor, signPlayer, releasePlayer, serialize, deserialize, DIVS };
+if (typeof module !== 'undefined') module.exports = { recordHabit, scoutFor, HABIT, runWeekDays, applySunday, DAY, DAYS, DAY_NAME, EVENT_DAYS, evDayOf, rosterShort, fixInjuredStarters, isInjured, MIN_ROSTER, MAX_ROSTER, INJURY, renewContract, seasonBlockers, wageOf, takeJob, chooseCoachOffer, expectedPos, repNeeded, formOf, newSeason, advanceWindow, buyPlayer, sellPlayer, sellQuote, canBuy, acceptOffer, declineOffer, valueOf, offerTiers, EVENTS, teamPop, eventIncome, newLeague, setUser, startSeason, finishWeek, standings, userFixture, currentFixtures, ovr, salary, payroll, teamOVR, starters, matchDef, aiCoach, signSponsor, signPlayer, releasePlayer, serialize, deserialize, DIVS };

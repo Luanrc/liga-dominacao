@@ -66,6 +66,9 @@ const TAC = {
   protDodge: 0.10, protCd: 1.05,
   sameDodge: -0.18, sameCd: 1.08,
   // temperamento: o explosivo esquenta quando está atrás; o calmo fica frio quando está à frente
+  // efeitos próprios de cada elemento (v0.21): terra pressionando finca o pé; fogo pressionando solta mais rajadas;
+  // água mantendo distância persegue melhor o alvo; água protegendo rebate ataques fracos que vão num companheiro próximo
+  earthPressBrace: 6, firePressBurst: 0.45, firePressCd: 1.05, fireDistKb: 1.1, waterDistHome: 1.8, waterGuard: 0.18, waterGuardMaxKb: 200, distVsPressKb: 1.15, distVsPressDodge: -0.03,
   rageKb: 0.05, rageCd: 0.05, calmDodge: 0.04, foulBase: 0.8, foulTmp: 0.004,
   // duelo de elementos: mirar nos ataques que vêm na direção do time
   duelChance: 0.14, duelPre: 0.002, duelLei: 0.001, duelRange: 230, duelCd: 0.7, duelSlow: 1.25, // os três com a mesma instrução: o rival lê o plano
@@ -134,7 +137,7 @@ function createMatch(defs, seed, arena = 'round', coach = null) {
   };
   m.teams = defs.map((d, ti) => ({
     name: d.name, short: d.short || d.name, color: d.color, posture: d.posture || 'bal',
-    targeting: d.targeting || 'free', baseTargeting: d.targeting || 'free', formation: d.formation || 'open', auto: !!d.auto, pop: d.pop ?? 45, style: d.style || 'bal', limit: AL / 2, roundWins: 0, advances: 0, idx: ti,
+    targeting: d.targeting || 'free', baseTargeting: d.targeting || 'free', formation: d.formation || 'open', auto: !!d.auto, pop: d.pop ?? 45, style: d.style || 'bal', scout: d.scout || null, limit: AL / 2, roundWins: 0, advances: 0, idx: ti,
     players: d.players.map((pd, i) => newMatchPlayer(ti, ti * 10 + i, i, pd)),
     bench: (d.bench || []).map((pd, k) => newMatchPlayer(ti, ti * 10 + 3 + k, -1, pd)),
   }));
@@ -145,7 +148,7 @@ function createMatch(defs, seed, arena = 'round', coach = null) {
 
 function newMatchPlayer(ti, id, slot, pd) {
   const p = { id, team: ti, slot, name: pd.name, elem: pd.elem, st: { lei: 50, tmp: 50, ...pd.st }, ref: pd.id, instr: pd.instr || 'none', obey: true,
-    stats: { shots: 0, hits: 0, pushes: 0, falls: 0, dodges: 0, blocks: 0, fouls: 0, taken: 0 } };
+    stats: { shots: 0, hits: 0, pushes: 0, falls: 0, dodges: 0, blocks: 0, fouls: 0, taken: 0, bursts: 0, guards: 0, lineFouls: 0 } };
   if (pd.injured) injure(p, true); // lesionado que entra mesmo assim (não havia outro do elemento)
   return p;
 }
@@ -231,7 +234,7 @@ function step(m) {
         m.mode = 'play'; emit(m, 'start', { text: `Round ${m.round}: começou!` });
         // registra a tática de cada time neste round (para o relatório pós-partida)
         m.tacticLog = m.tacticLog || [];
-        m.tacticLog[m.round - 1] = m.teams.map((t) => ({ posture: t.posture, targeting: t.targeting, formation: t.formation, instr: t.players.map((p) => p.instr) }));
+        m.tacticLog[m.round - 1] = m.teams.map((t) => ({ posture: t.posture, targeting: t.targeting, formation: t.formation, instr: t.players.map((p) => p.instr), ie: Object.fromEntries(t.players.map((p) => [p.elem, p.instr])) }));
         // obediência: quem recebeu uma ordem contra o próprio temperamento pode ignorá-la neste round
         // os três com a mesma instrução (não vale "sem instrução"): o rival lê o plano
         for (const t of m.teams) { const ins = t.players.map((p) => p.instr || 'none'); t.sameInstr = ins.length >= 3 && ins[0] !== 'none' && ins.every((x) => x === ins[0]); if (t.sameInstr) emit(m, 'readplan', { team: t.idx, text: `${t.name} deu a mesma instrução aos três benders e ficou previsível: o rival antecipa os movimentos neste round.` }); }
@@ -361,7 +364,7 @@ function think(m, p) {
   // falta: pisar além da linha (afobação)
   if (!inTb && m.mode === 'play') {
     const pf = 0.0007 * (1.25 - p.st.dis / 100) * p.post.foul * SIM_TUNING.foulMul * (ins === 'press' ? TAC.pressFoul : 1);
-    if (m.rng() < pf) foul(m, p, 'linha');
+    if (m.rng() < pf) { p.stats.lineFouls++; foul(m, p, 'linha'); }
   }
 }
 
@@ -503,8 +506,11 @@ function shoot(m, p, isBurst) {
   });
   p.stats.shots++;
   if (!isBurst) {
-    p.cd = E.cd * (1.15 - p.st.agi * 0.003) * p.post.cd * ({ press: TAC.pressCd, distance: TAC.distCd, protect: TAC.protCd }[instrOf(p)] || 1) * (team.formation === 'stagger' && p === anchorOf(team) ? TAC.anchorCd : 1) * (team.sameInstr ? TAC.sameCd : 1) * (1 - moodOf(m, p).rage * TAC.rageCd) * (team.targeting === 'mirror' ? TAC.duelSlow : 1) * (0.85 + m.rng() * 0.3);
-    if (p.elem === 'fire' && m.rng() < 0.35) p.burst = 0.12;
+    p.cd = E.cd * (1.15 - p.st.agi * 0.003) * p.post.cd * ({ press: p.elem === 'fire' ? TAC.firePressCd : TAC.pressCd, distance: TAC.distCd, protect: TAC.protCd }[instrOf(p)] || 1) * (team.formation === 'stagger' && p === anchorOf(team) ? TAC.anchorCd : 1) * (team.sameInstr ? TAC.sameCd : 1) * (1 - moodOf(m, p).rage * TAC.rageCd) * (team.targeting === 'mirror' ? TAC.duelSlow : 1) * (0.85 + m.rng() * 0.3);
+    if (p.elem === 'fire' && m.rng() < (instrOf(p) === 'press' ? TAC.firePressBurst : 0.35)) {
+      p.burst = 0.12; p.stats.bursts++;
+      if (instrOf(p) === 'press') emit(m, 'burst', { pid: p.id, team: p.team, x: p.x, y: p.y });
+    }
   }
 }
 
@@ -519,7 +525,8 @@ function updateProjs(m) {
       let da = want - cur;
       while (da > Math.PI) da -= 2 * Math.PI;
       while (da < -Math.PI) da += 2 * Math.PI;
-      const turn = clamp(da, -E.home * DT, E.home * DT);
+      const home = E.home * (pr.elem === 'water' && pr.owner && instrOf(pr.owner) === 'distance' ? TAC.waterDistHome : 1);
+      const turn = clamp(da, -home * DT, home * DT);
       const sp = Math.hypot(pr.vx, pr.vy), na = cur + turn;
       pr.vx = Math.cos(na) * sp; pr.vy = Math.sin(na) * sp;
     }
@@ -545,8 +552,16 @@ function updateProjs(m) {
         const g = m.teams[t.team].players.find((q) => q !== t && q.alive && q.active && q.elem === 'earth' && q.stagger <= 0 &&
           instrOf(q) === 'protect' && Math.hypot(q.x - t.x, q.y - t.y) < 80);
         if (g && m.rng() < 0.1 + g.st.fir * 0.002) {
-          pr.dead = true; g.stats.blocks++;
-          emit(m, 'block', { pid: g.id, team: g.team, x: pr.x, y: pr.y, text: `${g.name} protege ${t.name} com um disco!` });
+          pr.dead = true; g.stats.blocks++; g.stats.guards++;
+          emit(m, 'block', { pid: g.id, team: g.team, x: pr.x, y: pr.y, guard: 'disco', text: `${g.name} protege ${t.name} com um disco!` });
+          continue;
+        }
+        // água protegendo: rebate com um jato ataques fracos (o fogo) que vão num companheiro próximo
+        const wg = !g && pr.kb <= TAC.waterGuardMaxKb && m.teams[t.team].players.find((q) => q !== t && q.alive && q.active && q.elem === 'water' && q.stagger <= 0 &&
+          instrOf(q) === 'protect' && Math.hypot(q.x - t.x, q.y - t.y) < 80);
+        if (wg && m.rng() < TAC.waterGuard + wg.st.pre * 0.002) {
+          pr.dead = true; wg.stats.blocks++; wg.stats.guards++;
+          emit(m, 'block', { pid: wg.id, team: wg.team, x: pr.x, y: pr.y, guard: 'rebate', text: `${wg.name} rebate o ataque e protege ${t.name}!` });
           continue;
         }
       }
@@ -574,7 +589,7 @@ function updateProjs(m) {
         break;
       }
       const oi = instrOf(o), backline = m.teams[o.team].formation === 'stagger' && o !== anchorOf(m.teams[o.team]);
-      const prot = (oi === 'protect' ? TAC.protDodge : oi === 'distance' ? TAC.distDodge : oi === 'press' ? TAC.pressDodge : 0) + (backline ? TAC.backDodge : 0) + (m.teams[o.team].sameInstr ? TAC.sameDodge : 0);
+      const prot = (oi === 'protect' ? TAC.protDodge : oi === 'distance' ? TAC.distDodge : oi === 'press' ? TAC.pressDodge + (instrOf(pr.owner) === 'distance' ? TAC.distVsPressDodge : 0) : 0) + (backline ? TAC.backDodge : 0) + (m.teams[o.team].sameInstr ? TAC.sameDodge : 0);
       const ch = (0.1 + o.st.agi * 0.0045 + post.dodge + readB + prot + moodOf(m, o).calm * TAC.calmDodge - (pr.owner.st.pre - 60) * 0.004) * Math.min(1, tc / 0.4);
       if (m.rng() < ch) {
         const side = rx * pr.vy - ry * pr.vx; // lado do projétil
@@ -614,8 +629,8 @@ function hit(m, pr, o) {
   if (m.mode !== 'tb' && m.rng() < pf) { foul(m, a, 'cabeca', o); maybeInjure(m, o, 'head'); return; }
   const D = m.teams[o.team], edge = m.mode !== 'tb' && FORM_BEATS[team.formation] === D.formation;
   // quem segura a linha finca o pé, a não ser contra ataque concentrado da Compacta
-  const brace = D.formation === 'stagger' && o === anchorOf(D) && !(edge && team.formation === 'compact') ? TAC.anchorBrace : 0;
-  const imp = pr.kb * rangeMul(pr.elem, pr.dist) * SIM_TUNING.kbMul * (0.6 + a.st.pow * 0.008) / (0.6 + (o.st.fir + brace) * 0.008) * (edge ? 1 + TAC.formEdge[team.formation] : 1) * (1 + moodOf(m, a).rage * TAC.rageKb);
+  const brace = (D.formation === 'stagger' && o === anchorOf(D) && !(edge && team.formation === 'compact') ? TAC.anchorBrace : 0) + (o.elem === 'earth' && instrOf(o) === 'press' ? TAC.earthPressBrace : 0);
+  const imp = pr.kb * rangeMul(pr.elem, pr.dist) * SIM_TUNING.kbMul * (0.6 + a.st.pow * 0.008) / (0.6 + (o.st.fir + brace) * 0.008) * (edge ? 1 + TAC.formEdge[team.formation] : 1) * (1 + moodOf(m, a).rage * TAC.rageKb) * (a.elem === 'fire' && instrOf(a) === 'distance' ? TAC.fireDistKb : 1) * (instrOf(a) === 'distance' && instrOf(o) === 'press' ? TAC.distVsPressKb : 1);
   const L = Math.hypot(pr.vx, pr.vy);
   o.vx += pr.vx / L * imp; o.vy += pr.vy / L * imp * 0.5;
   o.stagger = Math.max(o.stagger, 0.22 + imp / 1200);
