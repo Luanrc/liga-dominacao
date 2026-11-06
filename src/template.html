@@ -523,6 +523,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
 .gloss dt svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px; color: var(--gold); }
 .sti { display: inline-flex; align-items: center; gap: 3px; margin-right: 9px; white-space: nowrap; color: var(--muted); } .sti svg { width: 13px; height: 13px; } .sti b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
 .scout2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 20px; margin-bottom: 10px; }
+.scout2 > div { min-width: 0; } .scout2 .ich { display: inline-block; white-space: normal; border-radius: 12px; max-width: 100%; line-height: 1.45; } .scout2 .ich svg { display: inline-block; vertical-align: -2px; margin-right: 4px; }
 .scout2 h4 { margin: 0 0 6px; font: 600 11px var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .reads svg { display: inline-block; width: 13px; height: 13px; vertical-align: -2px; color: var(--muted); margin-right: 4px; }
 .reads:has(svg) { list-style: none; padding-left: 0; }
@@ -582,7 +583,7 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
 <div class="wrap">
   <header class="top">
     <h1 class="brand">Sport Bend Manager</h1>
-    <span class="tag">Protótipo 0.25.8 · gestão de equipe de dominação profissional</span>
+    <span class="tag">Protótipo 0.25.10 · gestão de equipe de dominação profissional</span>
   </header>
 
   <section class="view" id="viewTitle" hidden>
@@ -1082,9 +1083,15 @@ h2 .ich, h2 .help { text-transform: none; letter-spacing: 0; font-family: var(--
   };
 
   // ---------- partida ----------
+  // partida avulsa: você contra a máquina (o time da direita é do técnico da IA, com um estilo sorteado)
   function newMatch(freshTeams) {
-    if (freshTeams || !defs) defs = makeTeams(Math.floor(Math.random() * 1e6));
-    setupMatch(defs, arenaKind, null);
+    if (freshTeams || !defs) {
+      defs = makeTeams(Math.floor(Math.random() * 1e6));
+      const st = ['agg', 'bal', 'def'][Math.floor(Math.random() * 3)];
+      Object.assign(defs[1], { auto: true, style: st, posture: st });
+      for (const d of defs) for (const pd of d.players) Object.assign(pd.st, { ovr: ovr(pd.st), energy: 100, stress: 0 }); // nota e energia na Preparação
+    }
+    setupMatch(defs, arenaKind, aiCoach);
   }
   function setupMatch(d, arena, coach) {
     defs = d;
